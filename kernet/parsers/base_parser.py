@@ -60,16 +60,16 @@ class BaseParser:
                             help='Comma separated channel means for data normalization')
         parser.add_argument('--normalize_std', type=str,
                             help='Comma separated channel standard deviations for data normalization')
-        parser.add_argument('--load_opt', action='store_true',
-                            help='If specified, load options from a saved file.')
-        parser.add_argument('--opt_file', type=str,
-                            help='A saved .pkl file to load options from.')
-        parser.add_argument('--load_model', action='store_true',
-                            help='If specified, load a saved model. Testing always loads model so there is no need for this flag.')
-        parser.add_argument('--checkpoint_dir', type=str,
-                            help='A folder where the saved model lives.')
-        parser.add_argument('--save_dir', type=str, default='./checkpoint/',
-                            help='A folder to save things.')
+        # parser.add_argument('--load_opt', action='store_true',
+        #                     help='If specified, load options from a saved file.')
+        # parser.add_argument('--opt_file', type=str,
+        #                     help='A saved .pkl file to load options from.')
+        # parser.add_argument('--load_model', action='store_true',
+        #                     help='If specified, load a saved model. Testing always loads model so there is no need for this flag.')
+        # parser.add_argument('--checkpoint_dir', type=str,
+        #                     help='A folder where the saved model lives.')
+        # parser.add_argument('--save_dir', type=str, default='./checkpoint/',
+        #                     help='A folder to save things.')
         parser.add_argument('--max_testset_size', type=int, default=int(1e12),
                             help='Max size for the test set.')
         parser.add_argument('--balanced', type=utils.str2bool,
@@ -105,8 +105,8 @@ class BaseParser:
 
         # if there is opt_file, load it.
         # The previous default options will be overwritten.
-        if opt.load_opt:
-            parser = self.update_options_from_file(parser, opt)
+        # if opt.load_opt:
+        #     parser = self.update_options_from_file(parser, opt)
         opt, unknown = parser.parse_known_args()
 
         # modify model-related parser options
@@ -135,8 +135,8 @@ class BaseParser:
 
         # this second loading is for updating the params
         # modified by model/dataset/script-specific parser modifiers
-        if opt.load_opt:
-            parser = self.update_options_from_file(parser, opt)
+        # if opt.load_opt:
+        #     parser = self.update_options_from_file(parser, opt)
         opt = parser.parse_args()
 
         self.parser = parser
@@ -158,51 +158,51 @@ class BaseParser:
         message += '----------------- End -------------------'
         print(message)
 
-    def option_file_path(self, opt, makedir=False):
-        if makedir:
-            if os.path.exists(opt.save_dir):
-                sd = opt.save_dir[:-
-                                  1] if opt.save_dir.endswith('/') else opt.save_dir
-                new_name = sd + '_archived_' + str(datetime.datetime.now())
-                logger.warning(
-                    f'save_dir {opt.save_dir} already exists. Renaming the existing one to {new_name}...')
-                os.rename(opt.save_dir, new_name)
-            os.makedirs(opt.save_dir)
+    # def option_file_path(self, opt, makedir=False):
+    #     if makedir:
+    #         if os.path.exists(opt.save_dir):
+    #             sd = opt.save_dir[:-
+    #                               1] if opt.save_dir.endswith('/') else opt.save_dir
+    #             new_name = sd + '_archived_' + str(datetime.datetime.now())
+    #             logger.warning(
+    #                 f'save_dir {opt.save_dir} already exists. Renaming the existing one to {new_name}...')
+    #             os.rename(opt.save_dir, new_name)
+    #         os.makedirs(opt.save_dir)
 
-        file_name = os.path.join(opt.save_dir, 'opt')
-        return file_name
+    #     file_name = os.path.join(opt.save_dir, 'opt')
+    #     return file_name
 
-    def save_options(self, opt):
-        file_name = self.option_file_path(opt, makedir=True)
-        with open(file_name + '.txt', 'wt') as opt_file:
-            opt_file.write(self.traverse_options(opt))
+    # def save_options(self, opt):
+    #     file_name = self.option_file_path(opt, makedir=True)
+    #     with open(file_name + '.txt', 'wt') as opt_file:
+    #         opt_file.write(self.traverse_options(opt))
 
-        with open(file_name + '.pkl', 'wb') as opt_file:
-            pickle.dump(opt, opt_file)
+    #     with open(file_name + '.pkl', 'wb') as opt_file:
+    #         pickle.dump(opt, opt_file)
 
-    def update_options_from_file(self, parser, opt):
-        new_opt = self.load_options(opt)
-        for k, v in sorted(vars(opt).items()):
-            if hasattr(new_opt, k) and v != getattr(new_opt, k):
-                new_val = getattr(new_opt, k)
-                parser.set_defaults(**{k: new_val})
-        return parser
+    # def update_options_from_file(self, parser, opt):
+    #     new_opt = self.load_options(opt)
+    #     for k, v in sorted(vars(opt).items()):
+    #         if hasattr(new_opt, k) and v != getattr(new_opt, k):
+    #             new_val = getattr(new_opt, k)
+    #             parser.set_defaults(**{k: new_val})
+    #     return parser
 
-    def load_options(self, opt):
-        return pickle.load(open(opt.opt_file, 'rb'))
+    # def load_options(self, opt):
+    #     return pickle.load(open(opt.opt_file, 'rb'))
 
     def parse(self):
         opt = self.gather_options()
         opt.is_train = self.is_train
-        if not opt.is_train:
-            # in testing, save test log into checkpoint_dir
-            opt.save_dir = opt.checkpoint_dir
+        # if not opt.is_train:
+        #     # in testing, save test log into checkpoint_dir
+        #     opt.save_dir = opt.checkpoint_dir
 
         self.print_options(opt)
 
-        if opt.is_train:
-            # create save_dir and write options
-            self.save_options(opt)
+        # if opt.is_train:
+        #     # create save_dir and write options
+        #     self.save_options(opt)
 
         # TODO multi-gpu WIP
         """

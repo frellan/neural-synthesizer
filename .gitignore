@@ -177,3 +177,4 @@ dmypy.json
 data/
 .vscode/
 checkpoint*/
+tf_log/

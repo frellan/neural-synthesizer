@@ -111,9 +111,5 @@ def train_output(opt, n_epochs, trainer, loader, val_loader, criterion, part_id,
                 logger.info(message)
                 if opt.schedule_lr:
                     trainer.scheduler_step(acc)
-            #     trainer.save(epoch, acc, model_name='net.pth',
-            #                  force_save=opt.always_save)
-            # else:
-            #     trainer.save(epoch, 0, model_name='net.pth', force_save=True)
 
     logger.info(f'Part {part_id} training finished!')

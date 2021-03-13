@@ -5,6 +5,7 @@ Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses
 import os
 import logging
 
+save_dir = "./"
 
 def set_logger(opt, filename, filemode):
     numeric_level = getattr(logging, opt.loglevel.upper(), None)
@@ -22,7 +23,7 @@ def set_logger(opt, filename, filemode):
 
     # set file handler
     fh = logging.FileHandler(os.path.join(
-        opt.save_dir, filename), mode=filemode)
+        save_dir, filename), mode=filemode)
     fh.setLevel(logging.NOTSET)  # log everything to file
     fh.setFormatter(formatter)
     logger.addHandler(fh)
@@ -37,7 +38,7 @@ def set_logger(opt, filename, filemode):
         from torch.utils.tensorboard import SummaryWriter
 
         writer = SummaryWriter(
-            log_dir=os.path.join(opt.save_dir, 'tf_log')
+            log_dir=os.path.join(save_dir, 'tf_log')
         )
         # give handles on tensorboard methods to this logger
         logger.add_scalar = writer.add_scalar

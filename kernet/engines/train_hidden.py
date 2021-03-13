@@ -98,17 +98,5 @@ def train_hidden(opt, n_epochs, trainer, loader, val_loader, criterion, part_id,
                 logger.info(message)
                 if opt.schedule_lr:
                     trainer.scheduler_step(hidden_obj)
-            #     trainer.save(epoch, hidden_obj,
-            #                  model_name=f'net_part{part_id}.pth', force_save=opt.always_save)
-            # else:
-            #     trainer.save(epoch, 0,
-            #                  model_name=f'net_part{part_id}.pth', force_save=True)
 
     logger.info(f'Part {part_id} training finished!')
-
-    # load best part for the next training session
-    # logger.info(
-    #     'Before proceeding, load saved checkpoint for training the next part...')
-    # tmp, opt.checkpoint_dir = opt.checkpoint_dir, opt.save_dir
-    # trainer.load(f'net_part{part_id}.pth')
-    # opt.checkpoint_dir = tmp

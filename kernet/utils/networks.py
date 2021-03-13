@@ -11,7 +11,7 @@ from torch.nn.modules.batchnorm import _BatchNorm
 
 from .misc import INF
 from kernet import datasets
-from kernet.layers.klinear import kLinear, kLinearCommittee
+from kernet.layers.klinear import kLinear
 
 
 logger = logging.getLogger()
@@ -81,8 +81,6 @@ def default_init_weights(module_list, scale=1, bias_fill=0, **kwargs):
                 init.constant_(m.weight, 1)
                 if m.bias is not None:
                     m.bias.data.fill_(bias_fill)
-            elif isinstance(m, kLinearCommittee):
-                raise NotImplementedError()  # TODO
 
 
 def update_centers_eval(model):
@@ -108,63 +106,6 @@ def include_during_backward(model):
         model.__class__.__name__))
     for p in model.parameters():
         p.requires_grad_()
-
-
-def to_committee(model, expert_size):
-    """
-    Convert a kLinear model into a committee of experts (a
-    kLinearCommittee model) with each expert except possibly the last
-    being of size expert_size.
-
-    The new model is numerically equivalent to the original.
-
-    If needed, call this function RIGHT AFTER model initialization.
-
-    This conversion preserves the device allocation of the original model, i.e.,
-    if model is on GPU, the returned committee will also be on GPU.
-    """
-    logger.info('Converting {} to committee w/ expert size {}...'.format(
-        model.__class__.__name__, expert_size))
-    if not isinstance(model, kLinear):
-        raise TypeError('Expecting the model to be of ' +
-                        'kLinear type, got {} instead.'.format(type(model)))
-
-    if not hasattr(model, 'centers'):
-        logger.warning('The given model does not have centers, ' +
-                       'in which case the conversion to committee ' +
-                       'was not performed. The original model ' +
-                       'was returned instead.')
-        return model
-
-    centers = model.centers
-    committee = kLinearCommittee()
-
-    i = 0
-    while i * expert_size < len(centers):
-        bias = True if model.linear.bias is not None and i == 0 else False
-        expert = kLinear(
-            out_features=model.out_features,
-            in_features=model.in_features,
-            kernel=model.kernel,
-            bias=bias,
-            evaluation=model.evaluation,
-            centers=centers[i *
-                            expert_size: (i + 1) * expert_size].clone().detach(),
-            trainable_centers=getattr(model, 'trainable_centers', False),
-            sigma=model.phi.k_params['sigma']
-        )
-
-        expert.linear.weight.data = \
-            model.linear.weight[:, i *
-                                expert_size: (i + 1) * expert_size].clone().detach()
-        if bias:
-            expert.linear.bias.data = model.linear.bias.clone().detach()
-
-        committee.add_expert(expert)
-        i += 1
-
-    return committee
-
 
 def attach_head(model, opt):
     """

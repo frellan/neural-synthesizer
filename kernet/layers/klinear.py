@@ -18,25 +18,30 @@ class _kLayer(torch.nn.Module):
 
     @staticmethod
     def modify_commandline_options(parser, **kwargs):
-        parser.add_argument('--memory_efficient', type=utils.str2bool,
-                            nargs='?', const=True, default=False,
-                            help='Whether to convert kLinear layers to committees to save memory. Results in slower runtime if set to True.')
         parser.add_argument('--expert_size', type=int, default=300,
                             help='The expert_size param for the kLinear committees.')
         return parser
 
     @staticmethod
     def update(layer, update_fn):
-        if not isinstance(layer, kLinearCommittee):
-            layer.centers = update_fn(layer.centers_init)
-        else:
-            for i in range(layer.n_experts):
-                expert = getattr(layer, 'expert' + str(i))
-                expert.centers = update_fn(expert.centers_init)
+        for i in range(layer.n_experts):
+            expert = getattr(layer, 'expert' + str(i))
+            expert.centers = update_fn(expert.centers_init)
 
 
 class kLinear(_kLayer):
-    def __init__(self, out_features, in_features=None, kernel='gaussian', bias=True, evaluation='direct', centers=None, trainable_centers=False, sigma=1., *args, **kwargs):
+    def __init__(
+        self,
+        out_features,
+        in_features=None,
+        kernel='gaussian',
+        bias=True,
+        evaluation='direct',
+        centers=None,
+        trainable_centers=False,
+        sigma=1.,
+        *args,
+        **kwargs):
         """
         A kernelized linear layer. With input x, this layer computes:
         w.T @ \phi(x) + bias, where 
@@ -73,10 +78,7 @@ class kLinear(_kLayer):
         super(kLinear, self).__init__(*args, **kwargs)
         self.evaluation = evaluation.lower()
         if self.evaluation not in ['direct', 'indirect']:
-            raise ValueError(
-                'Evaluation method can be "direct" or "indirect", got {}'.format(
-                    evaluation)
-            )
+            raise ValueError('Evaluation method can be "direct" or "indirect", got {}'.format(evaluation))
 
         # prepare the centers for indirect evaluation
         if self.evaluation == 'indirect':
@@ -93,67 +95,26 @@ class kLinear(_kLayer):
             del centers
 
         self.kernel = kernel
-        self.phi = Phi(kernel=kernel, in_features=in_features,
-                       evaluation=self.evaluation, sigma=sigma)
+        self.phi = Phi(
+            kernel=kernel,
+            in_features=in_features,
+            evaluation=self.evaluation,
+            sigma=sigma)
         self.out_features = out_features
         self.in_features = in_features
         if self.evaluation == 'indirect':
             self.linear = torch.nn.Linear(
-                len(centers), out_features, bias=bias)
+                len(centers),
+                out_features,
+                bias=bias)
         else:
             self.linear = torch.nn.Linear(
-                self.phi.out_features, out_features, bias=bias)
+                self.phi.out_features,
+                out_features,
+                bias=bias)
 
     def forward(self, input):
         if self.evaluation == 'indirect':
             return self.linear(self.phi(input, centers=self.centers))
         else:
             return self.linear(self.phi(input))
-
-
-class kLinearCommittee(torch.nn.Module):
-    """
-    A committee of kLinear experts, the responses from whom will be
-    summed to create the final model response.
-
-    This is useful for building kLinear models with large centers.
-    One can split such a model into several experts and store
-    them in a kLinearCommittee container. The resulting
-    model is equivalent to the original but does not put
-    large tensors (centers) onto GPU memory.
-
-    There is a handy helper function in utils called to_committee
-    that, when given a kLinear model, returns an equivalent
-    kLinearCommittee model.
-    """
-
-    def __init__(self, *args, **kwargs):
-        super(kLinearCommittee, self).__init__(*args, **kwargs)
-        self.n_experts = 0
-
-    def add_expert(self, expert):
-        if not isinstance(expert, kLinear):
-            raise TypeError('Expecting the expert to be of ' +
-                            'kLinear type, got {} instead.'.format(type(expert)))
-
-        if self.n_experts == 0:
-            self.phi = expert.phi
-            self.out_features = expert.out_features
-            self.evaluation = expert.evaluation
-        elif self.out_features != expert.out_features:
-            raise ValueError('The expert being added has a different output dimension ' +
-                             'than the existing experts, which may cause unexpected ' +
-                             'behaviors when evaluating the committee.')
-
-        self.add_module('expert'+str(self.n_experts), expert)
-        self.n_experts += 1
-
-    def forward(self, input):
-        if self.n_experts == 0:
-            raise ValueError('The committee does not have any expert yet.')
-
-        output = self.expert0(input)
-        for i in range(1, self.n_experts):
-            output = output.add(getattr(self, 'expert'+str(i))(input))
-
-        return output

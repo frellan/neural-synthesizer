@@ -4,7 +4,6 @@ Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses
 
 Modular training example.
 """
-# import logging
 
 import torch
 
@@ -59,7 +58,6 @@ def main():
 
     # set up logger
     utils.set_logger(opt=opt, filename='train.log', filemode='w')
-    # logger = logging.getLogger()
 
     if opt.seed:
         utils.make_deterministic(opt.seed)
@@ -98,40 +96,19 @@ def main():
         )
         trainers.append(trainer)
 
-        # if opt.load_model:
-        #     if i < opt.n_parts:  # load hidden layer
-        #         try:
-        #             trainers[i - 1].load('net_part{}.pth'.format(i))
-        #         except RuntimeError:
-        #             logger.warning(
-        #                 f'For some reason (likely mismatched shapes between weights), net_part{i}.pth was not loaded.')
-        #     else:  # load output layer
-        #         try:
-        #             trainers[i - 1].load('net.pth')
-        #         except RuntimeError:
-        #             logger.warning(
-        #                 f'For some reason (likely mismatched shapes between weights), net.pth was not loaded.')
-
-    # save init model
-    # trainers[0].save(
-    #     epoch=trainers[0].start_epoch - 1,
-    #     val_metric_value=trainers[0].best_val_metric,
-    #     model_name='net_part{}.pth'.format(1),
-    #     force_save=True
-    # )
     # train the first hidden module
-    train_hidden(opt, n_epochs=opt.n_epochs1, trainer=trainers[0],
-                 loader=loader, val_loader=val_loader, criterion=hidden_criterion, part_id=1, device=device)
+    train_hidden(
+        opt,
+        n_epochs=opt.n_epochs1,
+        trainer=trainers[0],
+        loader=loader,
+        val_loader=val_loader,
+        criterion=hidden_criterion,
+        part_id=1,
+        device=device)
 
     # train other hidden modules
     for i in range(2, opt.n_parts):
-        # save init model
-        # trainers[i - 1].save(
-        #     epoch=trainers[i - 1].start_epoch - 1,
-        #     val_metric_value=trainers[i - 1].best_val_metric,
-        #     model_name='net_part{}.pth'.format(i),
-        #     force_save=True
-        # )
         # prepare centers
         utils.update_centers_eval(model)
         # exclude certain network part(s) from the graph to make things faster
@@ -147,13 +124,6 @@ def main():
             device=device
         )
 
-    # save init model
-    # trainers[-1].save(
-    #     epoch=trainers[-1].start_epoch - 1,
-    #     val_metric_value=trainers[-1].best_val_metric,
-    #     model_name='net.pth',
-    #     force_save=True
-    # )
     # train output layer
     utils.update_centers_eval(model)
     utils.exclude_during_backward(modules[-2])

@@ -3,7 +3,7 @@
 Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
 """
 import os
-import pickle
+# import pickle
 import logging
 
 import torch
@@ -113,11 +113,11 @@ def get_dataloaders(opt):
             else:
                 rand_idx = torch.randperm(len(trainset)).tolist()
             # save rand_idx for reproducibility
-            file_name = os.path.join(opt.save_dir, 'dataset_rand_idx')
-            with open(file_name + '.txt', 'wt') as f:
-                f.write(str(rand_idx))
-            with open(file_name + '.pkl', 'wb') as f:
-                pickle.dump(rand_idx, f)
+            # file_name = os.path.join(opt.save_dir, 'dataset_rand_idx')
+            # with open(file_name + '.txt', 'wt') as f:
+            #     f.write(str(rand_idx))
+            # with open(file_name + '.pkl', 'wb') as f:
+            #     pickle.dump(rand_idx, f)
             trainset, valset = Subset(
                 trainset, rand_idx[:-opt.n_val]), Subset(trainset, rand_idx[-opt.n_val:])
 
@@ -206,39 +206,39 @@ def _get_subset(dataset, size: int, balanced=False, saved_indices=None, save_nam
       A torch.utils.data.Dataset.
     """
     indices = None
-    if saved_indices is not None:
-        indices = pickle.load(open(saved_indices, 'rb'))
-        logger.info(
-            f'Successfully loaded a sequence of saved indices of length {len(indices)}.')
-        logger.debug(f'These indices are {indices}.')
-        dataset = Subset(dataset, indices=indices)
-        logger.info('Initiated a subset with the given indices.')
-    else:
-        if size <= len(dataset):
-            if type(size) != int:
-                raise TypeError(
-                    f'size should be of int type, got {type(size)} instead')
-            if not balanced:
-                dataset, _ = torch.utils.data.random_split(
-                    dataset, [size, len(dataset) - size])
-                indices = dataset.indices
-            else:
-                if isinstance(dataset, Subset):
-                    dataset = dataset.dataset
-                try:
-                    indices = utils.supervised_sample(
-                        torch.tensor(dataset.data), torch.tensor(
-                            dataset.targets),
-                        n=size, indices_only=True
-                    )
-                except AttributeError:
-                    # SVHN uses "labels"
-                    indices = utils.supervised_sample(
-                        torch.tensor(dataset.data), torch.tensor(
-                            dataset.labels),
-                        n=size, indices_only=True
-                    )
-                dataset = Subset(dataset, indices=indices)
+    # if saved_indices is not None:
+    #     indices = pickle.load(open(saved_indices, 'rb'))
+    #     logger.info(
+    #         f'Successfully loaded a sequence of saved indices of length {len(indices)}.')
+    #     logger.debug(f'These indices are {indices}.')
+    #     dataset = Subset(dataset, indices=indices)
+    #     logger.info('Initiated a subset with the given indices.')
+    # else:
+    if size <= len(dataset):
+        if type(size) != int:
+            raise TypeError(
+                f'size should be of int type, got {type(size)} instead')
+        if not balanced:
+            dataset, _ = torch.utils.data.random_split(
+                dataset, [size, len(dataset) - size])
+            indices = dataset.indices
+        else:
+            if isinstance(dataset, Subset):
+                dataset = dataset.dataset
+            try:
+                indices = utils.supervised_sample(
+                    torch.tensor(dataset.data), torch.tensor(
+                        dataset.targets),
+                    n=size, indices_only=True
+                )
+            except AttributeError:
+                # SVHN uses "labels"
+                indices = utils.supervised_sample(
+                    torch.tensor(dataset.data), torch.tensor(
+                        dataset.labels),
+                    n=size, indices_only=True
+                )
+            dataset = Subset(dataset, indices=indices)
 
     if indices is not None and save_name is not None and opt is not None:
         try:
@@ -247,11 +247,11 @@ def _get_subset(dataset, size: int, balanced=False, saved_indices=None, save_nam
         except:
             indices = list(indices)
 
-        file_name = os.path.join(opt.save_dir, save_name)
-        with open(file_name + '.txt', 'wt') as f:
-            f.write(str(indices))
-        with open(file_name + '.pkl', 'wb') as f:
-            pickle.dump(indices, f)
+        # file_name = os.path.join(opt.save_dir, save_name)
+        # with open(file_name + '.txt', 'wt') as f:
+        #     f.write(str(indices))
+        # with open(file_name + '.pkl', 'wb') as f:
+        #     pickle.dump(indices, f)
 
     return dataset
 
