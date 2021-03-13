@@ -8,11 +8,8 @@ Modified from:
 
 import os
 import sys
-import pickle
 import logging
-import datetime
 import argparse
-import importlib
 
 import kernet.utils as utils
 import kernet.models as models
@@ -40,14 +37,18 @@ class BaseParser:
         self.initialized = False
 
     def initialize(self, parser):
-        parser.add_argument('--dataset', choices=['mnist', 'cifar10', 'cifar100', 'fashionmnist', 'svhn'] + list(datasets.CIFAR10_2.keys()),
-                            default='mnist', help='Dataset name.')
+        parser.add_argument('--dataset', choices=[
+            'mnist',
+            'cifar10',
+            'cifar100',
+            'fashionmnist',
+            'svhn'
+        ] + list(datasets.CIFAR10_2.keys()), default='mnist', help='Dataset name.')
         parser.add_argument('--model', choices=[
             'kmlp',
             'lenet5',
             'k1lenet5', 'k2lenet5', 'k3lenet5'
-        ], default='lenet5',
-            help='Model name. The (k)ResNets are for 3-channel images only.')
+        ], default='lenet5', help='Model name. The (k)ResNets are for 3-channel images only.')
         parser.add_argument('--activation', choices=['tanh', 'sigmoid', 'relu', 'gaussian', 'reapen'], default='tanh',
                             help='Model activation/kernel function. Not used by certain models such as the ResNets.')
         parser.add_argument('--in_channels', type=int, default=3,
@@ -60,16 +61,6 @@ class BaseParser:
                             help='Comma separated channel means for data normalization')
         parser.add_argument('--normalize_std', type=str,
                             help='Comma separated channel standard deviations for data normalization')
-        # parser.add_argument('--load_opt', action='store_true',
-        #                     help='If specified, load options from a saved file.')
-        # parser.add_argument('--opt_file', type=str,
-        #                     help='A saved .pkl file to load options from.')
-        # parser.add_argument('--load_model', action='store_true',
-        #                     help='If specified, load a saved model. Testing always loads model so there is no need for this flag.')
-        # parser.add_argument('--checkpoint_dir', type=str,
-        #                     help='A folder where the saved model lives.')
-        # parser.add_argument('--save_dir', type=str, default='./checkpoint/',
-        #                     help='A folder to save things.')
         parser.add_argument('--max_testset_size', type=int, default=int(1e12),
                             help='Max size for the test set.')
         parser.add_argument('--balanced', type=utils.str2bool,
@@ -103,12 +94,6 @@ class BaseParser:
         # get the basic options
         opt, unknown = parser.parse_known_args()
 
-        # if there is opt_file, load it.
-        # The previous default options will be overwritten.
-        # if opt.load_opt:
-        #     parser = self.update_options_from_file(parser, opt)
-        opt, unknown = parser.parse_known_args()
-
         # modify model-related parser options
         model_name = opt.model
         model_option_setter = models.get_option_setter(model_name)
@@ -133,10 +118,6 @@ class BaseParser:
 
         opt, unknown = parser.parse_known_args()
 
-        # this second loading is for updating the params
-        # modified by model/dataset/script-specific parser modifiers
-        # if opt.load_opt:
-        #     parser = self.update_options_from_file(parser, opt)
         opt = parser.parse_args()
 
         self.parser = parser
@@ -158,68 +139,28 @@ class BaseParser:
         message += '----------------- End -------------------'
         print(message)
 
-    # def option_file_path(self, opt, makedir=False):
-    #     if makedir:
-    #         if os.path.exists(opt.save_dir):
-    #             sd = opt.save_dir[:-
-    #                               1] if opt.save_dir.endswith('/') else opt.save_dir
-    #             new_name = sd + '_archived_' + str(datetime.datetime.now())
-    #             logger.warning(
-    #                 f'save_dir {opt.save_dir} already exists. Renaming the existing one to {new_name}...')
-    #             os.rename(opt.save_dir, new_name)
-    #         os.makedirs(opt.save_dir)
-
-    #     file_name = os.path.join(opt.save_dir, 'opt')
-    #     return file_name
-
-    # def save_options(self, opt):
-    #     file_name = self.option_file_path(opt, makedir=True)
-    #     with open(file_name + '.txt', 'wt') as opt_file:
-    #         opt_file.write(self.traverse_options(opt))
-
-    #     with open(file_name + '.pkl', 'wb') as opt_file:
-    #         pickle.dump(opt, opt_file)
-
-    # def update_options_from_file(self, parser, opt):
-    #     new_opt = self.load_options(opt)
-    #     for k, v in sorted(vars(opt).items()):
-    #         if hasattr(new_opt, k) and v != getattr(new_opt, k):
-    #             new_val = getattr(new_opt, k)
-    #             parser.set_defaults(**{k: new_val})
-    #     return parser
-
-    # def load_options(self, opt):
-    #     return pickle.load(open(opt.opt_file, 'rb'))
-
     def parse(self):
         opt = self.gather_options()
         opt.is_train = self.is_train
-        # if not opt.is_train:
-        #     # in testing, save test log into checkpoint_dir
-        #     opt.save_dir = opt.checkpoint_dir
 
         self.print_options(opt)
 
-        # if opt.is_train:
-        #     # create save_dir and write options
-        #     self.save_options(opt)
-
         # TODO multi-gpu WIP
         """
-    # set gpu ids
-    str_ids = opt.gpu_ids.split(',')
-    opt.gpu_ids = []
-    for str_id in str_ids:
-      id = int(str_id)
-      if id >= 0:
-        opt.gpu_ids.append(id)
-    if len(opt.gpu_ids) > 0:
-      torch.cuda.set_device(opt.gpu_ids[0])
+        # set gpu ids
+        str_ids = opt.gpu_ids.split(',')
+        opt.gpu_ids = []
+        for str_id in str_ids:
+        id = int(str_id)
+        if id >= 0:
+            opt.gpu_ids.append(id)
+        if len(opt.gpu_ids) > 0:
+        torch.cuda.set_device(opt.gpu_ids[0])
 
-    assert len(opt.gpu_ids) == 0 or opt.batch_size % len(opt.gpu_ids) == 0, \
-      "Batch size %d is wrong. It must be a multiple of # GPUs %d." \
-      % (opt.batch_size, len(opt.gpu_ids))
-    """
+        assert len(opt.gpu_ids) == 0 or opt.batch_size % len(opt.gpu_ids) == 0, \
+        "Batch size %d is wrong. It must be a multiple of # GPUs %d." \
+        % (opt.batch_size, len(opt.gpu_ids))
+        """
 
         # get lists from strings
         opt.normalize_mean = [float(_) for _ in opt.normalize_mean.split(',')]

@@ -70,8 +70,8 @@ def main():
     trainer_cls = Trainer
 
     output_layer = list(model.children())[-1]
-    hidden_criterion = getattr(losses, opt.hidden_objective)(
-        output_layer.phi, opt.n_classes)
+    selected_loss_fn = getattr(losses, opt.hidden_objective)
+    hidden_criterion = selected_loss_fn(output_layer.phi, opt.n_classes)
     if opt.loss == 'xe':
         output_criterion = torch.nn.CrossEntropyLoss()
     elif opt.loss == 'hinge':

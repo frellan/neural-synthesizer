@@ -43,9 +43,6 @@ class TrainParser(BaseParser):
                             help='Validate once every this many epochs.')
         parser.add_argument('--max_trainset_size', type=int, default=int(1e12),
                             help='Max size for the training set.')
-        # parser.add_argument('--always_save', type=utils.str2bool,
-        #                     nargs='?', const=True, default=False,
-        #                     help='If True, always save model after each epoch. Otherwise, save according to validation metric.')
         parser.add_argument('--n_val', type=int, default=100,
                             help='Validation set size. The validation set will be taken from a randomly permuted training set. Can set to 0 if do not need a validation set.')
         parser.add_argument('--dataset_rand_idx', type=str,

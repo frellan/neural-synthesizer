@@ -33,11 +33,8 @@ def train_hidden(opt, n_epochs, trainer, loader, val_loader, criterion, part_id,
             start = time.time()
 
             # train step
-            input, target = \
-                input.to(device, non_blocking=True), target.to(
-                    device, non_blocking=True)
-            output, loss = trainer.step(
-                input, target, criterion, minimize=False)
+            input, target = input.to(device, non_blocking=True), target.to(device, non_blocking=True)
+            output, loss = trainer.step(input, target, criterion, minimize=False)
             end = time.time()
 
             # get some batch statistics
