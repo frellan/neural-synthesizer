@@ -172,3 +172,8 @@ dmypy.json
 .prof
 
 # End of https://www.toptal.com/developers/gitignore/api/python,macos
+
+# Project specific
+data/
+.vscode/
+checkpoint*/
