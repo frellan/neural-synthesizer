@@ -45,6 +45,7 @@ class BaseParser:
             'svhn'
         ] + list(datasets.CIFAR10_2.keys()), default='mnist', help='Dataset name.')
         parser.add_argument('--model', choices=[
+            'simple',
             'kmlp',
             'lenet5',
             'k1lenet5', 'k2lenet5', 'k3lenet5'
