@@ -11,7 +11,7 @@ from torch.nn.modules.batchnorm import _BatchNorm
 
 from .misc import INF
 from kernet import datasets
-from kernet.layers.alignment_linear import AlignmentLinear
+from kernet.models.alignment_linear import AlignmentLinear
 
 
 logger = logging.getLogger()

@@ -9,7 +9,7 @@ import torch
 
 import kernet.utils as utils
 import kernet.models as models
-import kernet.layers.loss as losses
+import kernet.models.loss as losses
 import kernet.datasets as datasets
 from kernet.parsers import TrainParser
 from kernet.trainers import train_hidden, train_output, Trainer
@@ -59,6 +59,9 @@ def main():
 
     model = models.get_model(opt)
     model = model.to(device)
+    
+    utils.default_init_weights(model)
+    
     modules, params = model.split(n_parts=opt.n_parts, mode=opt.split_mode)
 
     trainer_cls = Trainer

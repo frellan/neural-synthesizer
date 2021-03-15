@@ -9,7 +9,7 @@ import torch
 
 import kernet.utils as utils
 from kernet.models import Flatten
-from kernet.layers.alignment_linear import _DynamicLayer, AlignmentLinear
+from kernet.models.alignment_linear import _DynamicLayer, AlignmentLinear
 from kernet.models.base_model import BaseModel
 
 
