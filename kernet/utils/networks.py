@@ -11,39 +11,10 @@ from torch.nn.modules.batchnorm import _BatchNorm
 
 from .misc import INF
 from kernet import datasets
-from kernet.layers.klinear import kLinear
+from kernet.layers.alignment_linear import AlignmentLinear
 
 
 logger = logging.getLogger()
-
-
-def get_centers(opt):
-    # TODO for large train sets, do we need to limit the max tensor we load here?
-    opt_copy = copy.deepcopy(opt)
-
-    opt_copy.n_workers = 0
-    opt_copy.batch_size = 1
-    opt_copy.shuffle = True
-    opt_copy.is_train = True  # always load the train set as centers
-    opt_copy.max_trainset_size = INF
-    opt_copy.max_ori_trainset_size = INF
-    # TODO need to modify other options such as n_val, dataset_rand_idx, etc. to
-    # work with the current data loading pipeline. We do not want to always follow the settings in the
-    # given opt because, e.g., the user might have set max_ori_trainset_size to be a small number
-    # to limit the number of labeled training examples used, but the centers are unlabeled so they can
-    # potentially be selected from the full training set
-
-    logger.info('Getting centers: dummy load...')
-    loader = datasets.get_dataloaders(opt_copy)
-
-    opt_copy.batch_size = len(loader)  # get dataset size
-    logger.info('Getting centers...')
-    loader = datasets.get_dataloaders(opt_copy)
-
-    # get the entire dataset (input, target) as a tensor
-    centers = next(iter(loader))
-
-    return centers
 
 
 @torch.no_grad()
@@ -72,7 +43,7 @@ def default_init_weights(module_list, scale=1, bias_fill=0, **kwargs):
                 m.weight.data *= scale
                 if m.bias is not None:
                     m.bias.data.fill_(bias_fill)
-            elif isinstance(m, kLinear):
+            elif isinstance(m, AlignmentLinear):
                 init.kaiming_normal_(m.linear.weight, **kwargs)
                 m.linear.weight.data *= scale
                 if m.linear.bias is not None:
@@ -81,17 +52,6 @@ def default_init_weights(module_list, scale=1, bias_fill=0, **kwargs):
                 init.constant_(m.weight, 1)
                 if m.bias is not None:
                     m.bias.data.fill_(bias_fill)
-
-
-def update_centers_eval(model):
-    """
-    A wrapper around model's update_centers method that sets the model to eval
-    and cuts off grad beforehand.
-    """
-    model.eval()
-    with torch.no_grad():
-        if hasattr(model, 'update_centers'):
-            model.update_centers()
 
 
 def exclude_during_backward(model):

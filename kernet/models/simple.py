@@ -9,14 +9,11 @@ import torch
 
 import kernet.utils as utils
 from kernet.models import Flatten
-# from kernet.layers.klinear import _kLayer, kLinear
 from kernet.layers.alignment_linear import _DynamicLayer, AlignmentLinear
 from kernet.models.base_model import BaseModel
 
 
 logger = logging.getLogger()
-
-# TODO trainable centers?
 
 
 class Simple(BaseModel):
@@ -52,32 +49,13 @@ class Simple(BaseModel):
 
         self.fc1 = torch.nn.Sequential(*[torch.nn.Linear(self.feat_len, 120), self.act()])
         self.fc2 = torch.nn.Linear(120, 84)
-
-        if centers is not None:
-            # centers is a tuple of (input, target)
-            centers3 = utils.supervised_sample(
-                centers[0],
-                centers[1],
-                opt.n_centers3).clone().detach()
-        else:
-            centers3 = None
-
-        # self.fc3 = kLinear(
-        #     in_features=84,
-        #     out_features=10,
-        #     kernel=self.kernel,
-        #     evaluation=self.evaluation,
-        #     centers=centers3,
-        #     sigma=opt.sigma3)
         self.fc3 = AlignmentLinear(in_features=84, out_features=10, activation=opt.activation)
 
         self.opt = opt
 
         self.print_network(self)
 
-    def forward(self, input, update_centers=True):
-        # if update_centers:
-        #     self.update_centers()
+    def forward(self, input):
         output = self.conv1(input)
         output = self.conv2(output)
         output = self.fc1(output)
@@ -106,10 +84,7 @@ class Simple(BaseModel):
                            '5 parts instead of the requested {} parts...'.format(self.__class__.__name__, n_parts))
             n_parts = 5
 
-        # in modular training (assumed training mode given split has been called),
-        # update_centers do not need to be performed at each forward call. Define
-        # new forward to bypass the forward function defined for the entire model
-        self.forward = functools.partial(self.forward, update_centers=False)
+        self.forward = functools.partial(self.forward)
 
         output_layer = list(self.children())[-1]
         if n_parts == 1:
@@ -167,10 +142,5 @@ class Simple(BaseModel):
     @staticmethod
     def modify_commandline_options(parser, **kwargs):
         parser = _DynamicLayer.modify_commandline_options(parser, **kwargs)
-
-        parser.add_argument('--n_centers3', type=int, default=1000,
-                            help='The number of centers for the kernelized fc layer 3. Note that kernels evaluated directly do not need centers. For them, this param has no effect.')
-        parser.add_argument('--sigma3', type=float, default=9.,
-                            help='The optional sigma hyperparameter for layer fc3.')
 
         return parser

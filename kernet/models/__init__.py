@@ -89,17 +89,7 @@ def get_model(opt):
     """
     model = find_model_using_name(opt.model)
 
-    # check if model contains kernelized components that need centers
-    from inspect import signature
-    if opt.activation in ['gaussian']:
-        # currently, the only case where centers are required is when the model
-        # uses Gaussian kernel. All other kernels can be implemented directly
-        # without using the kernel trick (which is what requires centers)
-        from kernet import utils
-        centers = utils.get_centers(opt)
-        instance = model(opt, centers)
-    else:
-        instance = model(opt)
+    instance = model(opt)
 
     logger.info("model [%s] was created" % type(instance).__name__)
     return instance

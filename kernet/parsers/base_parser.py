@@ -44,12 +44,7 @@ class BaseParser:
             'fashionmnist',
             'svhn'
         ] + list(datasets.CIFAR10_2.keys()), default='mnist', help='Dataset name.')
-        parser.add_argument('--model', choices=[
-            'simple',
-            'kmlp',
-            'lenet5',
-            'k1lenet5', 'k2lenet5', 'k3lenet5'
-        ], default='lenet5', help='Model name. The (k)ResNets are for 3-channel images only.')
+        parser.add_argument('--model', choices=['simple'], default='simple', help='Model name.')
         parser.add_argument('--activation', choices=['tanh', 'sigmoid', 'relu', 'gaussian', 'reapen'], default='tanh',
                             help='Model activation/kernel function. Not used by certain models such as the ResNets.')
         parser.add_argument('--in_channels', type=int, default=3,

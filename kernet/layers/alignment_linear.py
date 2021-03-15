@@ -5,7 +5,6 @@ Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses
 import torch
 
 import kernet.utils as utils
-from kernet.layers.kcore import Phi
 
 
 class _DynamicLayer(torch.nn.Module):
@@ -29,39 +28,6 @@ class AlignmentLinear(_DynamicLayer):
         bias=True,
         *args,
         **kwargs):
-        """
-        A kernelized linear layer. With input x, this layer computes:
-        w.T @ \phi(x) + bias, where 
-          1) when evaluation is 'indirect',
-          \phi(x).T = (k(c_1, x), ..., k(c_m, x)), k is the kernel function, 
-          and the c_i's are the centers;
-
-          2) when evaluation is 'direct',
-          \phi(x).T is the actual image of x under the corresponding feature map.
-          In this case, there is no need to specify the centers.
-
-        Direct evaluation only works on kernels whose feature maps \phi's are 
-        implementable. 
-
-        Args:
-          out_features (int): The output dimension. 
-          in_features (int): The input dimension. Not needed for certain
-          kernels. Default: None. 
-          kernel (str): Name of the kernel. Default: 'gaussian'.
-          bias (bool): If True, add a bias term to the output. Default: True. 
-          evaluation (str): Whether to evaluate the kernel machines directly 
-          as the inner products between weight vectors and \phi(input), which
-          requires explicitly writing out \phi, or indirectly 
-          via an approximation using the reproducing property, which works 
-          for all kernels but can be less accurate and less efficient. 
-          Default: 'direct'. Choices: 'direct' | 'indirect'.
-          centers (tensor): A set of torch tensors. Needed only when evaluation
-          is set to 'indirect'. Default: None.
-          trainable_centers (bool): Whether to treat the centers as trainable
-            parameters. Default: False.
-          sigma (float): The sigma hyperparameter for the kernel. See the
-            kernel definitions for details. Default: 1..
-        """
         super(AlignmentLinear, self).__init__(*args, **kwargs)
 
         self.out_features = out_features

@@ -25,17 +25,19 @@ class Trainer(torch.nn.Module):
         self.start_epoch = 0
         self.val_metric_name = val_metric_name
         self.val_metric_obj = val_metric_obj
-        self.best_val_metric = float(
-            'inf') if val_metric_obj == 'min' else -float('inf')
+        self.best_val_metric = float('inf') if val_metric_obj == 'min' else -float('inf')
         self.model = model
         self.set_eval = set_eval
 
         if opt.is_train:
             self.optimizer = optimizer
             if opt.schedule_lr:
-                self.scheduler = ReduceLROnPlateau(self.optimizer, val_metric_obj,
-                                                   factor=opt.lr_schedule_factor,
-                                                   patience=opt.lr_schedule_patience, verbose=True)
+                self.scheduler = ReduceLROnPlateau(
+                    self.optimizer,
+                    val_metric_obj,
+                    factor=opt.lr_schedule_factor,
+                    patience=opt.lr_schedule_patience,
+                    verbose=True)
 
     def step(self, input, target, criterion, minimize=True):
         self.model.train()
@@ -65,18 +67,7 @@ class Trainer(torch.nn.Module):
     def get_eval_output(self, input):
         with torch.no_grad():
             self.model.eval()
-
-            try:
-                if hasattr(self.model, 'update_centers'):
-                    output = self.model(input, update_centers=False)
-                else:
-                    output = self.model(input)
-            except:
-                if hasattr(self.model, 'update_centers'):
-                    output = self.model(input, update_centers=False)
-                else:
-                    output = self.model(input)
-
+            output = self.model(input)
             return output
     
     def scheduler_step(self, val_loss_value):

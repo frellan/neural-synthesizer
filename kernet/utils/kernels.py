@@ -8,18 +8,6 @@ import torch.nn.functional as F
 from .misc import *
 
 
-def gaussian_phi_fn_indir(input, centers, sigma, **kwargs):
-    """
-    Gaussian kernel (indirect):
-      k(x, y) = exp(-||x-y||_2^2 / (2 * sigma^2));
-      x -> (k(c_1, x), ..., k(c_m, x)), c_i \in centers, \forall i.
-    """
-    input = centers.sub(input.unsqueeze(1)).pow(
-        2).view(input.size(0), centers.size(0), -1)
-    input = input.sum(dim=-1).mul(-1./(2*sigma**2)).exp()
-    return input
-
-
 def poly2_phi_fn_dir(input, **kwargs):
     """
     Polynomial kernel of order 2 (direct)

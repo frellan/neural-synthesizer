@@ -256,15 +256,11 @@ srs_raw_neo = functools.partial(_srs_raw, neo=True)
 srs_raw = functools.partial(_srs_raw, neo=False)
 srs_nmse_neo = functools.partial(_srs_nmse, neo=True)
 srs_nmse = functools.partial(_srs_nmse, neo=False)
-srs_upper_tri_alignment_neo = functools.partial(
-    _srs_upper_tri_alignment, neo=True)
-srs_upper_tri_alignment = functools.partial(
-    _srs_upper_tri_alignment, neo=False)
+srs_upper_tri_alignment_neo = functools.partial(_srs_upper_tri_alignment, neo=True)
+srs_upper_tri_alignment = functools.partial(_srs_upper_tri_alignment, neo=False)
 srs_alignment_neo = functools.partial(_srs_alignment, neo=True)
 srs_alignment = functools.partial(_srs_alignment, neo=False)
 srs_contrastive_neo = functools.partial(_srs_contrastive, neo=True)
 srs_contrastive = functools.partial(_srs_contrastive, neo=False)
-srs_log_contrastive_neo = functools.partial(
-    _srs_log_contrastive, neo=True)
-srs_log_contrastive = functools.partial(
-    _srs_log_contrastive, neo=False)
+srs_log_contrastive_neo = functools.partial(_srs_log_contrastive, neo=True)
+srs_log_contrastive = functools.partial(_srs_log_contrastive, neo=False)

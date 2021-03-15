@@ -109,8 +109,6 @@ def main():
 
     # train other hidden modules
     for i in range(2, opt.n_parts):
-        # prepare centers
-        utils.update_centers_eval(model)
         # exclude certain network part(s) from the graph to make things faster
         utils.exclude_during_backward(modules[i - 2])
         train_hidden(
@@ -125,7 +123,6 @@ def main():
         )
 
     # train output layer
-    utils.update_centers_eval(model)
     utils.exclude_during_backward(modules[-2])
     train_output(
         opt,
