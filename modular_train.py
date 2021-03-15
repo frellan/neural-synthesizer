@@ -12,8 +12,7 @@ import kernet.models as models
 import kernet.layers.loss as losses
 import kernet.datasets as datasets
 from kernet.parsers import TrainParser
-from kernet.trainers.trainer import Trainer
-from kernet.engines import train_hidden, train_output
+from kernet.trainers import train_hidden, train_output, Trainer
 
 
 loss_names = [
@@ -31,11 +30,6 @@ def modify_commandline_options(parser, **kwargs):
                         choices=loss_names + [_ + '_neo' for _ in loss_names],
                         default='srs_alignment',
                         help='Proxy hidden objective.')
-    parser.add_argument('--use_proj_head', type=utils.str2bool,
-                        nargs='?', const=True, default=False,
-                        help='Whether to attach a trainable two-layer MLP projection head to the ' +
-                             'output of the hidden modules during training. If added, the heads project ' +
-                        'all activations to the same Euclidean space with dimension determined by head_size.')
     parser.add_argument('--split_mode', type=int, default=1,
                         help='The mode to perform the split. Effective only for certain networks.')
     parser.add_argument('--head_size', type=int, default=512,

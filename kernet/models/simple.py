@@ -90,40 +90,30 @@ class Simple(BaseModel):
         if n_parts == 1:
             models, trainables = (self,), (self,)
         elif n_parts == 2:
-            hidden_layers = utils.attach_head(
-                torch.nn.Sequential(*list(self.children())[:-1]), self.opt)
+            hidden_layers = torch.nn.Sequential(*list(self.children())[:-1])
             t1 = hidden_layers
             models, trainables = (hidden_layers, self), (t1, output_layer)
         elif n_parts == 3:
-            hidden_layers1 = utils.attach_head(
-                torch.nn.Sequential(*list(self.children())[:-2]), self.opt)
-            hidden_layers2 = utils.attach_head(
-                torch.nn.Sequential(*list(self.children())[:-1]), self.opt)
+            hidden_layers1 = torch.nn.Sequential(*list(self.children())[:-2])
+            hidden_layers2 = torch.nn.Sequential(*list(self.children())[:-1])
             t1 = hidden_layers1
             t2 = hidden_layers2[-1]
             models, trainables = (hidden_layers1, hidden_layers2, self), \
                                  (t1, t2, output_layer)
         elif n_parts == 4:
-            hidden_layers1 = utils.attach_head(
-                torch.nn.Sequential(*list(self.children())[:-3]), self.opt)
-            hidden_layers2 = utils.attach_head(
-                torch.nn.Sequential(*list(self.children())[:-2]), self.opt)
-            hidden_layers3 = utils.attach_head(
-                torch.nn.Sequential(*list(self.children())[:-1]), self.opt)
+            hidden_layers1 = torch.nn.Sequential(*list(self.children())[:-3])
+            hidden_layers2 = torch.nn.Sequential(*list(self.children())[:-2])
+            hidden_layers3 = torch.nn.Sequential(*list(self.children())[:-1])
             t1 = hidden_layers1
             t2 = hidden_layers2[-1]
             t3 = hidden_layers3[-1]
             models, trainables = (hidden_layers1, hidden_layers2, hidden_layers3, self), \
                                  (t1, t2, t3, output_layer)
         elif n_parts == 5:
-            hidden_layers1 = utils.attach_head(
-                torch.nn.Sequential(*list(self.children())[:-4]), self.opt)
-            hidden_layers2 = utils.attach_head(
-                torch.nn.Sequential(*list(self.children())[:-3]), self.opt)
-            hidden_layers3 = utils.attach_head(
-                torch.nn.Sequential(*list(self.children())[:-2]), self.opt)
-            hidden_layers4 = utils.attach_head(
-                torch.nn.Sequential(*list(self.children())[:-1]), self.opt)
+            hidden_layers1 = torch.nn.Sequential(*list(self.children())[:-4])
+            hidden_layers2 = torch.nn.Sequential(*list(self.children())[:-3])
+            hidden_layers3 = torch.nn.Sequential(*list(self.children())[:-2])
+            hidden_layers4 = torch.nn.Sequential(*list(self.children())[:-1])
             t1 = hidden_layers1
             t2 = hidden_layers2[-1]
             t3 = hidden_layers3[-1]
