@@ -64,9 +64,9 @@ def main():
 
     trainer_cls = Trainer
 
-    output_layer = list(model.children())[-1]
     selected_loss_fn = getattr(losses, opt.hidden_objective)
     hidden_criterion = selected_loss_fn(opt.activation, opt.n_classes)
+    
     if opt.loss == 'xe':
         output_criterion = torch.nn.CrossEntropyLoss()
     elif opt.loss == 'hinge':
