@@ -17,6 +17,78 @@ import kernet.models as models
 logger = logging.getLogger()
 
 
+def get_loss_act(activation):
+    if activation == 'tanh':
+        act = utils.nn_tanh_phi_fn_dir
+        k_min, k_max = -1., 1.
+    elif activation == 'sigmoid':
+        act = utils.nn_sigmoid_phi_fn_dir
+        k_min, k_max = 0., 1.
+    elif activation == 'relu':
+        act = utils.nn_relu_phi_fn_dir
+        k_min, k_max = 0., 1.
+    else:
+        raise NotImplementedError()
+    return act, k_min, k_max
+
+def get_k_mtrx(input1, input2, activation):
+    act, _, _ = get_loss_act(activation)
+    return act(input1).mm(act(input2).t())
+
+def get_ideal_k_mtrx(target1, target2, activation, n_classes):
+    """
+    Returns the "ideal" kernel matrix G* defined as
+        (G*)_{ij} = k_min if y_i == y_j;
+        (G*)_{ij} = k_max if y_i != y_j.
+
+    Args:
+        target1 (tensor): Categorical labels with values in 
+        {0, 1, ..., n_classes-1}.
+        target2 (tensor): Categorical labels with values in 
+        {0, 1, ..., n_classes-1}.
+        n_classes (int)
+
+    Shape:
+        - Input:
+        target1: (n_examples1, 1) or (1,) (singleton set)
+        target2: (n_examples2, 1) or (1,) (singleton set)
+        - Output: (n_examples1, n_examples2)
+    """
+    _, k_min, k_max = get_loss_act(activation)
+
+    if n_classes < 2:
+        raise ValueError('You need at least 2 classes')
+
+    if len(target1.size()) == 1:
+        target1.unsqueeze_(1)
+    elif len(target1.size()) > 2:
+        raise ValueError('target1 has too many dimensions')
+    if len(target2.size()) == 1:
+        target2.unsqueeze_(1)
+    elif len(target2.size()) > 2:
+        raise ValueError('target2 has too many dimensions')
+
+    if torch.max(target1) + 1 > n_classes:
+        raise ValueError('target1 has at least one invalid entry')
+    if torch.max(target2) + 1 > n_classes:
+        raise ValueError('target2 has at least one invalid entry')
+
+    target1_onehot, target2_onehot = \
+        utils.one_hot_encode(target1, n_classes).to(torch.float), \
+        utils.one_hot_encode(target2, n_classes).to(torch.float)
+
+    ideal = target1_onehot.mm(target2_onehot.t())
+
+    if k_min != 0:
+        min_mask = torch.full_like(ideal, k_min)
+        ideal = torch.where(ideal == 0, min_mask, ideal)
+    if k_max != 1:
+        max_mask = torch.full_like(ideal, k_max)
+        ideal = torch.where(ideal == 1, max_mask, ideal)
+
+    return ideal
+
+
 class SRSLoss(_Loss):
     """
     The Supervised Representation Similarity (SRS) loss defined as
@@ -69,7 +141,7 @@ def _make_fn(map_input, map_target, loss):
     )
 
 
-def _srs_raw(phi, n_classes, neo):
+def _srs_raw(activation, n_classes, neo):
     """
     In the regular version, the returned loss function computes sum of all kernel
     values from positive pairs minus that of all kernel values from negative pairs
@@ -91,21 +163,22 @@ def _srs_raw(phi, n_classes, neo):
     def map_input(x): return torch.where(
         torch.eye(len(x)).to(x.device) == 1,
         torch.tensor(0.).to(x.device),
-        phi.get_k_mtrx(x, x)
+        get_k_mtrx(x, x, activation=activation)
     )  # removes the main diagonal
-    def map_target(x): return phi.get_ideal_k_mtrx(x, x, n_classes=n_classes)
+    def map_target(x): return get_ideal_k_mtrx(x, x, activation=activation, n_classes=n_classes)
 
     def loss_fn(input, target):
+        _, k_min, k_max = get_loss_act(activation)
         if neo:
             mask = torch.where(
-                target == phi.k_min,
+                target == k_min,
                 torch.tensor(-1., device=input.device),
                 torch.tensor(0., device=input.device)
             )
             return torch.sum(input * mask) / (torch.sum(torch.abs(mask)))
         else:
             mask = torch.where(
-                target == phi.k_max,
+                target == k_max,
                 torch.tensor(1., device=input.device),
                 torch.tensor(-1., device=input.device)
             )
@@ -119,17 +192,18 @@ def _srs_raw(phi, n_classes, neo):
     )
 
 
-def _srs_nmse(phi, n_classes, neo):
+def _srs_nmse(activation, n_classes, neo):
     """
     Negative MSE between the actual kernel mtrx and the perfect one.
     """
 
-    def map_input(x): return phi.get_k_mtrx(x, x)
-    def map_target(x): return phi.get_ideal_k_mtrx(x, x, n_classes=n_classes)
+    def map_input(x): return get_k_mtrx(x, x, activation=activation)
+    def map_target(x): return get_ideal_k_mtrx(x, x, activation=activation, n_classes=n_classes)
     _loss_fn = torch.nn.MSELoss(reduction='mean')
 
     if neo:
-        @utils.mask_loss_fn(phi.k_min)
+        _, k_min, _ = get_loss_act(activation)
+        @utils.mask_loss_fn(k_min)
         def loss_fn(input, target):
             return -_loss_fn(input, target)
     else:
@@ -143,21 +217,22 @@ def _srs_nmse(phi, n_classes, neo):
     )
 
 
-def _srs_alignment(phi, n_classes, neo):
+def _srs_alignment(activation, n_classes, neo):
     """
     Cosine similarity between the actual kernel mtrx and the perfect one.
     """
 
-    def map_input(x): return phi.get_k_mtrx(x, x)
-    def map_target(x): return phi.get_ideal_k_mtrx(x, x, n_classes=n_classes)
+    def map_input(x): get_k_mtrx(x, x, activation=activation)
+    def map_target(x): return get_ideal_k_mtrx(x, x, activation=activation, n_classes=n_classes)
     _loss_fn = torch.nn.CosineSimilarity(dim=0)
 
     if neo:
-        if phi.k_min == 0:
+        _, k_min, _ = get_loss_act(activation)
+        if k_min == 0:
             raise ValueError(
                 'srs_alignment_neo is not defined for the given phi.')
 
-        @utils.mask_loss_fn(phi.k_min)
+        @utils.mask_loss_fn(k_min)
         def loss_fn(input, target):
             return _loss_fn(input, target)
     else:
@@ -170,25 +245,26 @@ def _srs_alignment(phi, n_classes, neo):
     )
 
 
-def _srs_upper_tri_alignment(phi, n_classes, neo):
+def _srs_upper_tri_alignment(activation, n_classes, neo):
     """
     Cosine similarity between the actual kernel mtrx and the
     perfect one but only considering the upper triangle minus
     the main diagonal.
     """
-    def map_input(x): return utils.upper_tri(phi.get_k_mtrx(x, x))
+    def map_input(x): return utils.upper_tri(get_k_mtrx(x, x, activation=activation))
 
     def map_target(x): return utils.upper_tri(
-        phi.get_ideal_k_mtrx(x, x, n_classes=n_classes))
+        get_ideal_k_mtrx(x, x, activation=activation, n_classes=n_classes))
 
     _loss_fn = torch.nn.CosineSimilarity(dim=0)
 
     if neo:
-        if phi.k_min == 0:
+        _, k_min, _ = get_loss_act(activation)
+        if k_min == 0:
             raise ValueError(
                 'srs_upper_tri_alignment_neo is not defined for the given phi.')
 
-        @utils.mask_loss_fn(phi.k_min)
+        @utils.mask_loss_fn(k_min)
         def loss_fn(input, target):
             return _loss_fn(input, target)
     else:
@@ -201,7 +277,7 @@ def _srs_upper_tri_alignment(phi, n_classes, neo):
     )
 
 
-def _srs_contrastive(phi, n_classes, neo):
+def _srs_contrastive(activation, n_classes, neo):
     """
     A contrastive-loss-like instantiation.
     """
@@ -209,13 +285,14 @@ def _srs_contrastive(phi, n_classes, neo):
     def map_input(x): return torch.where(
         torch.eye(len(x)).to(x.device) == 1,
         torch.tensor(-utils.INF).to(x.device),
-        phi.get_k_mtrx(x, x)
+        get_k_mtrx(x, x, activation=activation)
     )  # removes the main diagonal
-    def map_target(y): return phi.get_ideal_k_mtrx(y, y, n_classes=n_classes)
+    def map_target(y): return get_ideal_k_mtrx(y, y, activation=activation, n_classes=n_classes)
+    _, k_min, k_max = get_loss_act(activation)
     if neo:
-        def loss_fn(x, y): return -torch.mean(torch.exp(x[y == phi.k_min]))
+        def loss_fn(x, y): return -torch.mean(torch.exp(x[y == k_min]))
     else:
-        def loss_fn(x, y): return torch.sum(torch.exp(x[y == phi.k_max])) / \
+        def loss_fn(x, y): return torch.sum(torch.exp(x[y == k_max])) / \
             torch.sum(torch.exp(x))
 
     return _make_fn(
@@ -225,25 +302,25 @@ def _srs_contrastive(phi, n_classes, neo):
     )
 
 
-def _srs_log_contrastive(phi, n_classes, neo):
+def _srs_log_contrastive(activation, n_classes, neo):
     """
     A contrastive-loss-like instantiation.
     """
-
+    _, k_min, k_max = get_loss_act(activation)
     if neo:
         def loss_fn(x, y): return - \
-            torch.log(torch.mean(torch.exp(x[y == phi.k_min])))
+            torch.log(torch.mean(torch.exp(x[y == k_min])))
     else:
         def loss_fn(x, y):
             dims = list(range(len(x.size())))
-            return torch.logsumexp(x[y == phi.k_max], dim=0) - torch.logsumexp(x, dim=dims)
+            return torch.logsumexp(x[y == k_max], dim=0) - torch.logsumexp(x, dim=dims)
 
     def map_input(x): return torch.where(
         torch.eye(len(x)).to(x.device) == 1,
         torch.tensor(-utils.INF).to(x.device),
-        phi.get_k_mtrx(x, x)
+        get_k_mtrx(x, x, activation=activation)
     )  # removes the main diagonal
-    def map_target(y): return phi.get_ideal_k_mtrx(y, y, n_classes=n_classes)
+    def map_target(y): return get_ideal_k_mtrx(y, y, activation=activation, n_classes=n_classes)
 
     return _make_fn(
         map_input=map_input,

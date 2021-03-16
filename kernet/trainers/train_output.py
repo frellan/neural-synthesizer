@@ -94,15 +94,14 @@ def train_output(opt, n_epochs, trainer, loader, val_loader, criterion, part_id,
                     total += target.size(0)
 
                     if opt.loglevel.upper() not in ['DEBUG', 'NOTSET']:
-                        latest_acc = 100 * correct / total
+                        latest_acc = 100.0 * correct / total
                         message = f'avg val acc (%): {latest_acc:.3f}'
                         val_pbar.update(message)
-                    batch_acc = 100 * \
-                        batch_correct / target.size(0)
+                    batch_acc = 100.0 * batch_correct / target.size(0)
                     message = f'batch: {i + 1}/{total_batch_val}, batch val acc (%): {batch_acc:.3f}'
                     logger.debug(message)
 
-                acc = 100 * correct / total
+                acc = 100.0 * correct / total
                 trainer.log_loss_values({
                     'val_acc': acc
                 })

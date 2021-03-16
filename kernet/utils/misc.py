@@ -19,34 +19,6 @@ INF = float('inf')
 AVOID_ZERO_DIV = torch.tensor(1e-12)
 
 
-def examine_checkpoints(dirs: str) -> dict:
-    """
-    Given checkpoint directories, searches all checkpoints and returns a dict of
-    {directory1 name: {checkpoint1 name: best validation metric, checkpoint2 name: ...}, ...}.
-
-    Wildcards are supported for the argument dirs.
-    """
-    dirs = glob.glob(dirs)
-
-    if len(dirs) == 0:
-        return {}
-    if len(dirs) > 1:
-        results = {}
-        for checkpoint_dir in dirs:
-            results = {**results, **examine_checkpoints(checkpoint_dir)}
-        return results
-
-    checkpoint_dir = dirs[0]
-    print(f'processing {checkpoint_dir}...')
-    checkpoint_names = glob.glob(os.path.join(checkpoint_dir, '*.pth'))
-    info = {}
-    for checkpoint_name in checkpoint_names:
-        checkpoint = torch.load(checkpoint_name)
-        info[os.path.splitext(os.path.basename(checkpoint_name))[
-            0]] = checkpoint['best_val_metric']
-    return {os.path.basename(checkpoint_dir): info}
-
-
 def mask_loss_fn(mask_val):
     # only computes loss on examples where target == mask_val
     def wrapper(loss_fn):

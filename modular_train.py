@@ -9,7 +9,7 @@ import torch
 
 import kernet.utils as utils
 import kernet.models as models
-import kernet.models.loss as losses
+import kernet.models.srs_loss as losses
 import kernet.datasets as datasets
 from kernet.parsers import TrainParser
 from kernet.trainers import train_hidden, train_output, Trainer
@@ -27,23 +27,21 @@ loss_names = [
 
 def modify_commandline_options(parser, **kwargs):
     parser.add_argument('--hidden_objective',
-                        choices=loss_names + [_ + '_neo' for _ in loss_names],
-                        default='srs_alignment',
-                        help='Proxy hidden objective.')
+        choices=loss_names + [_ + '_neo' for _ in loss_names],
+        default='srs_alignment',
+        help='Proxy hidden objective.')
     parser.add_argument('--split_mode', type=int, default=1,
-                        help='The mode to perform the split. Effective only for certain networks.')
-    parser.add_argument('--head_size', type=int, default=512,
-                        help='Output size of the projection head.')
+        help='The mode to perform the split. Effective only for certain networks.')
     n_parts = kwargs["n_parts"]
     for i in range(1, n_parts + 1):
         parser.add_argument('--lr{}'.format(i), type=float, default=1e-3,
-                            help='Initial learning rate for part {}.'.format(i))
+            help='Initial learning rate for part {}.'.format(i))
         parser.add_argument('--momentum{}'.format(i), type=float, default=.9,
-                            help='Momentum for the SGD optimizer for part {}.'.format(i))
+            help='Momentum for the SGD optimizer for part {}.'.format(i))
         parser.add_argument('--weight_decay{}'.format(i), type=float, default=5e-4,
-                            help='L2 regularization on the model weights for part {}.'.format(i))
+            help='L2 regularization on the model weights for part {}.'.format(i))
         parser.add_argument('--n_epochs{}'.format(i), type=int, default=200,
-                            help='The number of training epochs for part {}.'.format(i))
+            help='The number of training epochs for part {}.'.format(i))
     return parser
 
 
@@ -68,7 +66,7 @@ def main():
 
     output_layer = list(model.children())[-1]
     selected_loss_fn = getattr(losses, opt.hidden_objective)
-    hidden_criterion = selected_loss_fn(output_layer.phi, opt.n_classes)
+    hidden_criterion = selected_loss_fn(opt.activation, opt.n_classes)
     if opt.loss == 'xe':
         output_criterion = torch.nn.CrossEntropyLoss()
     elif opt.loss == 'hinge':
