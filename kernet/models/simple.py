@@ -17,7 +17,7 @@ logger = logging.getLogger()
 
 
 class Simple(BaseModel):
-    def __init__(self, opt, centers=None, *args, **kwargs):
+    def __init__(self, opt, *args, **kwargs):
         super(Simple, self).__init__(*args, **kwargs)
         if opt.dataset in ['mnist', 'fashionmnist']:
             self.feat_len = 400

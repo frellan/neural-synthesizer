@@ -57,8 +57,6 @@ class Trainer(torch.nn.Module):
         self.optimizer.step()
         self.steps_taken += 1
 
-        # on why use .detach() but not .data:
-        # https://pytorch.org/blog/pytorch-0_4_0-migration-guide/
         if minimize:
             return output.detach(), loss.item()
         else:
