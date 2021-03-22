@@ -13,7 +13,6 @@ import kernet.models.srs_loss as losses
 import kernet.datasets as datasets
 from kernet.models import Flatten
 from kernet.models.morph import Morph
-from kernet.models.alignment_linear import AlignmentLinear
 from kernet.parsers import TrainParser
 from kernet.trainers import train_hidden, train_output, Trainer
 
@@ -56,15 +55,15 @@ def main():
     selected_loss_fn = getattr(losses, opt.hidden_objective)
     hidden_criterion = selected_loss_fn(opt.activation, opt.n_classes)
 
-    model.add_to_pending_module(torch.nn.Sequential(*[
+    model.add_to_pending_module(
         torch.nn.Conv2d(1, 6, 5, padding=2),
         torch.nn.ReLU(),
-        torch.nn.MaxPool2d(2)]))
-    model.add_to_pending_module(torch.nn.Sequential(*[
+        torch.nn.MaxPool2d(2))
+    model.add_to_pending_module(
         torch.nn.Conv2d(6, 16, 5),
         torch.nn.ReLU(),
         torch.nn.MaxPool2d(2),
-        Flatten()]))
+        Flatten())
     model.add_to_pending_module(torch.nn.Linear(400, 120))
     model.add_to_pending_module(torch.nn.ReLU())
     model.add_to_pending_module(torch.nn.Linear(120, 84))
@@ -82,9 +81,10 @@ def main():
         val_loader,
         hidden_criterion,
         device)
-
     model.solidify_pending_module()
-    model.add_to_pending_module(AlignmentLinear(in_features=84, out_features=10, activation=opt.activation))
+
+    model.add_to_pending_module(torch.nn.ReLU())
+    model.add_to_pending_module(torch.nn.Linear(84, 10))
 
     # train output layer
     if opt.loss == 'xe':

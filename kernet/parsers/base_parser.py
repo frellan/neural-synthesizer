@@ -44,7 +44,7 @@ class BaseParser:
             'fashionmnist',
             'svhn'
         ] + list(datasets.CIFAR10_2.keys()), default='mnist', help='Dataset name.')
-        parser.add_argument('--model', choices=['simple'], default='simple', help='Model name.')
+        parser.add_argument('--model', choices=['morph'], default='morph', help='Model name.')
         parser.add_argument('--activation', choices=['tanh', 'sigmoid', 'relu'], default='tanh',
                             help='Model activation/kernel function. Not used by certain models such as the ResNets.')
         parser.add_argument('--in_channels', type=int, default=3,

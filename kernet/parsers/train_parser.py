@@ -10,7 +10,7 @@ class TrainParser(BaseParser):
     def initialize(self, parser):
         super().initialize(parser)
 
-        parser.add_argument('--optimizer', choices=['sgd', 'adam'], default='adam',
+        parser.add_argument('--optimizer', choices=['sgd', 'adam','samsgd'], default='adam',
                             help='The optimizer to be used.')
         parser.add_argument('--loss', choices=['xe', 'hinge', 'nll'], default='xe',
                             help='The overall loss function to be used. xe is for CrossEntropyLoss, hinge for ' +

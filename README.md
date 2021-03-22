@@ -3,7 +3,7 @@
 ```
 python modular_train.py \
 --dataset mnist \
---model simple \
+--model morph \
 --n_parts 2 \
 --loss xe \
 --lr1 .1 \

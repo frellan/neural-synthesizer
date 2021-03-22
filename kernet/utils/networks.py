@@ -11,7 +11,6 @@ from torch.nn.modules.batchnorm import _BatchNorm
 
 from .misc import INF
 from kernet import datasets
-from kernet.models.alignment_linear import AlignmentLinear
 
 
 logger = logging.getLogger()
@@ -43,11 +42,6 @@ def default_init_weights(module_list, scale=1, bias_fill=0, **kwargs):
                 m.weight.data *= scale
                 if m.bias is not None:
                     m.bias.data.fill_(bias_fill)
-            elif isinstance(m, AlignmentLinear):
-                init.kaiming_normal_(m.linear.weight, **kwargs)
-                m.linear.weight.data *= scale
-                if m.linear.bias is not None:
-                    m.linear.bias.data.fill_(bias_fill)
             elif isinstance(m, _BatchNorm):
                 init.constant_(m.weight, 1)
                 if m.bias is not None:

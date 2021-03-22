@@ -9,24 +9,15 @@ import torch
 
 import kernet.utils as utils
 from kernet.models import Flatten
-from kernet.models.alignment_linear import _DynamicLayer, AlignmentLinear
 from kernet.models.base_model import BaseModel
 
 
 logger = logging.getLogger()
 
 
-class Morph(BaseModel):
+class Morph(torch.nn.Module):
     def __init__(self, opt, device, *args, **kwargs):
         super(Morph, self).__init__(*args, **kwargs)
-        if opt.dataset in ['mnist', 'fashionmnist']:
-            self.feat_len = 400
-            in_channels = 1
-        elif opt.dataset in ['cifar10', 'cifar100', 'svhn']:
-            self.feat_len = 576
-            in_channels = 3
-        else:
-            raise NotImplementedError()
 
         self.opt = opt
         self.device = device
@@ -41,8 +32,11 @@ class Morph(BaseModel):
         output = pending(output)
         return output
 
-    def add_to_pending_module(self, component):
-        self.pending_components.append(component)
+    def add_to_pending_module(self, *components):
+        if (len(components) > 1):
+            self.pending_components.append(torch.nn.Sequential(*components))
+        else:
+            self.pending_components.append(*components)
 
     def clear_pending_module(self):
         self.pending_components = []
@@ -57,6 +51,4 @@ class Morph(BaseModel):
 
     @staticmethod
     def modify_commandline_options(parser, **kwargs):
-        parser = _DynamicLayer.modify_commandline_options(parser, **kwargs)
-
         return parser
