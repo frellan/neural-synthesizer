@@ -7,9 +7,8 @@ import functools
 
 import torch
 
-import kernet.utils as utils
-from kernet.models import Flatten
-from kernet.models.base_model import BaseModel
+import network.utils as utils
+from network.models import Flatten
 
 
 logger = logging.getLogger()

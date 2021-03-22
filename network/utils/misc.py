@@ -14,7 +14,7 @@ from shutil import get_terminal_size
 import torch
 import torchvision
 
-from kernet.models.sam_sgd import SAMSGD
+from network.models.sam_sgd import SAMSGD
 
 logger = logging.getLogger()
 INF = float('inf')

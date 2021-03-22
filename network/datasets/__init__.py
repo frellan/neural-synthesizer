@@ -11,7 +11,7 @@ import torchvision
 import torchvision.transforms as transforms
 from torch.utils.data.dataset import Subset
 
-from kernet import utils
+from network import utils
 
 logger = logging.getLogger()
 

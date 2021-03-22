@@ -10,7 +10,7 @@ from torch.nn import init as init
 from torch.nn.modules.batchnorm import _BatchNorm
 
 from .misc import INF
-from kernet import datasets
+from network import datasets
 
 
 logger = logging.getLogger()
