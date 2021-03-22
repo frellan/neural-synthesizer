@@ -2,21 +2,18 @@
 ©Copyright 2020 University of Florida Research Foundation, Inc. All rights reserved.
 Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
 """
-import os
 import time
 import logging
 
-import kernet.utils as utils
+import torch
+
+import network.utils as utils
+
 
 logger = logging.getLogger()
 
 
-# TODO if not all batches are of the same size, some of the printed statistics might be slightly
-# wrong due to the fact that the final batch might be smaller than the others but stats from all batches
-# are sometimes averaged upon printing. The same goes for other scripts in engine/. This does
-# not affect training result and all validation accuracy stats are correct
-
-def train_hidden(opt, n_epochs, trainer, loader, val_loader, criterion, part_id, device):
+def train_output(opt, n_epochs, trainer, loader, val_loader, criterion, part_id, device):
     logger.info(f'Starting training part {part_id}...')
 
     total_epoch = trainer.start_epoch + n_epochs
@@ -24,8 +21,10 @@ def train_hidden(opt, n_epochs, trainer, loader, val_loader, criterion, part_id,
 
     for epoch in range(trainer.start_epoch, total_epoch):
         running_loss = 0.
+        running_acc = 0.
         running_time = 0.
         total_loss = 0.
+        total_acc = 0.
         total_time = 0.
         if opt.loglevel.upper() not in ['DEBUG', 'NOTSET']:
             pbar = utils.ProgressBar(len(loader))
@@ -33,41 +32,53 @@ def train_hidden(opt, n_epochs, trainer, loader, val_loader, criterion, part_id,
             start = time.time()
 
             # train step
-            input, target = input.to(device, non_blocking=True), target.to(device, non_blocking=True)
-            output, loss = trainer.step(input, target, criterion, minimize=False)
+            input, target = \
+                input.to(device, non_blocking=True), target.to(
+                    device, non_blocking=True)
+            output, loss = trainer.step(input, target, criterion)
             end = time.time()
 
             # get some batch statistics
+            _, predicted = torch.max(output, 1)
+            acc = 100 * \
+                (predicted == target).sum().to(
+                    torch.float).item() / target.size(0)
             trainer.log_loss_values({
-                f'train_{part_id}_batch_{opt.hidden_objective}': loss,
+                f'train_{part_id}_batch_{criterion.__class__.__name__.lower()}': loss,
+                f'train_{part_id}_batch_acc': acc
             })
 
             # print statistics
-            running_loss += loss  # revert the sign for loss logging
+            running_loss += loss
+            running_acc += acc
             running_time += end - start
-            total_loss += loss  # revert the sign for loss logging
+            total_loss += loss
+            total_acc += acc
             total_time += end - start
             if batch % opt.print_freq == opt.print_freq - 1:
                 message = (
                     f'[part: {part_id}, epoch: {epoch+1:5d}/{total_epoch}, batch: {batch+1:5d}/{total_batch}] '
-                    f'{opt.hidden_objective}: {running_loss/opt.print_freq:.3f}, '
-                    f'runtime (s): {running_time/opt.print_freq:.3f}'
+                    f'loss ({criterion.__class__.__name__.lower()}): {running_loss / opt.print_freq:.3f}, '
+                    f'acc (%): {running_acc / opt.print_freq:.3f}, '
+                    f'runtime (s): {running_time / opt.print_freq:.3f}'
                 )
                 logger.debug(message)
                 running_loss = 0.
+                running_acc = 0.
                 running_time = 0.
             if opt.loglevel.upper() not in ['DEBUG', 'NOTSET']:
                 message = (
                     f'[part: {part_id}, epoch: {epoch+1:5d}/{total_epoch}] '
-                    f'avg {opt.hidden_objective}: {total_loss/(batch+1):.3f}, '
-                    f'avg runtime (s): {total_time/(batch+1):.3f}'
+                    f'avg loss ({criterion.__class__.__name__.lower()}): {total_loss / (batch+1):.3f}, '
+                    f'avg acc (%): {total_acc / (batch+1):.3f}, '
+                    f'avg runtime (s): {total_time / (batch+1):.3f}'
                 )
                 pbar.update(message)
 
         # validate
         if epoch % opt.val_freq == opt.val_freq - 1:
             if val_loader is not None:
-                hidden_obj, total = 0, 0
+                correct, total = 0, 0
                 total_batch_val = len(val_loader)
                 if opt.loglevel.upper() not in ['DEBUG', 'NOTSET']:
                     val_pbar = utils.ProgressBar(len(val_loader))
@@ -76,24 +87,28 @@ def train_hidden(opt, n_epochs, trainer, loader, val_loader, criterion, part_id,
                         input.to(device, non_blocking=True), target.to(
                             device, non_blocking=True)
                     output = trainer.get_eval_output(input)
-                    batch_obj = criterion(output, target).item()
-                    hidden_obj += batch_obj
-                    total += 1
+
+                    _, predicted = torch.max(output, 1)
+                    batch_correct = (predicted == target).sum().item()
+                    correct += batch_correct
+                    total += target.size(0)
 
                     if opt.loglevel.upper() not in ['DEBUG', 'NOTSET']:
-                        latest_obj = hidden_obj / total
-                        message = f'avg val {opt.hidden_objective}:  {latest_obj:.3f}'
+                        latest_acc = 100.0 * correct / total
+                        message = f'avg val acc (%): {latest_acc:.3f}'
                         val_pbar.update(message)
-                    message = f'batch: {i + 1}/{total_batch_val}, batch val {opt.hidden_objective}: {batch_obj:.3f}'
+                    batch_acc = 100.0 * batch_correct / target.size(0)
+                    message = f'batch: {i + 1}/{total_batch_val}, batch val acc (%): {batch_acc:.3f}'
                     logger.debug(message)
 
-                hidden_obj /= total
+                acc = 100.0 * correct / total
                 trainer.log_loss_values({
-                    f'val_{part_id}_{opt.hidden_objective}': hidden_obj
+                    'val_acc': acc
                 })
-                message = f'[part {part_id}, epoch: {epoch+1}] val {opt.hidden_objective}: {hidden_obj:.3f}'
+
+                message = f'[part {part_id}, epoch: {epoch+1}] val acc (%): {acc:.3f}'
                 logger.info(message)
                 if opt.schedule_lr:
-                    trainer.scheduler_step(hidden_obj)
+                    trainer.scheduler_step(acc)
 
     logger.info(f'Part {part_id} training finished!')

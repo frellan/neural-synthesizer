@@ -10,8 +10,8 @@ from easydict import EasyDict as edict
 import torch
 from torch.nn.modules.loss import _Loss
 
-import kernet.utils as utils
-import kernet.models as models
+import network.utils as utils
+import network.models as models
 
 
 logger = logging.getLogger()
