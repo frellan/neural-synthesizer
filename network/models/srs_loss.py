@@ -8,6 +8,7 @@ import functools
 from easydict import EasyDict as edict
 
 import torch
+import torch.nn.functional as F
 from torch.nn.modules.loss import _Loss
 
 import network.utils as utils
@@ -33,6 +34,11 @@ def get_loss_act(activation):
 
 def get_k_mtrx(input1, input2, activation):
     act, _, _ = get_loss_act(activation)
+    if (len(input1.shape) > 2 or len(input2.shape) > 2):
+        input1 = F.avg_pool2d(input1, 4)
+        input1 = input1.view(input1.size(0), -1)
+        input2 = F.avg_pool2d(input2, 4)
+        input2 = input2.view(input2.size(0), -1)
     return act(input1).mm(act(input2).t())
 
 def get_ideal_k_mtrx(target1, target2, activation, n_classes):
