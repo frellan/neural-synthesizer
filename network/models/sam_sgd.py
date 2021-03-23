@@ -18,14 +18,13 @@ class SAMSGD(SGD):
     """
 
     def __init__(self,
-                 params: Iterable[torch.Tensor],
-                 lr: float,
-                 momentum: float = 0,
-                 dampening: float = 0,
-                 weight_decay: float = 0,
-                 nesterov: bool = False,
-                 rho: float = 0.05,
-                 ):
+        params: Iterable[torch.Tensor],
+        lr: float,
+        momentum: float = 0,
+        dampening: float = 0,
+        weight_decay: float = 0,
+        nesterov: bool = False,
+        rho: float = 0.05):
         if rho <= 0:
             raise ValueError(f"Invalid neighborhood size: {rho}")
         super().__init__(params, lr, momentum, dampening, weight_decay, nesterov)
@@ -35,9 +34,7 @@ class SAMSGD(SGD):
         self.param_groups[0]["rho"] = rho
 
     @torch.no_grad()
-    def step(self,
-             closure
-             ) -> torch.Tensor:
+    def step(self, closure) -> torch.Tensor:
         """
         Args:
             closure: A closure that reevaluates the model and returns the loss.

@@ -46,7 +46,7 @@ def main():
     loader, val_loader = datasets.get_dataloaders(opt)
 
     model = Morph(opt, device).to(device)
-    
+
     lr = .1
     weight_decay = .0002
     momentum = .9
@@ -55,28 +55,28 @@ def main():
     hidden_criterion = get_hidden_criterion(opt)
     output_criterion = torch.nn.CrossEntropyLoss() if opt.loss == 'xe' else torch.nn.MultiMarginLoss()
 
-    model.add_to_pending_module(
+    model.add_pending(
         torch.nn.Conv2d(1, 6, 5, padding=2),
         torch.nn.ReLU(),
         torch.nn.MaxPool2d(2))
-    model.add_to_pending_module(
+    model.add_pending(
         torch.nn.Conv2d(6, 16, 5),
         torch.nn.ReLU(),
         torch.nn.MaxPool2d(2),
         Flatten())
-    model.add_to_pending_module(torch.nn.Linear(400, 120))
-    model.add_to_pending_module(torch.nn.ReLU())
-    model.add_to_pending_module(torch.nn.Linear(120, 84))
+    model.add_pending(torch.nn.Linear(400, 120))
+    model.add_pending(torch.nn.ReLU())
+    model.add_pending(torch.nn.Linear(120, 84))
 
     utils.default_init_weights(model)
 
     train_pending(opt, model, lr, weight_decay, momentum, epochs,
         loader, val_loader, hidden_criterion, device)
-    model.solidify_pending_module()
+    model.freeze_pending()
 
-    model.add_to_pending_module(torch.nn.ReLU())
-    model.add_to_pending_module(UnitVectorize())
-    model.add_to_pending_module(torch.nn.Linear(84, 10))
+    model.add_pending(torch.nn.ReLU())
+    model.add_pending(UnitVectorize())
+    model.add_pending(torch.nn.Linear(84, 10))
 
     # train output layer
     optimizer = utils.get_optimizer(opt, params=model.get_trainable_params(), lr=lr,

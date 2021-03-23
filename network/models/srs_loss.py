@@ -222,7 +222,7 @@ def _srs_alignment(activation, n_classes, neo):
     Cosine similarity between the actual kernel mtrx and the perfect one.
     """
 
-    def map_input(x): get_k_mtrx(x, x, activation=activation)
+    def map_input(x): return get_k_mtrx(x, x, activation=activation)
     def map_target(x): return get_ideal_k_mtrx(x, x, activation=activation, n_classes=n_classes)
     _loss_fn = torch.nn.CosineSimilarity(dim=0)
 
@@ -252,7 +252,6 @@ def _srs_upper_tri_alignment(activation, n_classes, neo):
     the main diagonal.
     """
     def map_input(x): return utils.upper_tri(get_k_mtrx(x, x, activation=activation))
-
     def map_target(x): return utils.upper_tri(
         get_ideal_k_mtrx(x, x, activation=activation, n_classes=n_classes))
 

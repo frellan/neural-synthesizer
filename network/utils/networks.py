@@ -46,17 +46,3 @@ def default_init_weights(module_list, scale=1, bias_fill=0, **kwargs):
                 init.constant_(m.weight, 1)
                 if m.bias is not None:
                     m.bias.data.fill_(bias_fill)
-
-
-def exclude_during_backward(model):
-    logger.debug('Exclude {} during backward...'.format(
-        model.__class__.__name__))
-    for p in model.parameters():
-        p.requires_grad_(False)
-
-
-def include_during_backward(model):
-    logger.debug('Include {} during backward...'.format(
-        model.__class__.__name__))
-    for p in model.parameters():
-        p.requires_grad_()

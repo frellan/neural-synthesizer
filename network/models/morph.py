@@ -1,11 +1,9 @@
-"""
-©Copyright 2020 University of Florida Research Foundation, Inc. All rights reserved.
-Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
-"""
 import logging
 import functools
 
 import torch
+from torch.nn import init as init
+from torch.nn.modules.batchnorm import _BatchNorm
 
 import network.utils as utils
 from network.models import Flatten
@@ -21,33 +19,68 @@ class Morph(torch.nn.Module):
         self.opt = opt
         self.device = device
         self.n_modules = 0
-        self.permanent_components = []
-        self.pending_components = []
+        self.frozen = []
+        self.pending = []
 
     def forward(self, input):
-        permanent = torch.nn.Sequential(*self.permanent_components).to(self.device)
-        pending = torch.nn.Sequential(*self.pending_components).to(self.device)
-        output = permanent(input)
+        frozen = torch.nn.Sequential(*self.frozen).to(self.device)
+        pending = torch.nn.Sequential(*self.pending).to(self.device)
+        output = frozen(input)
         output = pending(output)
         return output
 
-    def add_to_pending_module(self, *components):
+    def add_pending(self, *components):
+        _init_weights([*components])
         if (len(components) > 1):
-            self.pending_components.append(torch.nn.Sequential(*components))
+            self.pending.append(torch.nn.Sequential(*components))
         else:
-            self.pending_components.append(*components)
+            self.pending.append(*components)
 
-    def clear_pending_module(self):
-        self.pending_components = []
+    def clear_pending(self):
+        self.pending = []
 
-    def solidify_pending_module(self):
-        self.permanent_components.extend(self.pending_components)
-        self.clear_pending_module()
+    def freeze_pending(self):
+        self.frozen.extend(self.pending)
+        self.clear_pending()
+        frozen_module = torch.nn.Sequential(*self.frozen)
+
+        for p in frozen_module.parameters():
+            p.requires_grad_(False)
+
         self.n_modules += 1
 
     def get_trainable_params(self):
-        return torch.nn.Sequential(*self.pending_components).to(self.device).parameters()
+        return torch.nn.Sequential(*self.pending).to(self.device).parameters()
 
-    @staticmethod
-    def modify_commandline_options(parser, **kwargs):
-        return parser
+    
+@torch.no_grad()
+def _init_weights(module_list, scale=1, bias_fill=0, **kwargs):
+    """Initialize network weights.
+    Reference: https://github.com/xinntao/BasicSR
+
+    Args:
+        module_list (list[nn.Module] | nn.Module): Modules to be initialized.
+        scale (float): Scale initialized weights, especially for residual
+            blocks. Default: 1.
+        bias_fill (float): The value to fill bias. Default: 0
+        kwargs (dict): Other arguments for initialization function.
+    """
+    if not isinstance(module_list, list):
+        module_list = [module_list]
+    for module in module_list:
+        for m in module.modules():
+            if isinstance(m, torch.nn.Conv2d):
+                init.kaiming_normal_(m.weight, **kwargs)
+                m.weight.data *= scale
+                if m.bias is not None:
+                    m.bias.data.fill_(bias_fill)
+            elif isinstance(m, torch.nn.Linear):
+                init.kaiming_normal_(m.weight, **kwargs)
+                m.weight.data *= scale
+                if m.bias is not None:
+                    m.bias.data.fill_(bias_fill)
+            elif isinstance(m, _BatchNorm):
+                init.constant_(m.weight, 1)
+                if m.bias is not None:
+                    m.bias.data.fill_(bias_fill)
+

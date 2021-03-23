@@ -78,7 +78,7 @@ class ArgumentParser:
             nargs='?', const=True, default=True,
             help='Whether to shuffle data across training epochs. "True" or "t" will be parsed as True (bool); "False" or "f" as False. Same works for all params of bool type.')
         parser.add_argument('--augment_data', type=utils.str2bool,
-            nargs='?', const=True, default=True,
+            nargs='?', const=True, default=False,
             help='If True, augment training data. See datasets/__init__.py for the specific augmentations used.')
         parser.add_argument('--train_subset_indices', type=str,
             help='Path to saved training subset indices, if available.')
