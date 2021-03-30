@@ -1,18 +1,82 @@
 import logging
-import functools
 
 import torch
+import torch.nn as nn
 from torch.nn import init as init
 from torch.nn.modules.batchnorm import _BatchNorm
-
-import network.utils as utils
-from network.models import Flatten
 
 
 logger = logging.getLogger()
 
 
-class Morph(torch.nn.Module):
+class Block(nn.Module):
+    def __init__(self, in_channels, out_channels, kernel_size, device):
+        super(Block, self).__init__()
+
+        self.device = device
+
+        padding = kernel_size // 2
+        groups = in_channels if kernel_size == 1 else 1
+
+        self.out_channels = out_channels
+        self.conv = nn.Conv2d(
+            in_channels=in_channels,
+            out_channels=out_channels,
+            kernel_size=kernel_size,
+            stride=1,
+            padding=padding,
+            groups=groups,
+            bias=False).to(self.device)
+        self.bn = nn.BatchNorm2d(out_channels).to(self.device)
+        self.relu = nn.ReLU().to(self.device)
+
+    def forward(self, x):
+        return self.relu(self.bn(self.conv(x)))
+
+
+class Cell(nn.Module):
+    def __init__(self, in_channels, use_residual, blocks, device, survival_prob=0.8):
+        super(Cell, self).__init__()
+
+        self.device = device
+        self.survival_prob = survival_prob
+
+        self.seq1 = nn.Sequential(*blocks[0:2]).to(self.device)
+        self.seq2 = nn.Sequential(*blocks[2:4]).to(self.device)
+        self.seq3 = nn.Sequential(*blocks[4:6]).to(self.device)
+
+        stack_channels = blocks[1].out_channels + blocks[3].out_channels + blocks[5].out_channels
+
+        self.use_residual = use_residual
+
+        self.shrink = nn.Conv2d(
+            in_channels=stack_channels,
+            out_channels=in_channels,
+            kernel_size=1,
+            groups=in_channels,
+            bias=False).to(self.device)
+        self.bn = nn.BatchNorm2d(in_channels).to(self.device)
+        self.relu = nn.ReLU().to(self.device)
+
+    def forward(self, x):
+        seq1 = self.seq1(x)
+        seq2 = self.seq2(x)
+        seq3 = self.seq3(x)
+
+        stack = torch.cat([seq1, seq2, seq3], dim=1)
+        output = self.relu(self.bn(self.shrink(stack)))
+
+        return self.stochastic_depth(output) + x if self.use_residual else output
+
+    def stochastic_depth(self, x):
+        if not self.training:
+            return x
+
+        binary_tensor = torch.rand(x.shape[0], 1, 1, 1, device=x.device) < self.survival_prob
+        return torch.div(x, self.survival_prob) * binary_tensor
+
+
+class Morph(nn.Module):
     def __init__(self, opt, device, *args, **kwargs):
         super(Morph, self).__init__(*args, **kwargs)
 
@@ -23,8 +87,8 @@ class Morph(torch.nn.Module):
         self.pending = []
 
     def forward(self, input):
-        frozen = torch.nn.Sequential(*self.frozen).to(self.device)
-        pending = torch.nn.Sequential(*self.pending).to(self.device)
+        frozen = nn.Sequential(*self.frozen).to(self.device)
+        pending = nn.Sequential(*self.pending).to(self.device)
         output = frozen(input)
         output = pending(output)
         return output
@@ -32,7 +96,7 @@ class Morph(torch.nn.Module):
     def add_pending(self, *components):
         _init_weights([*components])
         if (len(components) > 1):
-            self.pending.append(torch.nn.Sequential(*components))
+            self.pending.append(nn.Sequential(*components))
         else:
             self.pending.append(*components)
 
@@ -42,15 +106,23 @@ class Morph(torch.nn.Module):
     def freeze_pending(self):
         self.frozen.extend(self.pending)
         self.clear_pending()
-        frozen_module = torch.nn.Sequential(*self.frozen)
+        frozen_module = nn.Sequential(*self.frozen)
 
         for p in frozen_module.parameters():
             p.requires_grad_(False)
 
         self.n_modules += 1
 
+    def unfreeze_network(self):
+        frozen_module = nn.Sequential(*self.frozen)
+        for p in frozen_module.parameters():
+            p.requires_grad_(True)
+
+    def get_all_trainable_params(self):
+        return nn.Sequential(*self.frozen, *self.pending).to(self.device).parameters()
+
     def get_trainable_params(self):
-        return torch.nn.Sequential(*self.pending).to(self.device).parameters()
+        return nn.Sequential(*self.pending).to(self.device).parameters()
 
     
 @torch.no_grad()
@@ -69,12 +141,12 @@ def _init_weights(module_list, scale=1, bias_fill=0, **kwargs):
         module_list = [module_list]
     for module in module_list:
         for m in module.modules():
-            if isinstance(m, torch.nn.Conv2d):
+            if isinstance(m, nn.Conv2d):
                 init.kaiming_normal_(m.weight, **kwargs)
                 m.weight.data *= scale
                 if m.bias is not None:
                     m.bias.data.fill_(bias_fill)
-            elif isinstance(m, torch.nn.Linear):
+            elif isinstance(m, nn.Linear):
                 init.kaiming_normal_(m.weight, **kwargs)
                 m.weight.data *= scale
                 if m.bias is not None:
@@ -83,4 +155,3 @@ def _init_weights(module_list, scale=1, bias_fill=0, **kwargs):
                 init.constant_(m.weight, 1)
                 if m.bias is not None:
                     m.bias.data.fill_(bias_fill)
-

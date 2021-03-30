@@ -8,11 +8,11 @@ Modular training example.
 import torch
 
 import network.utils as utils
-import network.models as models
 import network.models.srs_loss as losses
 import network.datasets as datasets
-from network.models import Flatten, UnitVectorize
-from network.models.morph import Morph
+from network.models import Flatten
+from network.models.resnet import ResnetBlock, ResnetOutput
+from network.models.morph import Block, Cell, Morph
 from network.parsers.argument_parser import ArgumentParser
 from network.trainers import train_hidden, train_output, Trainer
 
@@ -34,6 +34,11 @@ def modify_commandline_options(parser, **kwargs):
         help='Proxy hidden objective.')
     return parser
 
+def make_layer_group(chin, chout, num_blocks, stride=1):
+    layers = [ResnetBlock(chin, chout, stride)]
+    for i in range(num_blocks-1):
+        layers.append(ResnetBlock(chout, chout, stride=1))
+    return torch.nn.Sequential(*layers)
 
 def main():
     opt = ArgumentParser().parse()
@@ -48,36 +53,40 @@ def main():
     model = Morph(opt, device).to(device)
 
     lr = .1
-    weight_decay = .0002
+    weight_decay = .0000625
     momentum = .9
-    epochs = 30
+    epochs = 400
 
     hidden_criterion = get_hidden_criterion(opt)
     output_criterion = torch.nn.CrossEntropyLoss() if opt.loss == 'xe' else torch.nn.MultiMarginLoss()
 
-    model.add_pending(
-        torch.nn.Conv2d(1, 6, 5, padding=2),
-        torch.nn.ReLU(),
-        torch.nn.MaxPool2d(2))
-    model.add_pending(
-        torch.nn.Conv2d(6, 16, 5),
-        torch.nn.ReLU(),
-        torch.nn.MaxPool2d(2),
-        Flatten())
-    model.add_pending(torch.nn.Linear(400, 120))
-    model.add_pending(torch.nn.ReLU())
-    model.add_pending(torch.nn.Linear(120, 84))
+    # build and evolve network
+    model.add_pending(torch.nn.Conv2d(3, 16, kernel_size=3, stride=1, padding=1, bias=False).to(device))
+    model.add_pending(torch.nn.BatchNorm2d(16).to(device))
 
-    utils.default_init_weights(model)
+    for i in range(2):
+        model.add_pending(Cell(16, True, [
+            Block(16, 16, 3, device),
+            Block(16, 16, 3, device),
+            Block(16, 16, 3, device),
+            Block(16, 16, 3, device),
+            Block(16, 16, 3, device),
+            Block(16, 16, 3, device),
+        ], device))
+    model.add_pending(Cell(16, False, [
+        Block(16, 16, 3, device),
+        Block(16, 16, 3, device),
+        Block(16, 16, 3, device),
+        Block(16, 16, 3, device),
+        Block(16, 16, 3, device),
+        Block(16, 16, 3, device),
+    ], device))
 
     train_pending(opt, model, lr, weight_decay, momentum, epochs,
         loader, val_loader, hidden_criterion, device)
     model.freeze_pending()
 
-    model.add_pending(torch.nn.ReLU())
-    model.add_pending(UnitVectorize())
-    model.add_pending(torch.nn.Linear(84, 10))
-
+    model.add_pending(ResnetOutput(16, 10))
     # train output layer
     optimizer = utils.get_optimizer(opt, params=model.get_trainable_params(), lr=lr,
         weight_decay=weight_decay, momentum=momentum)
@@ -91,7 +100,7 @@ def get_hidden_criterion(opt):
     return selected_loss_fn(opt.activation, opt.n_classes)
 
 def train_pending(opt, model, lr, weight_decay, momentum, epochs, loader, val_loader, hidden_criterion, device):
-    optimizer = utils.get_optimizer( opt, params=model.get_trainable_params(), lr=lr,
+    optimizer = utils.get_optimizer(opt, params=model.get_trainable_params(), lr=lr,
         weight_decay=weight_decay, momentum=momentum)
     trainer = Trainer(opt=opt, model=model, set_eval=None, optimizer=optimizer,
         val_metric_name=opt.hidden_objective, val_metric_obj='max')
