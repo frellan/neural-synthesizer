@@ -10,8 +10,9 @@ import torch
 import network.utils as utils
 import network.models.srs_loss as losses
 import network.datasets as datasets
+from network.models import Flatten
 from network.models.resnet import ResnetBlock, ResnetOutput
-from network.models.morph import Morph
+from network.models.morph import Block, Cell, Morph
 from network.parsers.argument_parser import ArgumentParser
 from network.trainers import train_hidden, train_output, Trainer
 
@@ -33,13 +34,11 @@ def modify_commandline_options(parser, **kwargs):
         help='Proxy hidden objective.')
     return parser
 
-
 def make_layer_group(chin, chout, num_blocks, stride=1):
     layers = [ResnetBlock(chin, chout, stride)]
     for i in range(num_blocks-1):
         layers.append(ResnetBlock(chout, chout, stride=1))
     return torch.nn.Sequential(*layers)
-
 
 def main():
     opt = ArgumentParser().parse()
@@ -53,32 +52,41 @@ def main():
 
     model = Morph(opt, device).to(device)
 
-    lr = .05
+    lr = .1
     weight_decay = .0000625
     momentum = .9
-    epochs = 100
+    epochs = 400
 
     hidden_criterion = get_hidden_criterion(opt)
     output_criterion = torch.nn.CrossEntropyLoss() if opt.loss == 'xe' else torch.nn.MultiMarginLoss()
 
-    model.add_pending(torch.nn.Conv2d(3, 16, kernel_size=3, stride=1, padding=1, bias=False))
-    model.add_pending(torch.nn.BatchNorm2d(16))
-    model.add_pending(make_layer_group(16, 16, 9, stride=1))
+    # build and evolve network
+    model.add_pending(torch.nn.Conv2d(3, 16, kernel_size=3, stride=1, padding=1, bias=False).to(device))
+    model.add_pending(torch.nn.BatchNorm2d(16).to(device))
+
+    for i in range(2):
+        model.add_pending(Cell(16, True, [
+            Block(16, 16, 3, device),
+            Block(16, 16, 3, device),
+            Block(16, 16, 3, device),
+            Block(16, 16, 3, device),
+            Block(16, 16, 3, device),
+            Block(16, 16, 3, device),
+        ], device))
+    model.add_pending(Cell(16, False, [
+        Block(16, 16, 3, device),
+        Block(16, 16, 3, device),
+        Block(16, 16, 3, device),
+        Block(16, 16, 3, device),
+        Block(16, 16, 3, device),
+        Block(16, 16, 3, device),
+    ], device))
+
     train_pending(opt, model, lr, weight_decay, momentum, epochs,
         loader, val_loader, hidden_criterion, device)
     model.freeze_pending()
 
-    model.add_pending(make_layer_group(16, 32, 9, stride=2))
-    train_pending(opt, model, lr, weight_decay, momentum, epochs,
-        loader, val_loader, hidden_criterion, device)
-    model.freeze_pending()
-
-    model.add_pending(make_layer_group(32, 64, 9, stride=2))
-    train_pending(opt, model, lr, weight_decay, momentum, epochs,
-        loader, val_loader, hidden_criterion, device)
-    model.freeze_pending()
-
-    model.add_pending(ResnetOutput(64, 10))
+    model.add_pending(ResnetOutput(16, 10))
     # train output layer
     optimizer = utils.get_optimizer(opt, params=model.get_trainable_params(), lr=lr,
         weight_decay=weight_decay, momentum=momentum)

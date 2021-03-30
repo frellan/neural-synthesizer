@@ -8,7 +8,7 @@ class ResnetBlock(nn.Module):
         self.conv1 = nn.Conv2d(cnin, cnout, kernel_size=3, stride=stride, padding=1, bias=False)
         self.bn2 = nn.BatchNorm2d(cnout)
         self.conv2 = nn.Conv2d(cnout, cnout, kernel_size=3, stride=1, padding=1, bias=False)
-        
+
         self.downsample = downsample
         
         if stride != 1 or cnin != cnout:
