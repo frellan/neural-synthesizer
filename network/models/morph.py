@@ -35,11 +35,10 @@ class Block(nn.Module):
 
 
 class Cell(nn.Module):
-    def __init__(self, in_channels, use_residual, blocks, device, survival_prob=0.8):
+    def __init__(self, in_channels, use_residual, blocks, device):
         super(Cell, self).__init__()
 
         self.device = device
-        self.survival_prob = survival_prob
 
         self.seq1 = nn.Sequential(*blocks[0:2]).to(self.device)
         self.seq2 = nn.Sequential(*blocks[2:4]).to(self.device)
@@ -66,14 +65,7 @@ class Cell(nn.Module):
         stack = torch.cat([seq1, seq2, seq3], dim=1)
         output = self.relu(self.bn(self.shrink(stack)))
 
-        return self.stochastic_depth(output) + x if self.use_residual else output
-
-    def stochastic_depth(self, x):
-        if not self.training:
-            return x
-
-        binary_tensor = torch.rand(x.shape[0], 1, 1, 1, device=x.device) < self.survival_prob
-        return torch.div(x, self.survival_prob) * binary_tensor
+        return output + x if self.use_residual else output
 
 
 class Morph(nn.Module):
