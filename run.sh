@@ -1,0 +1,15 @@
+CUDA_VISIBLE_DEVICES=0 python morph_train.py \
+    --dataset cifar10 \
+    --loss xe \
+    --activation relu \
+    --optimizer sgd \
+    --print_freq 1 \
+    --hidden_objective srs_upper_tri_alignment \
+    --loglevel info \
+    --n_classes 10 \
+    --schedule_lr True \
+    --in_channels 3 \
+    --augment_data True \
+    --batch_size 512 \
+    --n_val 5000 \
+    --max_trainset_size 45000

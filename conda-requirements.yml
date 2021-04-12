@@ -13,3 +13,6 @@ dependencies:
   - cleverhans
   - easydict
   - setuptools
+  - pip
+  - pip:
+    - ax-platform
