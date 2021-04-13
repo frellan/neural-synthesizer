@@ -11,18 +11,12 @@ from ax.service.managed_loop import optimize
 import network.utils as utils
 import network.models.srs_loss as losses
 import network.datasets as datasets
-from network.models import Flatten
-from network.models.resnet import ResnetBlock, ResnetOutput
-from network.models.morph import Block, Cell, Morph
+from network.models.morph import Block, Cell, OutputCell, Morph
 from network.parsers.argument_parser import ArgumentParser
 from network.trainers import train_hidden, train_output, Trainer
 
 
-parameters = {
-    'lr': .15,
-    'weight_decay': .0000625,
-    'momentum': .9
-}
+in_channels = 16
 checkpoint_path = "./checkpoint/bayesian_start.pth"
 
 opt = None
@@ -49,41 +43,68 @@ def modify_commandline_options(parser, **kwargs):
         help='Proxy hidden objective.')
     return parser
 
+
 def get_hidden_criterion(opt):
     selected_loss_fn = getattr(losses, opt.hidden_objective)
     return selected_loss_fn(opt.activation, opt.n_classes)
 
+
+def get_module(parameterization):
+    net = torch.load(checkpoint_path)
+    if (net.n_modules == 0):
+        net.add_pending(torch.nn.Conv2d(3, in_channels, kernel_size=3, stride=1, padding=1, bias=False).to(device))
+        net.add_pending(torch.nn.BatchNorm2d(in_channels).to(device))
+    cell = Cell(in_channels=in_channels, use_residual=True, blocks=[
+        Block(in_channels, parameterization.get('out1', 16), 3, device),
+        Block(parameterization.get('out1', 16), parameterization.get('out2', 16), 3, device),
+        Block(in_channels, parameterization.get('out3', 16), 3, device),
+        Block(parameterization.get('out3', 16), parameterization.get('out4', 16), 3, device),
+        Block(in_channels, parameterization.get('out5', 16), 3, device),
+        Block(parameterization.get('out5', 16), parameterization.get('out6', 16), 3, device),
+    ], device=device)
+    net.add_pending(cell)
+    return net
+
 def train_evaluate(parameterization):
-    global model
-    parameters = {
-        'lr': parameterization.get("lr", 0.001),
-        'weight_decay': parameterization.get("weight_decay", .0000625),
-        'momentum': parameterization.get("momentum", .9)
-    }
+    eval_hyper = True if "lr" in parameterization else False
+    net = get_module(parameterization)
     optimizer = utils.get_optimizer(
         opt,
-        params=model.get_trainable_params(),
-        lr=parameters['lr'],
-        weight_decay=parameters['weight_decay'],
-        momentum=parameters['momentum'])
-    trainer = Trainer(opt=opt, model=model, optimizer=optimizer)
-    for epoch in range(10):
+        params=net.get_trainable_params(),
+        lr=parameterization.get("lr", 0.001),
+        weight_decay=parameterization.get("weight_decay", .0000625),
+        momentum=parameterization.get("momentum", .9))
+    trainer = Trainer(opt=opt, model=net, optimizer=optimizer)
+    for epoch in range(3):
         for input, target in loader:
             input, target = input.to(device, non_blocking=True), target.to(device, non_blocking=True)
             trainer.step(input, target, hidden_criterion, minimize=False)
     
+    resource_constraint = 0
+    if not eval_hyper:
+        for i in range(6):
+            if (i < 2):
+                kernel_size = 9
+            elif (i < 4):
+                kernel_size = 25
+            else:
+                kernel_size = 49
+            resource_constraint += (parameterization['out' + str(i + 1)] * kernel_size)
+        resource_constraint *= 1e-5
+
     with torch.no_grad():
         hidden_obj, total = 0, 0
         for input, target in val_loader:
             input, target = input.to(device, non_blocking=True), target.to(device, non_blocking=True)
             output = trainer.get_eval_output(input)
             batch_obj = hidden_criterion(output, target).item()
+            if eval_hyper:
+                batch_obj -= resource_constraint
             hidden_obj += batch_obj
             total += 1
 
-    model = torch.load(checkpoint_path)
-
     return hidden_obj / total
+
 
 def train_pending(parameters, epochs):
     optimizer = utils.get_optimizer(
@@ -131,32 +152,16 @@ def main():
     hidden_criterion = get_hidden_criterion(opt)
     output_criterion = torch.nn.CrossEntropyLoss() if opt.loss == 'xe' else torch.nn.MultiMarginLoss()
 
-    # Add inital modules
-    model.add_pending(torch.nn.Conv2d(3, 16, kernel_size=3, stride=1, padding=1, bias=False).to(device))
-    model.add_pending(torch.nn.BatchNorm2d(16).to(device))
-
-    for i in range(3):
-        # Add components
-        cell = Cell(in_channels=16, use_residual=i != 2, blocks=[
-            Block(16, 16, 3, device),
-            Block(16, 16, 3, device),
-            Block(16, 16, 3, device),
-            Block(16, 16, 3, device),
-            Block(16, 16, 3, device),
-            Block(16, 16, 3, device),
-        ], device=device)
-        model.add_pending(cell)
-        model.add_pending(cell)
-
-        # Save model for resetting on bayesian trials and after
+    for i in range(6):
+        # Save current model for resetting on bayesian trials and after
         torch.save(model, checkpoint_path)
 
         # Search for parameters
         best_parameters, values, experiment, model = optimize(
             parameters=[
-                {"name": "lr", "type": "range", "bounds": [1e-6, 0.4], "log_scale": True},
+                {"name": "lr", "type": "range", "bounds": [0.001, 0.3], "log_scale": True},
                 {"name": "weight_decay", "type": "range", "bounds": [1e-5, 1e-3]},
-                {"name": "momentum", "type": "range", "bounds": [0.5, 1.0]},     
+                {"name": "momentum", "type": "range", "bounds": [0., 1.0]}
             ],
             evaluation_function=train_evaluate,
             objective_name=opt.hidden_objective,
@@ -171,15 +176,52 @@ def main():
             'momentum': best_parameters["momentum"]
         }
 
-        # Train model with found parameters
+        # Reset model
         model = torch.load(checkpoint_path)
+
+        # Search for channel parameters
+        best_parameters, values, experiment, model = optimize(
+            parameters=[
+                {"name": "out1", "type": "range", "bounds": [8, 64]},
+                {"name": "out2", "type": "range", "bounds": [8, 64]},
+                {"name": "out3", "type": "range", "bounds": [8, 64]},
+                {"name": "out4", "type": "range", "bounds": [8, 64]},
+                {"name": "out5", "type": "range", "bounds": [8, 64]},
+                {"name": "out6", "type": "range", "bounds": [8, 64]},
+            ],
+            evaluation_function=train_evaluate,
+            objective_name=opt.hidden_objective,
+        )
+
+        # Print and set the best parameters
+        print("BEST PARAMETERS: ", end='')
+        print(best_parameters)
+
+        # Reset model
+        model = torch.load(checkpoint_path)
+
+        # Add components with best parameters
+        if (model.n_modules == 0):
+            model.add_pending(torch.nn.Conv2d(3, in_channels, kernel_size=3, stride=1, padding=1, bias=False).to(device))
+            model.add_pending(torch.nn.BatchNorm2d(in_channels).to(device))
+        cell = Cell(in_channels=in_channels, use_residual=i != 2, blocks=[
+            Block(in_channels, best_parameters['out1'], 3, device),
+            Block(best_parameters['out1'], best_parameters['out2'], 3, device),
+            Block(in_channels, best_parameters['out3'], 5, device),
+            Block(best_parameters['out3'], best_parameters['out4'], 5, device),
+            Block(in_channels, best_parameters['out5'], 7, device),
+            Block(best_parameters['out5'], best_parameters['out6'], 7, device),
+        ], device=device)
+        model.add_pending(cell)
+
+        # Train for given epochs and then freeze
         train_pending(parameters, epochs)
         model.freeze_pending()
 
     # Train output layer
-    model.add_pending(ResnetOutput(16, 10))
+    model.add_pending(OutputCell(16, 10))
     optimizer = utils.get_optimizer(
-        opt,
+        opt=opt,
         params=model.get_trainable_params(),
         lr=parameters['lr'],
         weight_decay=parameters['weight_decay'],
@@ -192,7 +234,7 @@ def main():
         val_metric_name=opt.hidden_objective,
         val_metric_obj='max')
     train_output(
-        opt,
+        opt=opt,
         n_epochs=output_epochs,
         trainer=trainer,
         loader=loader,

@@ -1,0 +1,227 @@
+04/13/2021 07:18:03 AM INFO: dataset [train: CIFAR10] was created
+[INFO 04-13 07:18:03] ax.modelbridge.dispatch_utils: Using Bayesian Optimization generation strategy: GenerationStrategy(name='Sobol+GPEI', steps=[Sobol for 9 arms, GPEI for subsequent arms], generated 0 arm(s) so far). Iterations after 9 will take longer to generate due to model-fitting.
+[INFO 04-13 07:18:03] ax.service.managed_loop: Started full optimization with 20 steps.
+[INFO 04-13 07:18:03] ax.service.managed_loop: Running optimization trial 1...
+[INFO 04-13 07:18:38] ax.service.managed_loop: Running optimization trial 2...
+[INFO 04-13 07:19:09] ax.service.managed_loop: Running optimization trial 3...
+[INFO 04-13 07:19:40] ax.service.managed_loop: Running optimization trial 4...
+[INFO 04-13 07:20:11] ax.service.managed_loop: Running optimization trial 5...
+[INFO 04-13 07:20:40] ax.service.managed_loop: Running optimization trial 6...
+[INFO 04-13 07:21:11] ax.service.managed_loop: Running optimization trial 7...
+[INFO 04-13 07:21:41] ax.service.managed_loop: Running optimization trial 8...
+[INFO 04-13 07:22:12] ax.service.managed_loop: Running optimization trial 9...
+[INFO 04-13 07:22:43] ax.service.managed_loop: Running optimization trial 10...
+[INFO 04-13 07:23:14] ax.service.managed_loop: Running optimization trial 11...
+[INFO 04-13 07:23:45] ax.service.managed_loop: Running optimization trial 12...
+[INFO 04-13 07:24:16] ax.service.managed_loop: Running optimization trial 13...
+[INFO 04-13 07:24:47] ax.service.managed_loop: Running optimization trial 14...
+[INFO 04-13 07:25:18] ax.service.managed_loop: Running optimization trial 15...
+[INFO 04-13 07:25:49] ax.service.managed_loop: Running optimization trial 16...
+[INFO 04-13 07:26:20] ax.service.managed_loop: Running optimization trial 17...
+[INFO 04-13 07:26:51] ax.service.managed_loop: Running optimization trial 18...
+[INFO 04-13 07:27:22] ax.service.managed_loop: Running optimization trial 19...
+[INFO 04-13 07:27:53] ax.service.managed_loop: Running optimization trial 20...
+04/13/2021 07:28:24 AM INFO: Starting training part 1...
+04/13/2021 07:28:36 AM INFO: [part 1, epoch: 1] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:28:47 AM INFO: [part 1, epoch: 2] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:28:58 AM INFO: [part 1, epoch: 3] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:29:09 AM INFO: [part 1, epoch: 4] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:29:20 AM INFO: [part 1, epoch: 5] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:29:32 AM INFO: [part 1, epoch: 6] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:29:42 AM INFO: [part 1, epoch: 7] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:29:53 AM INFO: [part 1, epoch: 8] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:30:04 AM INFO: [part 1, epoch: 9] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:30:15 AM INFO: [part 1, epoch: 10] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:30:25 AM INFO: [part 1, epoch: 11] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:30:36 AM INFO: [part 1, epoch: 12] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:30:46 AM INFO: [part 1, epoch: 13] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:30:57 AM INFO: [part 1, epoch: 14] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:31:08 AM INFO: [part 1, epoch: 15] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:31:18 AM INFO: [part 1, epoch: 16] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:31:29 AM INFO: [part 1, epoch: 17] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:31:40 AM INFO: [part 1, epoch: 18] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:31:51 AM INFO: [part 1, epoch: 19] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:32:01 AM INFO: [part 1, epoch: 20] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:32:12 AM INFO: [part 1, epoch: 21] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:32:23 AM INFO: [part 1, epoch: 22] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:32:33 AM INFO: [part 1, epoch: 23] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:32:44 AM INFO: [part 1, epoch: 24] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:32:54 AM INFO: [part 1, epoch: 25] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:33:05 AM INFO: [part 1, epoch: 26] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:33:16 AM INFO: [part 1, epoch: 27] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:33:26 AM INFO: [part 1, epoch: 28] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:33:37 AM INFO: [part 1, epoch: 29] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:33:48 AM INFO: [part 1, epoch: 30] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:33:59 AM INFO: [part 1, epoch: 31] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:34:09 AM INFO: [part 1, epoch: 32] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:34:20 AM INFO: [part 1, epoch: 33] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:34:31 AM INFO: [part 1, epoch: 34] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:34:41 AM INFO: [part 1, epoch: 35] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:34:52 AM INFO: [part 1, epoch: 36] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:35:03 AM INFO: [part 1, epoch: 37] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:35:13 AM INFO: [part 1, epoch: 38] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:35:24 AM INFO: [part 1, epoch: 39] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:35:35 AM INFO: [part 1, epoch: 40] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:35:46 AM INFO: [part 1, epoch: 41] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:35:56 AM INFO: [part 1, epoch: 42] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:36:07 AM INFO: [part 1, epoch: 43] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:36:18 AM INFO: [part 1, epoch: 44] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:36:28 AM INFO: [part 1, epoch: 45] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:36:39 AM INFO: [part 1, epoch: 46] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:36:50 AM INFO: [part 1, epoch: 47] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:37:01 AM INFO: [part 1, epoch: 48] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:37:11 AM INFO: [part 1, epoch: 49] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:37:22 AM INFO: [part 1, epoch: 50] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:37:32 AM INFO: [part 1, epoch: 51] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:37:43 AM INFO: [part 1, epoch: 52] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:37:54 AM INFO: [part 1, epoch: 53] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:38:05 AM INFO: [part 1, epoch: 54] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:38:16 AM INFO: [part 1, epoch: 55] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:38:27 AM INFO: [part 1, epoch: 56] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:38:38 AM INFO: [part 1, epoch: 57] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:38:48 AM INFO: [part 1, epoch: 58] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:38:59 AM INFO: [part 1, epoch: 59] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:39:10 AM INFO: [part 1, epoch: 60] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:39:20 AM INFO: [part 1, epoch: 61] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:39:31 AM INFO: [part 1, epoch: 62] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:39:41 AM INFO: [part 1, epoch: 63] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:39:52 AM INFO: [part 1, epoch: 64] val srs_upper_tri_alignment: 0.321
+04/13/2021 07:40:03 AM INFO: [part 1, epoch: 65] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:40:13 AM INFO: [part 1, epoch: 66] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:40:24 AM INFO: [part 1, epoch: 67] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:40:35 AM INFO: [part 1, epoch: 68] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:40:46 AM INFO: [part 1, epoch: 69] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:40:56 AM INFO: [part 1, epoch: 70] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:41:07 AM INFO: [part 1, epoch: 71] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:41:18 AM INFO: [part 1, epoch: 72] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:41:28 AM INFO: [part 1, epoch: 73] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:41:39 AM INFO: [part 1, epoch: 74] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:41:50 AM INFO: [part 1, epoch: 75] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:42:01 AM INFO: [part 1, epoch: 76] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:42:11 AM INFO: [part 1, epoch: 77] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:42:22 AM INFO: [part 1, epoch: 78] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:42:33 AM INFO: [part 1, epoch: 79] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:42:44 AM INFO: [part 1, epoch: 80] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:42:54 AM INFO: [part 1, epoch: 81] val srs_upper_tri_alignment: 0.324
+04/13/2021 07:43:05 AM INFO: [part 1, epoch: 82] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:43:16 AM INFO: [part 1, epoch: 83] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:43:26 AM INFO: [part 1, epoch: 84] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:43:37 AM INFO: [part 1, epoch: 85] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:43:48 AM INFO: [part 1, epoch: 86] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:43:59 AM INFO: [part 1, epoch: 87] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:44:09 AM INFO: [part 1, epoch: 88] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:44:20 AM INFO: [part 1, epoch: 89] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:44:31 AM INFO: [part 1, epoch: 90] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:44:41 AM INFO: [part 1, epoch: 91] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:44:52 AM INFO: [part 1, epoch: 92] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:45:03 AM INFO: [part 1, epoch: 93] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:45:13 AM INFO: [part 1, epoch: 94] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:45:24 AM INFO: [part 1, epoch: 95] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:45:35 AM INFO: [part 1, epoch: 96] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:45:46 AM INFO: [part 1, epoch: 97] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:45:56 AM INFO: [part 1, epoch: 98] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:46:07 AM INFO: [part 1, epoch: 99] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:46:18 AM INFO: [part 1, epoch: 100] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:46:18 AM INFO: Part 1 training finished!
+[INFO 04-13 07:46:18] ax.modelbridge.dispatch_utils: Using Bayesian Optimization generation strategy: GenerationStrategy(name='Sobol+GPEI', steps=[Sobol for 9 arms, GPEI for subsequent arms], generated 0 arm(s) so far). Iterations after 9 will take longer to generate due to model-fitting.
+[INFO 04-13 07:46:18] ax.service.managed_loop: Started full optimization with 20 steps.
+[INFO 04-13 07:46:18] ax.service.managed_loop: Running optimization trial 1...
+[INFO 04-13 07:46:49] ax.service.managed_loop: Running optimization trial 2...
+[INFO 04-13 07:47:20] ax.service.managed_loop: Running optimization trial 3...
+[INFO 04-13 07:47:51] ax.service.managed_loop: Running optimization trial 4...
+[INFO 04-13 07:48:23] ax.service.managed_loop: Running optimization trial 5...
+[INFO 04-13 07:48:55] ax.service.managed_loop: Running optimization trial 6...
+[INFO 04-13 07:49:26] ax.service.managed_loop: Running optimization trial 7...
+[INFO 04-13 07:49:58] ax.service.managed_loop: Running optimization trial 8...
+[INFO 04-13 07:50:29] ax.service.managed_loop: Running optimization trial 9...
+[INFO 04-13 07:51:00] ax.service.managed_loop: Running optimization trial 10...
+[INFO 04-13 07:51:32] ax.service.managed_loop: Running optimization trial 11...
+[INFO 04-13 07:52:04] ax.service.managed_loop: Running optimization trial 12...
+[INFO 04-13 07:52:37] ax.service.managed_loop: Running optimization trial 13...
+[INFO 04-13 07:53:09] ax.service.managed_loop: Running optimization trial 14...
+[INFO 04-13 07:53:41] ax.service.managed_loop: Running optimization trial 15...
+[INFO 04-13 07:54:13] ax.service.managed_loop: Running optimization trial 16...
+[INFO 04-13 07:54:45] ax.service.managed_loop: Running optimization trial 17...
+[INFO 04-13 07:55:17] ax.service.managed_loop: Running optimization trial 18...
+[INFO 04-13 07:55:50] ax.service.managed_loop: Running optimization trial 19...
+[INFO 04-13 07:56:20] ax.service.managed_loop: Running optimization trial 20...
+04/13/2021 07:56:52 AM INFO: Starting training part 2...
+04/13/2021 07:57:03 AM INFO: [part 2, epoch: 1] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:57:14 AM INFO: [part 2, epoch: 2] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:57:25 AM INFO: [part 2, epoch: 3] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:57:36 AM INFO: [part 2, epoch: 4] val srs_upper_tri_alignment: 0.324
+04/13/2021 07:57:47 AM INFO: [part 2, epoch: 5] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:57:58 AM INFO: [part 2, epoch: 6] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:58:09 AM INFO: [part 2, epoch: 7] val srs_upper_tri_alignment: 0.324
+04/13/2021 07:58:20 AM INFO: [part 2, epoch: 8] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:58:31 AM INFO: [part 2, epoch: 9] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:58:42 AM INFO: [part 2, epoch: 10] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:58:53 AM INFO: [part 2, epoch: 11] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:59:04 AM INFO: [part 2, epoch: 12] val srs_upper_tri_alignment: 0.324
+04/13/2021 07:59:15 AM INFO: [part 2, epoch: 13] val srs_upper_tri_alignment: 0.322
+04/13/2021 07:59:26 AM INFO: [part 2, epoch: 14] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:59:37 AM INFO: [part 2, epoch: 15] val srs_upper_tri_alignment: 0.324
+04/13/2021 07:59:48 AM INFO: [part 2, epoch: 16] val srs_upper_tri_alignment: 0.323
+04/13/2021 07:59:59 AM INFO: [part 2, epoch: 17] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:00:10 AM INFO: [part 2, epoch: 18] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:00:21 AM INFO: [part 2, epoch: 19] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:00:32 AM INFO: [part 2, epoch: 20] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:00:43 AM INFO: [part 2, epoch: 21] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:00:54 AM INFO: [part 2, epoch: 22] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:01:05 AM INFO: [part 2, epoch: 23] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:01:16 AM INFO: [part 2, epoch: 24] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:01:27 AM INFO: [part 2, epoch: 25] val srs_upper_tri_alignment: 0.324
+04/13/2021 08:01:38 AM INFO: [part 2, epoch: 26] val srs_upper_tri_alignment: 0.324
+04/13/2021 08:01:49 AM INFO: [part 2, epoch: 27] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:02:00 AM INFO: [part 2, epoch: 28] val srs_upper_tri_alignment: 0.324
+04/13/2021 08:02:11 AM INFO: [part 2, epoch: 29] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:02:22 AM INFO: [part 2, epoch: 30] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:02:33 AM INFO: [part 2, epoch: 31] val srs_upper_tri_alignment: 0.324
+04/13/2021 08:02:44 AM INFO: [part 2, epoch: 32] val srs_upper_tri_alignment: 0.322
+04/13/2021 08:02:55 AM INFO: [part 2, epoch: 33] val srs_upper_tri_alignment: 0.324
+04/13/2021 08:03:06 AM INFO: [part 2, epoch: 34] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:03:17 AM INFO: [part 2, epoch: 35] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:03:28 AM INFO: [part 2, epoch: 36] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:03:39 AM INFO: [part 2, epoch: 37] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:03:50 AM INFO: [part 2, epoch: 38] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:04:01 AM INFO: [part 2, epoch: 39] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:04:12 AM INFO: [part 2, epoch: 40] val srs_upper_tri_alignment: 0.324
+04/13/2021 08:04:23 AM INFO: [part 2, epoch: 41] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:04:34 AM INFO: [part 2, epoch: 42] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:04:45 AM INFO: [part 2, epoch: 43] val srs_upper_tri_alignment: 0.324
+04/13/2021 08:04:56 AM INFO: [part 2, epoch: 44] val srs_upper_tri_alignment: 0.324
+04/13/2021 08:05:07 AM INFO: [part 2, epoch: 45] val srs_upper_tri_alignment: 0.324
+04/13/2021 08:05:18 AM INFO: [part 2, epoch: 46] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:05:29 AM INFO: [part 2, epoch: 47] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:05:40 AM INFO: [part 2, epoch: 48] val srs_upper_tri_alignment: 0.324
+04/13/2021 08:05:51 AM INFO: [part 2, epoch: 49] val srs_upper_tri_alignment: 0.324
+04/13/2021 08:06:02 AM INFO: [part 2, epoch: 50] val srs_upper_tri_alignment: 0.324
+04/13/2021 08:06:13 AM INFO: [part 2, epoch: 51] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:06:24 AM INFO: [part 2, epoch: 52] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:06:35 AM INFO: [part 2, epoch: 53] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:06:47 AM INFO: [part 2, epoch: 54] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:06:57 AM INFO: [part 2, epoch: 55] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:07:09 AM INFO: [part 2, epoch: 56] val srs_upper_tri_alignment: 0.322
+04/13/2021 08:07:19 AM INFO: [part 2, epoch: 57] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:07:30 AM INFO: [part 2, epoch: 58] val srs_upper_tri_alignment: 0.324
+04/13/2021 08:07:41 AM INFO: [part 2, epoch: 59] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:07:52 AM INFO: [part 2, epoch: 60] val srs_upper_tri_alignment: 0.322
+04/13/2021 08:08:03 AM INFO: [part 2, epoch: 61] val srs_upper_tri_alignment: 0.324
+04/13/2021 08:08:14 AM INFO: [part 2, epoch: 62] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:08:25 AM INFO: [part 2, epoch: 63] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:08:36 AM INFO: [part 2, epoch: 64] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:08:47 AM INFO: [part 2, epoch: 65] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:08:58 AM INFO: [part 2, epoch: 66] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:09:10 AM INFO: [part 2, epoch: 67] val srs_upper_tri_alignment: 0.322
+04/13/2021 08:09:21 AM INFO: [part 2, epoch: 68] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:09:33 AM INFO: [part 2, epoch: 69] val srs_upper_tri_alignment: 0.324
+04/13/2021 08:09:44 AM INFO: [part 2, epoch: 70] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:09:55 AM INFO: [part 2, epoch: 71] val srs_upper_tri_alignment: 0.324
+04/13/2021 08:10:06 AM INFO: [part 2, epoch: 72] val srs_upper_tri_alignment: 0.322
+04/13/2021 08:10:18 AM INFO: [part 2, epoch: 73] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:10:30 AM INFO: [part 2, epoch: 74] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:10:42 AM INFO: [part 2, epoch: 75] val srs_upper_tri_alignment: 0.324
+04/13/2021 08:10:53 AM INFO: [part 2, epoch: 76] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:11:05 AM INFO: [part 2, epoch: 77] val srs_upper_tri_alignment: 0.323
+04/13/2021 08:11:16 AM INFO: [part 2, epoch: 78] val srs_upper_tri_alignment: 0.323
+slurmstepd-bayes: error: *** JOB 64994 ON bayes CANCELLED AT 2021-04-13T08:11:21 ***

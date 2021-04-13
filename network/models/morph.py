@@ -2,6 +2,7 @@ import logging
 
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from torch.nn import init as init
 from torch.nn.modules.batchnorm import _BatchNorm
 
@@ -52,7 +53,7 @@ class Cell(nn.Module):
             in_channels=stack_channels,
             out_channels=in_channels,
             kernel_size=1,
-            groups=in_channels,
+            groups=1, # supposed to be in_channels, stack_channels needs to be a multiple of in_channels
             bias=False).to(self.device)
         self.bn = nn.BatchNorm2d(in_channels).to(self.device)
         self.relu = nn.ReLU().to(self.device)
@@ -66,6 +67,17 @@ class Cell(nn.Module):
         output = self.relu(self.bn(self.shrink(stack)))
 
         return output + x if self.use_residual else output
+
+
+class OutputCell(nn.Module):
+    def __init__(self, input_size, output_size, *args, **kwargs):
+        super(OutputCell, self).__init__(*args, **kwargs)
+        self.linear = nn.Linear(input_size, output_size)
+
+    def forward(self, input):
+        output = F.adaptive_avg_pool2d(input, 1)
+        output = output.view(output.size(0), -1)
+        return self.linear(output)
 
 
 class Morph(nn.Module):
