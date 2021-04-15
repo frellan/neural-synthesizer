@@ -16,8 +16,10 @@ from network.parsers.argument_parser import ArgumentParser
 from network.trainers import train_hidden, train_output, Trainer
 
 
+data_channels = 3
 in_channels = 16
 checkpoint_path = "./checkpoint/bayesian_start.pth"
+best_path = "./checkpoint/best.pth"
 
 opt = None
 model = None
@@ -26,7 +28,11 @@ output_criterion = None
 loader = None
 val_loader = None
 device = None
-
+parameters = {
+    'lr': 0.1,
+    'weight_decay': .0000625,
+    'momentum': .9
+}
 
 def modify_commandline_options(parser, **kwargs):
     loss_names = [
@@ -52,7 +58,7 @@ def get_hidden_criterion(opt):
 def get_module(parameterization):
     net = torch.load(checkpoint_path)
     if (net.n_modules == 0):
-        net.add_pending(torch.nn.Conv2d(3, in_channels, kernel_size=3, stride=1, padding=1, bias=False).to(device))
+        net.add_pending(torch.nn.Conv2d(data_channels, in_channels, kernel_size=3, stride=1, padding=1, bias=False).to(device))
         net.add_pending(torch.nn.BatchNorm2d(in_channels).to(device))
     cell = Cell(in_channels=in_channels, use_residual=True, blocks=[
         Block(in_channels, parameterization.get('out1', 16), 3, device),
@@ -65,15 +71,16 @@ def get_module(parameterization):
     net.add_pending(cell)
     return net
 
+
 def train_evaluate(parameterization):
     eval_hyper = True if "lr" in parameterization else False
     net = get_module(parameterization)
     optimizer = utils.get_optimizer(
         opt,
         params=net.get_trainable_params(),
-        lr=parameterization.get("lr", 0.001),
-        weight_decay=parameterization.get("weight_decay", .0000625),
-        momentum=parameterization.get("momentum", .9))
+        lr=parameterization.get("lr", parameters['lr']),
+        weight_decay=parameterization.get("weight_decay", parameters['weight_decay']),
+        momentum=parameterization.get("momentum", parameters['momentum']))
     trainer = Trainer(opt=opt, model=net, optimizer=optimizer)
     for epoch in range(3):
         for input, target in loader:
@@ -138,6 +145,7 @@ def main():
     global model
     global hidden_criterion
     global output_criterion
+    global parameters
 
     opt = ArgumentParser().parse()
     utils.set_logger(opt=opt, filename='train.log', filemode='w')
@@ -146,23 +154,24 @@ def main():
     loader, val_loader = datasets.get_dataloaders(opt)
 
     epochs = 100
-    output_epochs = 10
+    output_epochs = 100
     model = Morph(opt, device).to(device)
 
     hidden_criterion = get_hidden_criterion(opt)
     output_criterion = torch.nn.CrossEntropyLoss() if opt.loss == 'xe' else torch.nn.MultiMarginLoss()
 
-    for i in range(6):
+    for i in range(5):
         # Save current model for resetting on bayesian trials and after
         torch.save(model, checkpoint_path)
 
         # Search for parameters
-        best_parameters, values, experiment, model = optimize(
+        best_parameters, _, _, _ = optimize(
             parameters=[
                 {"name": "lr", "type": "range", "bounds": [0.001, 0.3], "log_scale": True},
                 {"name": "weight_decay", "type": "range", "bounds": [1e-5, 1e-3]},
-                {"name": "momentum", "type": "range", "bounds": [0., 1.0]}
+                {"name": "momentum", "type": "range", "bounds": [0.7, 1.0]}
             ],
+            total_trials=10,
             evaluation_function=train_evaluate,
             objective_name=opt.hidden_objective,
         )
@@ -180,7 +189,7 @@ def main():
         model = torch.load(checkpoint_path)
 
         # Search for channel parameters
-        best_parameters, values, experiment, model = optimize(
+        best_parameters, _, _, _ = optimize(
             parameters=[
                 {"name": "out1", "type": "range", "bounds": [8, 64]},
                 {"name": "out2", "type": "range", "bounds": [8, 64]},
@@ -189,6 +198,7 @@ def main():
                 {"name": "out5", "type": "range", "bounds": [8, 64]},
                 {"name": "out6", "type": "range", "bounds": [8, 64]},
             ],
+            total_trials=10,
             evaluation_function=train_evaluate,
             objective_name=opt.hidden_objective,
         )
@@ -202,7 +212,7 @@ def main():
 
         # Add components with best parameters
         if (model.n_modules == 0):
-            model.add_pending(torch.nn.Conv2d(3, in_channels, kernel_size=3, stride=1, padding=1, bias=False).to(device))
+            model.add_pending(torch.nn.Conv2d(data_channels, in_channels, kernel_size=3, stride=1, padding=1, bias=False).to(device))
             model.add_pending(torch.nn.BatchNorm2d(in_channels).to(device))
         cell = Cell(in_channels=in_channels, use_residual=i != 2, blocks=[
             Block(in_channels, best_parameters['out1'], 3, device),
@@ -216,10 +226,11 @@ def main():
 
         # Train for given epochs and then freeze
         train_pending(parameters, epochs)
+        model = torch.load(best_path)
         model.freeze_pending()
 
     # Train output layer
-    model.add_pending(OutputCell(16, 10))
+    model.add_pending(OutputCell(in_channels, opt.n_classes))
     optimizer = utils.get_optimizer(
         opt=opt,
         params=model.get_trainable_params(),
@@ -245,6 +256,7 @@ def main():
 
 if __name__ == '__main__':
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    print("USING DEVICE " + device)
     if device == 'cuda':
         torch.backends.cudnn.benchmark = True
     main()

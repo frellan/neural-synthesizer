@@ -6,9 +6,11 @@ import os
 import time
 import logging
 
+import torch
 import network.utils as utils
 
 logger = logging.getLogger()
+best_path = "./checkpoint/best.pth"
 
 
 # TODO if not all batches are of the same size, some of the printed statistics might be slightly
@@ -19,6 +21,9 @@ logger = logging.getLogger()
 def train_hidden(opt, n_epochs, trainer, loader, val_loader, criterion, part_id, device):
     logger.info(f'Starting training part {part_id}...')
 
+    best_val_acc = 0
+    unimproving_epochs = 0
+
     total_epoch = trainer.start_epoch + n_epochs
     total_batch = len(loader)
 
@@ -27,8 +32,8 @@ def train_hidden(opt, n_epochs, trainer, loader, val_loader, criterion, part_id,
         running_time = 0.
         total_loss = 0.
         total_time = 0.
-        if opt.loglevel.upper() not in ['DEBUG', 'NOTSET']:
-            pbar = utils.ProgressBar(len(loader))
+        # if opt.loglevel.upper() not in ['DEBUG', 'NOTSET']:
+        #     pbar = utils.ProgressBar(len(loader))
         for batch, (input, target) in enumerate(loader):
             start = time.time()
 
@@ -48,29 +53,29 @@ def train_hidden(opt, n_epochs, trainer, loader, val_loader, criterion, part_id,
             total_loss += loss  # revert the sign for loss logging
             total_time += end - start
             if batch % opt.print_freq == opt.print_freq - 1:
-                message = (
-                    f'[part: {part_id}, epoch: {epoch+1:5d}/{total_epoch}, batch: {batch+1:5d}/{total_batch}] '
-                    f'{opt.hidden_objective}: {running_loss/opt.print_freq:.3f}, '
-                    f'runtime (s): {running_time/opt.print_freq:.3f}'
-                )
-                logger.debug(message)
+                # message = (
+                #     f'[part: {part_id}, epoch: {epoch+1:5d}/{total_epoch}, batch: {batch+1:5d}/{total_batch}] '
+                #     f'{opt.hidden_objective}: {running_loss/opt.print_freq:.3f}, '
+                #     f'runtime (s): {running_time/opt.print_freq:.3f}'
+                # )
+                # logger.debug(message)
                 running_loss = 0.
                 running_time = 0.
-            if opt.loglevel.upper() not in ['DEBUG', 'NOTSET']:
-                message = (
-                    f'[part: {part_id}, epoch: {epoch+1:5d}/{total_epoch}] '
-                    f'avg {opt.hidden_objective}: {total_loss/(batch+1):.3f}, '
-                    f'avg runtime (s): {total_time/(batch+1):.3f}'
-                )
-                pbar.update(message)
+            # if opt.loglevel.upper() not in ['DEBUG', 'NOTSET']:
+            #     message = (
+            #         f'[part: {part_id}, epoch: {epoch+1:5d}/{total_epoch}] '
+            #         f'avg {opt.hidden_objective}: {total_loss/(batch+1):.3f}, '
+            #         f'avg runtime (s): {total_time/(batch+1):.3f}'
+            #     )
+            #     pbar.update(message)
 
         # validate
         if epoch % opt.val_freq == opt.val_freq - 1:
             if val_loader is not None:
                 hidden_obj, total = 0, 0
                 total_batch_val = len(val_loader)
-                if opt.loglevel.upper() not in ['DEBUG', 'NOTSET']:
-                    val_pbar = utils.ProgressBar(len(val_loader))
+                # if opt.loglevel.upper() not in ['DEBUG', 'NOTSET']:
+                #     val_pbar = utils.ProgressBar(len(val_loader))
                 for i, (input, target) in enumerate(val_loader):
                     input, target = \
                         input.to(device, non_blocking=True), target.to(
@@ -80,12 +85,12 @@ def train_hidden(opt, n_epochs, trainer, loader, val_loader, criterion, part_id,
                     hidden_obj += batch_obj
                     total += 1
 
-                    if opt.loglevel.upper() not in ['DEBUG', 'NOTSET']:
-                        latest_obj = hidden_obj / total
-                        message = f'avg val {opt.hidden_objective}:  {latest_obj:.3f}'
-                        val_pbar.update(message)
-                    message = f'batch: {i + 1}/{total_batch_val}, batch val {opt.hidden_objective}: {batch_obj:.3f}'
-                    logger.debug(message)
+                    # if opt.loglevel.upper() not in ['DEBUG', 'NOTSET']:
+                    #     latest_obj = hidden_obj / total
+                    #     message = f'avg val {opt.hidden_objective}:  {latest_obj:.3f}'
+                    #     val_pbar.update(message)
+                    # message = f'batch: {i + 1}/{total_batch_val}, batch val {opt.hidden_objective}: {batch_obj:.3f}'
+                    # logger.debug(message)
 
                 hidden_obj /= total
                 trainer.log_loss_values({
@@ -95,5 +100,18 @@ def train_hidden(opt, n_epochs, trainer, loader, val_loader, criterion, part_id,
                 logger.info(message)
                 if opt.schedule_lr:
                     trainer.scheduler_step(hidden_obj)
+
+        # early stopping
+        if hidden_obj > best_val_acc:
+            best_val_acc = hidden_obj
+            unimproving_epochs = 0
+            torch.save(trainer.model, best_path)
+        else:
+            unimproving_epochs += 1
+            print(f'No improvement for {unimproving_epochs} epochs')
+
+        if unimproving_epochs >= 20:
+            print('No improvement for 20 epochs, STOPPING EARLY')
+            break
 
     logger.info(f'Part {part_id} training finished!')
