@@ -19,7 +19,7 @@ best_path = "./checkpoint/best.pth"
 # not affect training result and all validation accuracy stats are correct
 
 def train_hidden(opt, n_epochs, trainer, loader, val_loader, criterion, part_id, device):
-    logger.info(f'Starting training part {part_id}...')
+    logger.info(f'Starting training layer {part_id}...')
 
     best_val_acc = 0
     unimproving_epochs = 0
@@ -96,7 +96,7 @@ def train_hidden(opt, n_epochs, trainer, loader, val_loader, criterion, part_id,
                 trainer.log_loss_values({
                     f'val_{part_id}_{opt.hidden_objective}': hidden_obj
                 })
-                message = f'[part {part_id}, epoch: {epoch+1}] val {opt.hidden_objective}: {hidden_obj:.3f}'
+                message = f'[layer {part_id}, epoch: {epoch+1}] val {opt.hidden_objective}: {hidden_obj:.3f}'
                 logger.info(message)
                 if opt.schedule_lr:
                     trainer.scheduler_step(hidden_obj)
@@ -107,11 +107,15 @@ def train_hidden(opt, n_epochs, trainer, loader, val_loader, criterion, part_id,
             unimproving_epochs = 0
             torch.save(trainer.model, best_path)
         else:
+            if unimproving_epochs > 1:
+                print(f'                   {unimproving_epochs} epochs')
+            else:
+                print(f'No improvement for {unimproving_epochs} epochs')
             unimproving_epochs += 1
-            print(f'No improvement for {unimproving_epochs} epochs')
 
         if unimproving_epochs >= 20:
             print('No improvement for 20 epochs, STOPPING EARLY')
             break
 
-    logger.info(f'Part {part_id} training finished!')
+    logger.info(f'Layer {part_id} training finished!')
+    return best_val_acc

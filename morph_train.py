@@ -20,6 +20,7 @@ data_channels = 3
 in_channels = 16
 checkpoint_path = "./checkpoint/bayesian_start.pth"
 best_path = "./checkpoint/best.pth"
+useful_layer = True
 
 opt = None
 model = None
@@ -97,7 +98,7 @@ def train_evaluate(parameterization):
             else:
                 kernel_size = 49
             resource_constraint += (parameterization['out' + str(i + 1)] * kernel_size)
-        resource_constraint *= 1e-5
+        resource_constraint *= 3e-5
 
     with torch.no_grad():
         hidden_obj, total = 0, 0
@@ -127,7 +128,7 @@ def train_pending(parameters, epochs):
         optimizer=optimizer,
         val_metric_name=opt.hidden_objective,
         val_metric_obj='max')
-    train_hidden(
+    return train_hidden(
         opt,
         n_epochs=epochs,
         trainer=trainer,
@@ -153,14 +154,16 @@ def main():
         utils.make_deterministic(opt.seed)
     loader, val_loader = datasets.get_dataloaders(opt)
 
-    epochs = 100
-    output_epochs = 100
+    epochs = 200
+    output_epochs = 10
+    max_layers = 5
+    best_val_accuracy = 0
     model = Morph(opt, device).to(device)
 
     hidden_criterion = get_hidden_criterion(opt)
     output_criterion = torch.nn.CrossEntropyLoss() if opt.loss == 'xe' else torch.nn.MultiMarginLoss()
 
-    for i in range(5):
+    for i in range(max_layers):
         # Save current model for resetting on bayesian trials and after
         torch.save(model, checkpoint_path)
 
@@ -168,7 +171,7 @@ def main():
         best_parameters, _, _, _ = optimize(
             parameters=[
                 {"name": "lr", "type": "range", "bounds": [0.001, 0.3], "log_scale": True},
-                {"name": "weight_decay", "type": "range", "bounds": [1e-5, 1e-3]},
+                {"name": "weight_decay", "type": "range", "bounds": [1e-6, 1e-3]},
                 {"name": "momentum", "type": "range", "bounds": [0.7, 1.0]}
             ],
             total_trials=10,
@@ -198,7 +201,7 @@ def main():
                 {"name": "out5", "type": "range", "bounds": [8, 64]},
                 {"name": "out6", "type": "range", "bounds": [8, 64]},
             ],
-            total_trials=10,
+            total_trials=30,
             evaluation_function=train_evaluate,
             objective_name=opt.hidden_objective,
         )
@@ -225,9 +228,17 @@ def main():
         model.add_pending(cell)
 
         # Train for given epochs and then freeze
-        train_pending(parameters, epochs)
-        model = torch.load(best_path)
-        model.freeze_pending()
+        new_accuracy = train_pending(parameters, epochs)
+
+        print(f'new_acc: {new_accuracy} best_acc: {best_val_accuracy}')
+        if new_accuracy > best_val_accuracy:
+            best_val_accuracy = new_accuracy
+            model = torch.load(best_path)
+            model.freeze_pending()
+        else:
+            print('New layer did not improve upon previous, STOPPING HIDDEN TRAINING')
+            model.clear_pending()
+            break
 
     # Train output layer
     model.add_pending(OutputCell(in_channels, opt.n_classes))
