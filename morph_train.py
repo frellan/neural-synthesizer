@@ -80,7 +80,6 @@ def train_evaluate(parameterization):
     optimizer = torch.optim.Adam(net.get_trainable_params(), lr=parameterization.get("lr", 0.1))
     trainer = Trainer(opt=opt, model=net, optimizer=optimizer)
     for epoch in range(10):
-        print(f'Optimizing - {epoch + 1}/{10}')
         for input, target in loader:
             input, target = input.to(device, non_blocking=True), target.to(device, non_blocking=True)
             trainer.step(input, target, hidden_criterion, minimize=False)
@@ -188,7 +187,7 @@ def main():
                 {"name": "out5", "type": "range", "bounds": [8, 64]},
                 {"name": "out6", "type": "range", "bounds": [8, 64]},
             ],
-            total_trials=30,
+            total_trials=10,
             evaluation_function=train_evaluate,
             objective_name=opt.hidden_objective,
         )
