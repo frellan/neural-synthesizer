@@ -65,63 +65,50 @@ def get_module(parameterization):
     cell = Cell(in_channels=in_channels, use_residual=True, blocks=[
         Block(in_channels, parameterization.get('out1', 16), 3, device),
         Block(parameterization.get('out1', 16), parameterization.get('out2', 16), 3, device),
-        Block(in_channels, parameterization.get('out3', 16), 3, device),
-        Block(parameterization.get('out3', 16), parameterization.get('out4', 16), 3, device),
-        Block(in_channels, parameterization.get('out5', 16), 3, device),
-        Block(parameterization.get('out5', 16), parameterization.get('out6', 16), 3, device),
+        Block(in_channels, parameterization.get('out3', 16), 5, device),
+        Block(parameterization.get('out3', 16), parameterization.get('out4', 16), 5, device),
+        Block(in_channels, parameterization.get('out5', 16), 7, device),
+        Block(parameterization.get('out5', 16), parameterization.get('out6', 16), 7, device),
     ], device=device)
     net.add_pending(cell)
     return net
 
 
 def train_evaluate(parameterization):
-    eval_hyper = True if "lr" in parameterization else False
+    print(f'Optimizing - Params {parameterization}')
+
     net = get_module(parameterization)
-    optimizer = torch.optim.Adam(net.get_trainable_params(), lr=parameterization.get("lr", 0.1))
-    trainer = Trainer(opt=opt, model=net, optimizer=optimizer)
-    for epoch in range(10):
-        for input, target in loader:
-            input, target = input.to(device, non_blocking=True), target.to(device, non_blocking=True)
-            trainer.step(input, target, hidden_criterion, minimize=False)
-    
+    parameters = {
+        'lr': parameterization.get('lr', 0.1)
+    }
+    val_result = train_pending(net, parameters, 10)
+
     resource_constraint = 0
-    if not eval_hyper:
-        for i in range(6):
-            if (i < 2):
-                kernel_size = 9
-            elif (i < 4):
-                kernel_size = 25
-            else:
-                kernel_size = 49
-            resource_constraint += (parameterization['out' + str(i + 1)] * kernel_size)
-        resource_constraint *= 3e-5
+    for i in range(6):
+        if (i < 2):
+            kernel_size = 9
+        elif (i < 4):
+            kernel_size = 25
+        else:
+            kernel_size = 49
+        resource_constraint += (parameterization['out' + str(i + 1)] * kernel_size)
+    resource_constraint *= 5e-5
 
-    with torch.no_grad():
-        hidden_obj, total = 0, 0
-        for input, target in val_loader:
-            input, target = input.to(device, non_blocking=True), target.to(device, non_blocking=True)
-            output = trainer.get_eval_output(input)
-            batch_obj = hidden_criterion(output, target).item()
-            if eval_hyper:
-                batch_obj -= resource_constraint
-            hidden_obj += batch_obj
-            total += 1
+    print(f'Optimizing - Alignment: {val_result}, ResConst: {resource_constraint}', end='')
+    val_result -= resource_constraint
+    print(f', Metric: {val_result}')
 
-    print(f'Optimizing - Current params {parameterization}')
-    print(f'Optimizing - Current alignment {hidden_obj / total}')
-
-    return hidden_obj / total
+    return val_result
 
 
-def train_pending(parameters, epochs):
-    optimizer = torch.optim.Adam(model.get_trainable_params(), lr=parameters['lr'])
+def train_pending(net, parameters, epochs, save_model=False):
+    optimizer = torch.optim.Adam(net.get_trainable_params(), lr=parameters['lr'])
     trainer = Trainer(
         opt=opt,
-        model=model,
+        model=net,
         set_eval=None,
         optimizer=optimizer,
-        val_metric_name=opt.hidden_objective,
-        val_metric_obj='max')
+        val_metric_name=opt.hidden_objective)
     return train_hidden(
         opt,
         n_epochs=epochs,
@@ -129,8 +116,9 @@ def train_pending(parameters, epochs):
         loader=loader,
         val_loader=val_loader,
         criterion=hidden_criterion,
-        part_id=model.n_modules + 1,
-        device=device)
+        part_id=net.n_modules + 1,
+        device=device,
+        save_model=save_model)
 
 
 def main():
@@ -160,9 +148,15 @@ def main():
         # Search for parameters
         best_parameters, _, _, _ = optimize(
             parameters=[
-                {"name": "lr", "type": "range", "bounds": [0.001, 0.3], "log_scale": True}
+                {"name": "lr", "type": "range", "bounds": [0.001, 0.3], "log_scale": True},
+                {"name": "out1", "type": "range", "bounds": [8, 64]},
+                {"name": "out2", "type": "range", "bounds": [8, 64]},
+                {"name": "out3", "type": "range", "bounds": [8, 64]},
+                {"name": "out4", "type": "range", "bounds": [8, 64]},
+                {"name": "out5", "type": "range", "bounds": [8, 64]},
+                {"name": "out6", "type": "range", "bounds": [8, 64]},
             ],
-            total_trials=10,
+            total_trials=30,
             evaluation_function=train_evaluate,
             objective_name=opt.hidden_objective,
         )
@@ -177,33 +171,11 @@ def main():
         # Reset model
         model = torch.load(checkpoint_path)
 
-        # Search for channel parameters
-        best_parameters, _, _, _ = optimize(
-            parameters=[
-                {"name": "out1", "type": "range", "bounds": [8, 64]},
-                {"name": "out2", "type": "range", "bounds": [8, 64]},
-                {"name": "out3", "type": "range", "bounds": [8, 64]},
-                {"name": "out4", "type": "range", "bounds": [8, 64]},
-                {"name": "out5", "type": "range", "bounds": [8, 64]},
-                {"name": "out6", "type": "range", "bounds": [8, 64]},
-            ],
-            total_trials=20,
-            evaluation_function=train_evaluate,
-            objective_name=opt.hidden_objective,
-        )
-
-        # Print and set the best parameters
-        print("BEST PARAMETERS: ", end='')
-        print(best_parameters)
-
-        # Reset model
-        model = torch.load(checkpoint_path)
-
         # Add components with best parameters
         if (model.n_modules == 0):
             model.add_pending(torch.nn.Conv2d(data_channels, in_channels, kernel_size=3, stride=1, padding=1, bias=False).to(device))
             model.add_pending(torch.nn.BatchNorm2d(in_channels).to(device))
-        cell = Cell(in_channels=in_channels, use_residual=i != 2, blocks=[
+        cell = Cell(in_channels=in_channels, use_residual=True, blocks=[
             Block(in_channels, best_parameters['out1'], 3, device),
             Block(best_parameters['out1'], best_parameters['out2'], 3, device),
             Block(in_channels, best_parameters['out3'], 5, device),
@@ -214,7 +186,7 @@ def main():
         model.add_pending(cell)
 
         # Train for given epochs and then freeze
-        new_accuracy = train_pending(parameters, epochs)
+        new_accuracy = train_pending(model, parameters, epochs, True)
 
         print(f'new_acc: {new_accuracy} best_acc: {best_val_accuracy}')
         if new_accuracy > best_val_accuracy:

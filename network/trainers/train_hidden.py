@@ -9,7 +9,7 @@ import torch
 logger = logging.getLogger()
 best_path = "./checkpoint/best.pth"
 
-def train_hidden(opt, n_epochs, trainer, loader, val_loader, criterion, part_id, device):
+def train_hidden(opt, n_epochs, trainer, loader, val_loader, criterion, part_id, device, save_model=False):
     logger.info(f'Starting training layer {part_id}...')
 
     best_val_acc = 0
@@ -22,11 +22,6 @@ def train_hidden(opt, n_epochs, trainer, loader, val_loader, criterion, part_id,
             # train step
             input, target = input.to(device, non_blocking=True), target.to(device, non_blocking=True)
             output, loss = trainer.step(input, target, criterion, minimize=False)
-
-            # get some batch statistics
-            trainer.log_loss_values({
-                f'train_{part_id}_batch_{opt.hidden_objective}': loss,
-            })
 
         # validate
         if epoch % opt.val_freq == opt.val_freq - 1:
@@ -42,9 +37,6 @@ def train_hidden(opt, n_epochs, trainer, loader, val_loader, criterion, part_id,
                     total += 1
 
                 hidden_obj /= total
-                trainer.log_loss_values({
-                    f'val_{part_id}_{opt.hidden_objective}': hidden_obj
-                })
                 message = f'[layer {part_id}, epoch: {epoch+1}] val {opt.hidden_objective}: {hidden_obj:.3f}'
                 logger.info(message)
                 if opt.schedule_lr:
@@ -54,8 +46,9 @@ def train_hidden(opt, n_epochs, trainer, loader, val_loader, criterion, part_id,
         if hidden_obj > best_val_acc:
             best_val_acc = hidden_obj
             unimproving_epochs = 0
-            torch.save(trainer.model, best_path)
-            print(f'New best val acc {best_val_acc}, saving model')
+            if save_model:
+                torch.save(trainer.model, best_path)
+                print(f'New best val acc {best_val_acc}, saving model')
         else:
             unimproving_epochs += 1
             if unimproving_epochs > 1:

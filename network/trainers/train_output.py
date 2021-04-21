@@ -28,10 +28,6 @@ def train_output(opt, n_epochs, trainer, loader, val_loader, criterion, part_id,
             acc = 100 * \
                 (predicted == target).sum().to(
                     torch.float).item() / target.size(0)
-            trainer.log_loss_values({
-                f'train_{part_id}_batch_{criterion.__class__.__name__.lower()}': loss,
-                f'train_{part_id}_batch_acc': acc
-            })
 
         # validate
         if epoch % opt.val_freq == opt.val_freq - 1:
@@ -53,9 +49,6 @@ def train_output(opt, n_epochs, trainer, loader, val_loader, criterion, part_id,
                     logger.debug(message)
 
                 acc = 100.0 * correct / total
-                trainer.log_loss_values({
-                    'val_acc': acc
-                })
 
                 message = f'[Output layer {part_id}, epoch: {epoch+1}] val acc (%): {acc:.3f}'
                 logger.info(message)

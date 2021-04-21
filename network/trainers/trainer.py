@@ -2,11 +2,8 @@
 ©Copyright 2020 University of Florida Research Foundation, Inc. All rights reserved.
 Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
 """
-import logging
 import torch
 from torch.optim.lr_scheduler import ReduceLROnPlateau
-
-logger = logging.getLogger()
 
 class Trainer(torch.nn.Module):
     def __init__(
@@ -72,7 +69,3 @@ class Trainer(torch.nn.Module):
     
     def scheduler_step(self, val_loss_value):
         self.scheduler.step(val_loss_value)
-
-    def log_loss_values(self, loss_dict):
-        for k, v in loss_dict.items():
-            logger.add_scalar(k, v, self.steps_taken)

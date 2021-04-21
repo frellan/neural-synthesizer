@@ -91,10 +91,13 @@ class Morph(nn.Module):
         self.pending = []
 
     def forward(self, input):
-        frozen = nn.Sequential(*self.frozen).to(self.device)
         pending = nn.Sequential(*self.pending).to(self.device)
-        output = frozen(input)
-        output = pending(output)
+        if len(self.frozen) > 0:
+            frozen = nn.Sequential(*self.frozen).to(self.device)
+            output = frozen(input)
+            output = pending(output)
+        else:
+            output = pending(input)
         return output
 
     def add_pending(self, *components):
