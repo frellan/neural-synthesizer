@@ -82,10 +82,9 @@ class OutputCell(nn.Module):
 
 
 class Morph(nn.Module):
-    def __init__(self, opt, device, *args, **kwargs):
+    def __init__(self, device, *args, **kwargs):
         super(Morph, self).__init__(*args, **kwargs)
 
-        self.opt = opt
         self.device = device
         self.n_modules = 0
         self.frozen = []
@@ -101,7 +100,7 @@ class Morph(nn.Module):
     def add_pending(self, *components):
         _init_weights([*components])
         if (len(components) > 1):
-            self.pending.append(nn.Sequential(*components))
+            self.pending.extend([*components])
         else:
             self.pending.append(*components)
 

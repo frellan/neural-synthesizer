@@ -108,7 +108,7 @@ def train_evaluate(parameterization):
             total += 1
 
     print(f'Optimizing - Current params {parameterization}')
-    print(f'Optimizing - Best loss {hidden_obj / total}')
+    print(f'Optimizing - Current alignment {hidden_obj / total}')
 
     return hidden_obj / total
 
@@ -148,7 +148,7 @@ def main():
         utils.make_deterministic(opt.seed)
     loader, val_loader = datasets.get_dataloaders(opt)
     best_val_accuracy = 0
-    model = Morph(opt, device).to(device)
+    model = Morph(device).to(device)
 
     hidden_criterion = get_hidden_criterion(opt)
     output_criterion = torch.nn.CrossEntropyLoss() if opt.loss == 'xe' else torch.nn.MultiMarginLoss()
@@ -187,7 +187,7 @@ def main():
                 {"name": "out5", "type": "range", "bounds": [8, 64]},
                 {"name": "out6", "type": "range", "bounds": [8, 64]},
             ],
-            total_trials=10,
+            total_trials=20,
             evaluation_function=train_evaluate,
             objective_name=opt.hidden_objective,
         )

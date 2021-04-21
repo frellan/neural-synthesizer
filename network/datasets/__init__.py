@@ -123,15 +123,19 @@ def get_dataloaders(opt):
 
         trainset = _get_subset(trainset, opt.max_trainset_size, opt.balanced,
                                opt.train_subset_indices, 'train_subset_indices', opt)
+        
+        def _init_fn(worker_id):
+            import numpy as np
+            np.random.seed(int(opt.seed))
         train_loader = torch.utils.data.DataLoader(
             trainset, batch_size=opt.batch_size,
             shuffle=opt.shuffle, num_workers=opt.n_workers,
-            pin_memory=True)
+            pin_memory=True, worker_init_fn=_init_fn)
         if opt.n_val > 0:
             val_loader = torch.utils.data.DataLoader(
                 valset, batch_size=opt.batch_size,
                 shuffle=opt.shuffle, num_workers=opt.n_workers,
-                pin_memory=True)
+                pin_memory=True, worker_init_fn=_init_fn)
         else:
             val_loader = None
 

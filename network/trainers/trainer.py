@@ -44,29 +44,21 @@ class Trainer(torch.nn.Module):
         if self.set_eval:
             self.set_eval.eval()
 
-        output = None
-        loss = None
+        self.optimizer.zero_grad()
+        output = self.model(input)
 
-        def closure():
-            self.optimizer.zero_grad()
-            nonlocal output
-            output = self.model(input)
-            cri_val = criterion(output, target)
-            nonlocal loss
-            if minimize:
-                loss = cri_val
-            else:
-                loss = -cri_val
-            loss.backward()
-            return loss
-
-        if (self.opt.optimizer == 'samsgd'):
-            self.optimizer.step(closure)
+        cri_val = criterion(output, target)
+        if minimize:
+            loss = cri_val
         else:
-            closure()
-            self.optimizer.step()
+            loss = -cri_val
+
+        loss.backward()
+        self.optimizer.step()
         self.steps_taken += 1
 
+        # on why use .detach() but not .data:
+        # https://pytorch.org/blog/pytorch-0_4_0-migration-guide/
         if minimize:
             return output.detach(), loss.item()
         else:
