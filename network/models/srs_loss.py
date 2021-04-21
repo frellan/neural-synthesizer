@@ -5,8 +5,6 @@ Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses
 import logging
 import functools
 
-from easydict import EasyDict as edict
-
 import torch
 import torch.nn.functional as F
 from torch.nn.modules.loss import _Loss

@@ -18,6 +18,9 @@ from network.trainers import train_hidden, train_output, Trainer
 
 data_channels = 3
 in_channels = 16
+epochs = 150
+output_epochs = 20
+max_layers = 5
 checkpoint_path = "./checkpoint/bayesian_start.pth"
 best_path = "./checkpoint/best.pth"
 useful_layer = True
@@ -30,9 +33,7 @@ loader = None
 val_loader = None
 device = None
 parameters = {
-    'lr': 0.1,
-    'weight_decay': .0000625,
-    'momentum': .9
+    'lr': 0.1
 }
 
 def modify_commandline_options(parser, **kwargs):
@@ -76,14 +77,10 @@ def get_module(parameterization):
 def train_evaluate(parameterization):
     eval_hyper = True if "lr" in parameterization else False
     net = get_module(parameterization)
-    optimizer = utils.get_optimizer(
-        opt,
-        params=net.get_trainable_params(),
-        lr=parameterization.get("lr", parameters['lr']),
-        weight_decay=parameterization.get("weight_decay", parameters['weight_decay']),
-        momentum=parameterization.get("momentum", parameters['momentum']))
+    optimizer = torch.optim.Adam(net.get_trainable_params(), lr=parameterization.get("lr", 0.1))
     trainer = Trainer(opt=opt, model=net, optimizer=optimizer)
-    for epoch in range(3):
+    for epoch in range(10):
+        print(f'Optimizing - {epoch + 1}/{10}')
         for input, target in loader:
             input, target = input.to(device, non_blocking=True), target.to(device, non_blocking=True)
             trainer.step(input, target, hidden_criterion, minimize=False)
@@ -111,16 +108,14 @@ def train_evaluate(parameterization):
             hidden_obj += batch_obj
             total += 1
 
+    print(f'Optimizing - Current params {parameterization}')
+    print(f'Optimizing - Best loss {hidden_obj / total}')
+
     return hidden_obj / total
 
 
 def train_pending(parameters, epochs):
-    optimizer = utils.get_optimizer(
-        opt,
-        params=model.get_trainable_params(),
-        lr=parameters['lr'],
-        weight_decay=parameters['weight_decay'],
-        momentum=parameters['momentum'])
+    optimizer = torch.optim.Adam(model.get_trainable_params(), lr=parameters['lr'])
     trainer = Trainer(
         opt=opt,
         model=model,
@@ -153,10 +148,6 @@ def main():
     if opt.seed:
         utils.make_deterministic(opt.seed)
     loader, val_loader = datasets.get_dataloaders(opt)
-
-    epochs = 200
-    output_epochs = 10
-    max_layers = 5
     best_val_accuracy = 0
     model = Morph(opt, device).to(device)
 
@@ -170,9 +161,7 @@ def main():
         # Search for parameters
         best_parameters, _, _, _ = optimize(
             parameters=[
-                {"name": "lr", "type": "range", "bounds": [0.001, 0.3], "log_scale": True},
-                {"name": "weight_decay", "type": "range", "bounds": [1e-6, 1e-3]},
-                {"name": "momentum", "type": "range", "bounds": [0.7, 1.0]}
+                {"name": "lr", "type": "range", "bounds": [0.001, 0.3], "log_scale": True}
             ],
             total_trials=10,
             evaluation_function=train_evaluate,
@@ -183,9 +172,7 @@ def main():
         print("BEST PARAMETERS: ", end='')
         print(best_parameters)
         parameters = {
-            'lr': best_parameters["lr"],
-            'weight_decay': best_parameters["weight_decay"],
-            'momentum': best_parameters["momentum"]
+            'lr': best_parameters["lr"]
         }
 
         # Reset model
@@ -232,6 +219,8 @@ def main():
 
         print(f'new_acc: {new_accuracy} best_acc: {best_val_accuracy}')
         if new_accuracy > best_val_accuracy:
+            print(f'Better acc from new layer:')
+            print(f'{new_accuracy} > {best_val_accuracy}')
             best_val_accuracy = new_accuracy
             model = torch.load(best_path)
             model.freeze_pending()
@@ -242,12 +231,7 @@ def main():
 
     # Train output layer
     model.add_pending(OutputCell(in_channels, opt.n_classes))
-    optimizer = utils.get_optimizer(
-        opt=opt,
-        params=model.get_trainable_params(),
-        lr=parameters['lr'],
-        weight_decay=parameters['weight_decay'],
-        momentum=parameters['momentum'])
+    optimizer = torch.optim.Adam(model.get_trainable_params(), lr=parameters['lr'])
     trainer = Trainer(
         opt=opt,
         model=model,

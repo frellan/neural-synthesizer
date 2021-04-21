@@ -28,11 +28,12 @@ class Block(nn.Module):
             padding=padding,
             groups=groups,
             bias=False).to(self.device)
-        self.bn = nn.BatchNorm2d(out_channels).to(self.device)
+        # self.bn = nn.BatchNorm2d(out_channels).to(self.device)
         self.relu = nn.ReLU().to(self.device)
 
     def forward(self, x):
-        return self.relu(self.bn(self.conv(x)))
+        return self.relu(self.conv(x))
+        # return self.relu(self.bn(self.conv(x)))
 
 
 class Cell(nn.Module):
