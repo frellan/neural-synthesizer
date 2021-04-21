@@ -92,7 +92,7 @@ def train_evaluate(parameterization):
         else:
             kernel_size = 49
         resource_constraint += (parameterization['out' + str(i + 1)] * kernel_size)
-    resource_constraint *= 5e-5
+    resource_constraint *= 1e-5
 
     print(f'Optimizing - Alignment: {val_result}, ResConst: {resource_constraint}', end='')
     val_result -= resource_constraint
