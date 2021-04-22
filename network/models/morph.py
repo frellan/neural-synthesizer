@@ -1,5 +1,6 @@
 import logging
 
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -17,22 +18,50 @@ class Block(nn.Module):
         self.device = device
 
         padding = kernel_size // 2
-        groups = in_channels if kernel_size == 1 else 1
 
         self.out_channels = out_channels
-        self.conv = nn.Conv2d(
-            in_channels=in_channels,
-            out_channels=out_channels,
-            kernel_size=kernel_size,
-            stride=1,
-            padding=padding,
-            groups=groups,
-            bias=False).to(self.device)
+        self.convs = []
+        if in_channels >= out_channels:
+            self.convs.append(nn.Conv2d(
+                in_channels=in_channels,
+                out_channels=out_channels,
+                kernel_size=kernel_size,
+                stride=1,
+                padding=padding,
+                groups=1,
+                bias=False).to(self.device))
+        else:
+            concats = out_channels // in_channels
+            for i in range(concats):
+                self.convs.append(nn.Conv2d(
+                    in_channels=in_channels,
+                    out_channels=in_channels,
+                    kernel_size=kernel_size,
+                    stride=1,
+                    padding=padding,
+                    groups=in_channels,
+                    bias=False).to(self.device))
+
+        # self.conv = nn.Conv2d(
+        #     in_channels=in_channels,
+        #     out_channels=out_channels,
+        #     kernel_size=kernel_size,
+        #     stride=1,
+        #     padding=padding,
+        #     groups=in_channels,
+        #     bias=False).to(self.device)
         self.bn = nn.BatchNorm2d(out_channels).to(self.device)
         self.relu = nn.ReLU().to(self.device)
 
     def forward(self, x):
-        return self.relu(self.bn(self.conv(x)))
+        if len(self.convs) == 1:
+            return self.relu(self.bn(self.convs[0](x)))
+        else:
+            output = []
+            for i in range(len(self.convs)):
+                output.append(self.convs[i](x))
+            stack = torch.cat(output, dim=1)
+            return self.relu(self.bn(stack))
 
 
 class Cell(nn.Module):
@@ -129,6 +158,17 @@ class Morph(nn.Module):
 
     def get_trainable_params(self):
         return nn.Sequential(*self.pending).to(self.device).parameters()
+
+    def n_params(self):
+        model = nn.Sequential(*self.frozen, *self.pending).to(self.device)
+        params = sum([np.prod(p.size()) for p in model.parameters()])
+        return params
+
+    def n_trainable_params(self):
+        model = nn.Sequential(*self.frozen, *self.pending).to(self.device)
+        model_parameters = filter(lambda p: p.requires_grad, model.parameters())
+        params = sum([np.prod(p.size()) for p in model_parameters])
+        return params
 
     
 @torch.no_grad()

@@ -11,10 +11,10 @@ from network.trainers import train_hidden, train_output, Trainer
 
 data_channels = 3
 in_channels = 16
-epochs = 200
-output_epochs = 100
-opt_trials = 30
-max_layers = 5
+epochs = 1
+output_epochs = 1
+opt_trials = 1
+max_layers = 2
 checkpoint_path = "./checkpoint/bayesian_start.pth"
 best_path = "./checkpoint/best.pth"
 useful_layer = True
@@ -65,6 +65,7 @@ def get_module(parameterization):
         Block(parameterization.get('out5', 16), parameterization.get('out6', 16), 7, device),
     ], device=device)
     net.add_pending(cell)
+    print(f"Trying a model with {net.n_params()} params, of which {net.n_trainable_params()} are trainable")
     return net
 
 
@@ -192,6 +193,7 @@ def main():
         else:
             print('New layer did not improve upon previous, STOPPING HIDDEN TRAINING')
             model.clear_pending()
+            model.frozen[-1].use_residual = False
             break
 
     # Train output layer
