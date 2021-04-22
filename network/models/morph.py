@@ -20,48 +20,56 @@ class Block(nn.Module):
         padding = kernel_size // 2
 
         self.out_channels = out_channels
-        self.convs = []
+        self.convs = nn.ModuleList()
         if in_channels >= out_channels:
-            self.convs.append(nn.Conv2d(
+            conv = nn.Sequential(
+                nn.Conv2d(
+                    in_channels=in_channels,
+                    out_channels=out_channels,
+                    kernel_size=1,
+                    stride=1,
+                    padding=0,
+                    groups=1,
+                    bias=False),
+                nn.Conv2d(
+                    in_channels=out_channels,
+                    out_channels=out_channels,
+                    kernel_size=kernel_size,
+                    stride=1,
+                    padding=padding,
+                    groups=out_channels,
+                    bias=False)
+            ).to(self.device)
+            self.convs.append(conv)
+        elif in_channels == out_channels:
+            conv = nn.Conv2d(
                 in_channels=in_channels,
                 out_channels=out_channels,
                 kernel_size=kernel_size,
                 stride=1,
                 padding=padding,
-                groups=1,
-                bias=False).to(self.device))
+                groups=in_channels,
+                bias=False).to(self.device)
+            self.convs.append(conv)
         else:
             concats = out_channels // in_channels
             for i in range(concats):
-                self.convs.append(nn.Conv2d(
+                conv = nn.Conv2d(
                     in_channels=in_channels,
                     out_channels=in_channels,
                     kernel_size=kernel_size,
                     stride=1,
                     padding=padding,
                     groups=in_channels,
-                    bias=False).to(self.device))
+                    bias=False).to(self.device)
+                self.convs.append(conv)
 
-        # self.conv = nn.Conv2d(
-        #     in_channels=in_channels,
-        #     out_channels=out_channels,
-        #     kernel_size=kernel_size,
-        #     stride=1,
-        #     padding=padding,
-        #     groups=in_channels,
-        #     bias=False).to(self.device)
         self.bn = nn.BatchNorm2d(out_channels).to(self.device)
         self.relu = nn.ReLU().to(self.device)
 
     def forward(self, x):
-        if len(self.convs) == 1:
-            return self.relu(self.bn(self.convs[0](x)))
-        else:
-            output = []
-            for i in range(len(self.convs)):
-                output.append(self.convs[i](x))
-            stack = torch.cat(output, dim=1)
-            return self.relu(self.bn(stack))
+        stack = torch.cat([conv(x) for conv in self.convs], dim=1)
+        return self.relu(self.bn(stack))
 
 
 class Cell(nn.Module):

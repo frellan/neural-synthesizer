@@ -79,18 +79,18 @@ def train_evaluate(parameterization):
     val_result = train_pending(net, parameters, 10)
 
     resource_constraint = 0
-    for i in range(6):
-        if (i < 2):
-            kernel_size = 9
-        elif (i < 4):
-            kernel_size = 25
-        else:
-            kernel_size = 49
-        resource_constraint += (parameterization['out' + str(i + 1)] * kernel_size)
-    resource_constraint *= 3e-6
+    # for i in range(6):
+    #     if (i < 2):
+    #         kernel_size = 9
+    #     elif (i < 4):
+    #         kernel_size = 25
+    #     else:
+    #         kernel_size = 49
+    #     resource_constraint += (parameterization['out' + str(i + 1)] * kernel_size)
+    # resource_constraint *= 3e-6
 
     print(f'Optimizing - Alignment: {val_result}, ResConst: {resource_constraint}', end='')
-    val_result -= resource_constraint
+    # val_result -= resource_constraint
     print(f', Metric: {val_result}')
 
     return val_result
@@ -196,6 +196,8 @@ def main():
             model.frozen[-1].use_residual = False
             break
 
+    print(f"TOTAL PARAMS FOR HIDDEN LAYERS: {net.n_params()}")
+
     # Train output layer
     model.add_pending(OutputCell(in_channels, opt.n_classes))
     optimizer = torch.optim.Adam(model.get_trainable_params(), lr=parameters['lr'])
@@ -215,6 +217,8 @@ def main():
         criterion=output_criterion,
         part_id=model.n_modules,
         device=device)
+
+    print(f"TOTAL PARAMS FOR ENTIRE NETWORK: {net.n_params()}")
 
 if __name__ == '__main__':
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
