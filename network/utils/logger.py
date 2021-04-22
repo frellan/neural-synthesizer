@@ -34,11 +34,11 @@ def set_logger(opt, filename, filemode):
     ch.setFormatter(formatter)
     logger.addHandler(ch)
 
-    if getattr(opt, 'tf_log', None):
-        from torch.utils.tensorboard import SummaryWriter
+    # if getattr(opt, 'tf_log', None):
+    #     from torch.utils.tensorboard import SummaryWriter
 
-        writer = SummaryWriter(
-            log_dir=os.path.join(save_dir, 'tf_log')
-        )
-        # give handles on tensorboard methods to this logger
-        logger.add_scalar = writer.add_scalar
+    #     writer = SummaryWriter(
+    #         log_dir=os.path.join(save_dir, 'tf_log')
+    #     )
+    #     # give handles on tensorboard methods to this logger
+    #     logger.add_scalar = writer.add_scalar

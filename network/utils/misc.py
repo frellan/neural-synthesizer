@@ -2,9 +2,7 @@
 ©Copyright 2020 University of Florida Research Foundation, Inc. All rights reserved.
 Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
 """
-import os
 import sys
-import glob
 import time
 import logging
 import argparse
@@ -13,8 +11,6 @@ from shutil import get_terminal_size
 
 import torch
 import torchvision
-
-from network.models.sam_sgd import SAMSGD
 
 logger = logging.getLogger()
 INF = float('inf')
@@ -76,8 +72,6 @@ def get_optimizer(opt, params, lr, weight_decay, **kwargs):
         return torch.optim.Adam(params, lr=lr, weight_decay=weight_decay)
     elif opt.optimizer == 'sgd':
         return torch.optim.SGD(params, lr=lr, weight_decay=weight_decay, momentum=kwargs['momentum'])
-    elif opt.optimizer == 'samsgd':
-        return SAMSGD(params, lr=lr, weight_decay=weight_decay, momentum=kwargs['momentum'])
 
 
 def sample(tensor, n):
@@ -170,6 +164,7 @@ def make_deterministic(seed):
     random.seed(seed)
     torch.manual_seed(seed)
     np.random.seed(seed)
+    torch.cuda.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False

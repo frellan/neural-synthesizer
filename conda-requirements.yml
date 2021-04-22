@@ -9,9 +9,6 @@ dependencies:
   - numpy
   - pytorch>=1.6.0
   - torchvision
-  - tensorboard
-  - cleverhans
-  - easydict
   - setuptools
   - pip
   - pip:
