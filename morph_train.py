@@ -11,10 +11,10 @@ from network.trainers import train_hidden, train_output, Trainer
 
 data_channels = 3
 in_channels = 16
-epochs = 1
-output_epochs = 1
-opt_trials = 1
-max_layers = 2
+epochs = 200
+output_epochs = 100
+opt_trials = 30
+max_layers = 5
 checkpoint_path = "./checkpoint/bayesian_start.pth"
 best_path = "./checkpoint/best.pth"
 useful_layer = True
