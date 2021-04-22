@@ -143,12 +143,12 @@ def main():
         best_parameters, _, _, _ = optimize(
             parameters=[
                 {"name": "lr", "type": "range", "bounds": [0.001, 0.3], "log_scale": True},
-                {"name": "out1", "type": "range", "bounds": [8, 64]},
-                {"name": "out2", "type": "range", "bounds": [8, 64]},
-                {"name": "out3", "type": "range", "bounds": [8, 64]},
-                {"name": "out4", "type": "range", "bounds": [8, 64]},
-                {"name": "out5", "type": "range", "bounds": [8, 64]},
-                {"name": "out6", "type": "range", "bounds": [8, 64]},
+                {"name": "out1", "type": "choice", "values": [4, 8, 16, 32, 64, 128]},
+                {"name": "out2", "type": "choice", "values": [4, 8, 16, 32, 64, 128]},
+                {"name": "out3", "type": "choice", "values": [4, 8, 16, 32, 64, 128]},
+                {"name": "out4", "type": "choice", "values": [4, 8, 16, 32, 64, 128]},
+                {"name": "out5", "type": "choice", "values": [4, 8, 16, 32, 64, 128]},
+                {"name": "out6", "type": "choice", "values": [4, 8, 16, 32, 64, 128]},
             ],
             total_trials=opt_trials,
             evaluation_function=train_evaluate,
@@ -183,7 +183,7 @@ def main():
         new_accuracy = train_pending(model, parameters, epochs, True)
 
         print(f'new_acc: {new_accuracy} best_acc: {best_val_accuracy}')
-        if new_accuracy > 1.01 * best_val_accuracy:
+        if new_accuracy > 1.01 * best_val_accuracy: # Be better with at least 1%
             print(f'Better acc from new layer:')
             print(f'{new_accuracy} > {best_val_accuracy}')
             best_val_accuracy = new_accuracy
