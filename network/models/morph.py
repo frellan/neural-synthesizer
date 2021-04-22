@@ -32,7 +32,6 @@ class Block(nn.Module):
         self.relu = nn.ReLU().to(self.device)
 
     def forward(self, x):
-        # return self.relu(self.conv(x))
         return self.relu(self.bn(self.conv(x)))
 
 

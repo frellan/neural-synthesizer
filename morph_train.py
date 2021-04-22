@@ -1,10 +1,3 @@
-"""
-©Copyright 2020 University of Florida Research Foundation, Inc. All rights reserved.
-Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
-
-Modular training example.
-"""
-
 import torch
 from ax.service.managed_loop import optimize
 
@@ -18,8 +11,9 @@ from network.trainers import train_hidden, train_output, Trainer
 
 data_channels = 3
 in_channels = 16
-epochs = 150
-output_epochs = 20
+epochs = 200
+output_epochs = 100
+opt_trials = 30
 max_layers = 5
 checkpoint_path = "./checkpoint/bayesian_start.pth"
 best_path = "./checkpoint/best.pth"
@@ -156,7 +150,7 @@ def main():
                 {"name": "out5", "type": "range", "bounds": [8, 64]},
                 {"name": "out6", "type": "range", "bounds": [8, 64]},
             ],
-            total_trials=30,
+            total_trials=opt_trials,
             evaluation_function=train_evaluate,
             objective_name=opt.hidden_objective,
         )
@@ -189,7 +183,7 @@ def main():
         new_accuracy = train_pending(model, parameters, epochs, True)
 
         print(f'new_acc: {new_accuracy} best_acc: {best_val_accuracy}')
-        if new_accuracy > best_val_accuracy:
+        if new_accuracy > 1.01 * best_val_accuracy:
             print(f'Better acc from new layer:')
             print(f'{new_accuracy} > {best_val_accuracy}')
             best_val_accuracy = new_accuracy
