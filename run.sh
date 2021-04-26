@@ -10,6 +10,6 @@ CUDA_VISIBLE_DEVICES=0 python morph_train.py \
     --schedule_lr True \
     --in_channels 3 \
     --augment_data True \
-    --batch_size 256 \
+    --batch_size 128 \
     --n_val 10000 \
     --max_trainset_size 50000

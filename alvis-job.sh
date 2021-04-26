@@ -12,12 +12,12 @@ python morph_train.py \
     --dataset cifar10 \
     --in_channels 3 \
     --augment_data True \
-    --batch_size 512 \
+    --batch_size 2048 \
     --n_val 10000 \
     --max_trainset_size 50000 \
     --activation relu \
     --hidden_objective srs_upper_tri_alignment \
     --n_classes 10 \
     --schedule_lr True \
-    --n_workers 8 \
+    --n_workers 16 \
     --seed 42

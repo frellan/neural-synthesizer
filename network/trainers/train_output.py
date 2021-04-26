@@ -18,8 +18,7 @@ def train_output(opt, n_epochs, trainer, loader, val_loader, criterion, part_id,
     for epoch in range(trainer.start_epoch, total_epoch):
         for input, target in loader:
             # train step
-            input, target = \
-                input.to(device, non_blocking=True), target.to(device, non_blocking=True)
+            input, target = input.to(device, non_blocking=True), target.to(device, non_blocking=True)
             output, loss = trainer.step(input, target, criterion)
 
             # get some batch statistics
@@ -39,9 +38,6 @@ def train_output(opt, n_epochs, trainer, loader, val_loader, criterion, part_id,
                     batch_correct = (predicted == target).sum().item()
                     correct += batch_correct
                     total += target.size(0)
-                    batch_acc = 100.0 * batch_correct / target.size(0)
-                    message = f'batch: {i + 1}/{total_batch_val}, batch val acc (%): {batch_acc:.3f}'
-                    logger.debug(message)
 
                 acc = 100.0 * correct / total
 
