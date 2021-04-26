@@ -196,7 +196,7 @@ def main():
             model.frozen[-1].use_residual = False
             break
 
-    print(f"TOTAL PARAMS FOR HIDDEN LAYERS: {net.n_params()}")
+    print(f"TOTAL PARAMS FOR HIDDEN LAYERS: {model.n_params()}")
 
     # Train output layer
     model.add_pending(OutputCell(in_channels, opt.n_classes))
@@ -218,7 +218,7 @@ def main():
         part_id=model.n_modules,
         device=device)
 
-    print(f"TOTAL PARAMS FOR ENTIRE NETWORK: {net.n_params()}")
+    print(f"TOTAL PARAMS FOR ENTIRE NETWORK: {model.n_params()}")
 
 if __name__ == '__main__':
     device = 'cuda' if torch.cuda.is_available() else 'cpu'

@@ -21,7 +21,7 @@ class Block(nn.Module):
 
         self.out_channels = out_channels
         self.convs = nn.ModuleList()
-        if in_channels >= out_channels:
+        if in_channels > out_channels:
             conv = nn.Sequential(
                 nn.Conv2d(
                     in_channels=in_channels,
