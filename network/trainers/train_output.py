@@ -19,15 +19,12 @@ def train_output(opt, n_epochs, trainer, loader, val_loader, criterion, part_id,
         for input, target in loader:
             # train step
             input, target = \
-                input.to(device, non_blocking=True), target.to(
-                    device, non_blocking=True)
+                input.to(device, non_blocking=True), target.to(device, non_blocking=True)
             output, loss = trainer.step(input, target, criterion)
 
             # get some batch statistics
             _, predicted = torch.max(output, 1)
-            acc = 100 * \
-                (predicted == target).sum().to(
-                    torch.float).item() / target.size(0)
+            acc = 100 * (predicted == target).sum().to(torch.float).item() / target.size(0)
 
         # validate
         if epoch % opt.val_freq == opt.val_freq - 1:
@@ -35,9 +32,7 @@ def train_output(opt, n_epochs, trainer, loader, val_loader, criterion, part_id,
                 correct, total = 0, 0
                 total_batch_val = len(val_loader)
                 for i, (input, target) in enumerate(val_loader):
-                    input, target = \
-                        input.to(device, non_blocking=True), target.to(
-                            device, non_blocking=True)
+                    input, target = input.to(device, non_blocking=True), target.to(device, non_blocking=True)
                     output = trainer.get_eval_output(input)
 
                     _, predicted = torch.max(output, 1)

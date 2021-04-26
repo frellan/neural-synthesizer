@@ -97,10 +97,6 @@ def get_dataloaders(opt):
         ))
         logger.debug("transformations:\n" + str(train_transform))
 
-        # sample a subset from the original training set
-        trainset = _get_subset(trainset, opt.max_ori_trainset_size, opt.ori_balanced,
-                               opt.ori_train_subset_indices, 'ori_train_subset_indices', opt)
-
         if opt.n_val > 0:
             # for regular datasets, the validation set is simply the last opt.n_val elements in a randomly
             # permuted training set. Random permutation is needed to break the original order of the
@@ -108,10 +104,7 @@ def get_dataloaders(opt):
             if opt.n_val > len(trainset):
                 raise ValueError(
                     'Validation set size cannot exceed that of training set.')
-            if opt.dataset_rand_idx is not None:
-                rand_idx = pickle.load(open(opt.dataset_rand_idx, 'rb'))
-            else:
-                rand_idx = torch.randperm(len(trainset)).tolist()
+            rand_idx = torch.randperm(len(trainset)).tolist()
             # save rand_idx for reproducibility
             # file_name = os.path.join(opt.save_dir, 'dataset_rand_idx')
             # with open(file_name + '.txt', 'wt') as f:
@@ -120,9 +113,6 @@ def get_dataloaders(opt):
             #     pickle.dump(rand_idx, f)
             trainset, valset = Subset(
                 trainset, rand_idx[:-opt.n_val]), Subset(trainset, rand_idx[-opt.n_val:])
-
-        trainset = _get_subset(trainset, opt.max_trainset_size, opt.balanced,
-                               opt.train_subset_indices, 'train_subset_indices', opt)
         
         def _init_fn(worker_id):
             import numpy as np
@@ -176,88 +166,12 @@ def get_dataloaders(opt):
             type(testset).__name__
         ))
         logger.debug("transformations:\n" + str(test_transform))
-        testset = _get_subset(testset, opt.max_testset_size, opt.balanced)
         test_loader = torch.utils.data.DataLoader(
             testset, batch_size=opt.batch_size,
             shuffle=False, num_workers=opt.n_workers,
             pin_memory=True)
 
         return test_loader
-
-
-def _get_subset(dataset, size: int, balanced=False, saved_indices=None, save_name=None, opt=None):
-    """
-    Get a random subset from a torch dataset.
-    If indices are provided, sample according to the given indices.
-
-    Args:
-      dataset: torch.utils.data.Dataset
-        The dataset to sample from.
-      size: int
-        The size of the subset.
-      balanced: (optional) bool
-        If True, the sampled subset will have balanced classes.
-        Only effective when size is smaller than the actual dataset size.
-        Defaults to False.
-      saved_indices: (optional) str 
-        Path to saved indices, if available.
-      save_name: (optional) str 
-        Path to save indices, if available.
-      opt: (optional)
-        An opt object.
-
-    Returns:
-      A torch.utils.data.Dataset.
-    """
-    indices = None
-    # if saved_indices is not None:
-    #     indices = pickle.load(open(saved_indices, 'rb'))
-    #     logger.info(
-    #         f'Successfully loaded a sequence of saved indices of length {len(indices)}.')
-    #     logger.debug(f'These indices are {indices}.')
-    #     dataset = Subset(dataset, indices=indices)
-    #     logger.info('Initiated a subset with the given indices.')
-    # else:
-    if size <= len(dataset):
-        if type(size) != int:
-            raise TypeError(
-                f'size should be of int type, got {type(size)} instead')
-        if not balanced:
-            dataset, _ = torch.utils.data.random_split(
-                dataset, [size, len(dataset) - size])
-            indices = dataset.indices
-        else:
-            if isinstance(dataset, Subset):
-                dataset = dataset.dataset
-            try:
-                indices = utils.supervised_sample(
-                    torch.tensor(dataset.data), torch.tensor(
-                        dataset.targets),
-                    n=size, indices_only=True
-                )
-            except AttributeError:
-                # SVHN uses "labels"
-                indices = utils.supervised_sample(
-                    torch.tensor(dataset.data), torch.tensor(
-                        dataset.labels),
-                    n=size, indices_only=True
-                )
-            dataset = Subset(dataset, indices=indices)
-
-    if indices is not None and save_name is not None and opt is not None:
-        try:
-            # may be a torch tensor
-            indices = list(indices.numpy())
-        except:
-            indices = list(indices)
-
-        # file_name = os.path.join(opt.save_dir, save_name)
-        # with open(file_name + '.txt', 'wt') as f:
-        #     f.write(str(indices))
-        # with open(file_name + '.pkl', 'wb') as f:
-        #     pickle.dump(indices, f)
-
-    return dataset
 
 
 #########

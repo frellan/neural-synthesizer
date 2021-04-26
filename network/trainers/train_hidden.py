@@ -28,9 +28,7 @@ def train_hidden(opt, n_epochs, trainer, loader, val_loader, criterion, part_id,
             if val_loader is not None:
                 hidden_obj, total = 0, 0
                 for i, (input, target) in enumerate(val_loader):
-                    input, target = \
-                        input.to(device, non_blocking=True), target.to(
-                            device, non_blocking=True)
+                    input, target = input.to(device, non_blocking=True), target.to(device, non_blocking=True)
                     output = trainer.get_eval_output(input)
                     batch_obj = criterion(output, target).item()
                     hidden_obj += batch_obj
