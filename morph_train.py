@@ -14,6 +14,7 @@ in_channels = 16
 epochs = 200
 output_epochs = 100
 opt_trials = 30
+opt_epochs_per_trial = 10
 max_layers = 5
 checkpoint_path = "./checkpoint/bayesian_start.pth"
 best_path = "./checkpoint/best.pth"
@@ -57,14 +58,15 @@ def get_module(parameterization):
         net.add_pending(torch.nn.Conv2d(data_channels, in_channels, kernel_size=3, stride=1, padding=1, bias=False).to(device))
         net.add_pending(torch.nn.BatchNorm2d(in_channels).to(device))
     cell = Cell(in_channels=in_channels, use_residual=True, blocks=[
-        Block(in_channels, parameterization.get('out1', 16), 3, device),
-        Block(parameterization.get('out1', 16), parameterization.get('out2', 16), 3, device),
-        Block(in_channels, parameterization.get('out3', 16), 5, device),
-        Block(parameterization.get('out3', 16), parameterization.get('out4', 16), 5, device),
-        Block(in_channels, parameterization.get('out5', 16), 7, device),
-        Block(parameterization.get('out5', 16), parameterization.get('out6', 16), 7, device),
-    ], device=device)
+        Block(in_channels, parameterization.get('out1', 16), 3),
+        Block(parameterization.get('out1', 16), parameterization.get('out2', 16), 3),
+        Block(in_channels, parameterization.get('out3', 16), 5),
+        Block(parameterization.get('out3', 16), parameterization.get('out4', 16), 5),
+        Block(in_channels, parameterization.get('out5', 16), 7),
+        Block(parameterization.get('out5', 16), parameterization.get('out6', 16), 7),
+    ]).to(device)
     net.add_pending(cell)
+    print(f"Trying a model with {net.n_params()} params, of which {net.n_trainable_params()} are trainable")
     return net
 
 
@@ -75,7 +77,7 @@ def train_evaluate(parameterization):
     parameters = {
         'lr': parameterization.get('lr', 0.1)
     }
-    val_result = train_pending(net, parameters, 10)
+    val_result = train_pending(net, parameters, opt_epochs_per_trial)
 
     resource_constraint = 0
     for i in range(6):
@@ -130,7 +132,7 @@ def main():
         utils.make_deterministic(opt.seed)
     loader, val_loader = datasets.get_dataloaders(opt)
     best_val_accuracy = 0
-    model = Morph(device).to(device)
+    model = Morph().to(device)
 
     hidden_criterion = get_hidden_criterion(opt)
     output_criterion = torch.nn.CrossEntropyLoss() if opt.loss == 'xe' else torch.nn.MultiMarginLoss()
@@ -170,13 +172,13 @@ def main():
             model.add_pending(torch.nn.Conv2d(data_channels, in_channels, kernel_size=3, stride=1, padding=1, bias=False).to(device))
             model.add_pending(torch.nn.BatchNorm2d(in_channels).to(device))
         cell = Cell(in_channels=in_channels, use_residual=True, blocks=[
-            Block(in_channels, best_parameters['out1'], 3, device),
-            Block(best_parameters['out1'], best_parameters['out2'], 3, device),
-            Block(in_channels, best_parameters['out3'], 5, device),
-            Block(best_parameters['out3'], best_parameters['out4'], 5, device),
-            Block(in_channels, best_parameters['out5'], 7, device),
-            Block(best_parameters['out5'], best_parameters['out6'], 7, device),
-        ], device=device)
+            Block(in_channels, best_parameters['out1'], 3),
+            Block(best_parameters['out1'], best_parameters['out2'], 3),
+            Block(in_channels, best_parameters['out3'], 5),
+            Block(best_parameters['out3'], best_parameters['out4'], 5),
+            Block(in_channels, best_parameters['out5'], 7),
+            Block(best_parameters['out5'], best_parameters['out6'], 7),
+        ]).to(device)
         model.add_pending(cell)
 
         # Train for given epochs and then freeze
@@ -192,7 +194,10 @@ def main():
         else:
             print('New layer did not improve upon previous, STOPPING HIDDEN TRAINING')
             model.clear_pending()
+            model.frozen[-1].use_residual = False
             break
+
+    print(f"TOTAL PARAMS FOR HIDDEN LAYERS: {model.n_params()}")
 
     # Train output layer
     model.add_pending(OutputCell(in_channels, opt.n_classes))
@@ -213,6 +218,8 @@ def main():
         criterion=output_criterion,
         part_id=model.n_modules,
         device=device)
+
+    print(f"TOTAL PARAMS FOR ENTIRE NETWORK: {model.n_params()}")
 
 if __name__ == '__main__':
     device = 'cuda' if torch.cuda.is_available() else 'cpu'

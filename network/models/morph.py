@@ -1,5 +1,6 @@
 import logging
 
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -11,13 +12,10 @@ logger = logging.getLogger()
 
 
 class Block(nn.Module):
-    def __init__(self, in_channels, out_channels, kernel_size, device):
+    def __init__(self, in_channels, out_channels, kernel_size):
         super(Block, self).__init__()
 
-        self.device = device
-
         padding = kernel_size // 2
-        groups = in_channels if kernel_size == 1 else 1
 
         self.out_channels = out_channels
         self.conv = nn.Conv2d(
@@ -26,24 +24,22 @@ class Block(nn.Module):
             kernel_size=kernel_size,
             stride=1,
             padding=padding,
-            groups=groups,
-            bias=False).to(self.device)
-        self.bn = nn.BatchNorm2d(out_channels).to(self.device)
-        self.relu = nn.ReLU().to(self.device)
+            groups=1,
+            bias=False)
+        self.bn = nn.BatchNorm2d(out_channels)
+        self.relu = nn.ReLU()
 
     def forward(self, x):
         return self.relu(self.bn(self.conv(x)))
 
 
 class Cell(nn.Module):
-    def __init__(self, in_channels, use_residual, blocks, device):
+    def __init__(self, in_channels, use_residual, blocks):
         super(Cell, self).__init__()
 
-        self.device = device
-
-        self.seq1 = nn.Sequential(*blocks[0:2]).to(self.device)
-        self.seq2 = nn.Sequential(*blocks[2:4]).to(self.device)
-        self.seq3 = nn.Sequential(*blocks[4:6]).to(self.device)
+        self.seq1 = nn.Sequential(*blocks[0:2])
+        self.seq2 = nn.Sequential(*blocks[2:4])
+        self.seq3 = nn.Sequential(*blocks[4:6])
 
         stack_channels = blocks[1].out_channels + blocks[3].out_channels + blocks[5].out_channels
 
@@ -54,9 +50,9 @@ class Cell(nn.Module):
             out_channels=in_channels,
             kernel_size=1,
             groups=1, # supposed to be in_channels, stack_channels needs to be a multiple of in_channels
-            bias=False).to(self.device)
-        self.bn = nn.BatchNorm2d(in_channels).to(self.device)
-        self.relu = nn.ReLU().to(self.device)
+            bias=False)
+        self.bn = nn.BatchNorm2d(in_channels)
+        self.relu = nn.ReLU()
 
     def forward(self, x):
         seq1 = self.seq1(x)
@@ -81,18 +77,17 @@ class OutputCell(nn.Module):
 
 
 class Morph(nn.Module):
-    def __init__(self, device, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(Morph, self).__init__(*args, **kwargs)
 
-        self.device = device
         self.n_modules = 0
         self.frozen = []
         self.pending = []
 
     def forward(self, input):
-        pending = nn.Sequential(*self.pending).to(self.device)
+        pending = nn.Sequential(*self.pending)
         if len(self.frozen) > 0:
-            frozen = nn.Sequential(*self.frozen).to(self.device)
+            frozen = nn.Sequential(*self.frozen)
             output = frozen(input)
             output = pending(output)
         else:
@@ -125,10 +120,21 @@ class Morph(nn.Module):
             p.requires_grad_(True)
 
     def get_all_trainable_params(self):
-        return nn.Sequential(*self.frozen, *self.pending).to(self.device).parameters()
+        return nn.Sequential(*self.frozen, *self.pending).parameters()
 
     def get_trainable_params(self):
-        return nn.Sequential(*self.pending).to(self.device).parameters()
+        return nn.Sequential(*self.pending).parameters()
+
+    def n_params(self):
+        model = nn.Sequential(*self.frozen, *self.pending)
+        params = sum([np.prod(p.size()) for p in model.parameters()])
+        return params
+
+    def n_trainable_params(self):
+        model = nn.Sequential(*self.frozen, *self.pending)
+        model_parameters = filter(lambda p: p.requires_grad, model.parameters())
+        params = sum([np.prod(p.size()) for p in model_parameters])
+        return params
 
     
 @torch.no_grad()
