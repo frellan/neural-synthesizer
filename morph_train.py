@@ -1,3 +1,5 @@
+import time
+
 import torch
 from ax.service.managed_loop import optimize
 
@@ -13,8 +15,10 @@ data_channels = 3
 in_channels = 16
 epochs = 200
 output_epochs = 100
-opt_trials = 30
-opt_epochs_per_trial = 10
+opt_hyper_trials = 10
+opt_hyper_epochs_per_trial = 5
+opt_channels_trials = 20
+opt_channels_epochs_per_trial = 10
 max_layers = 5
 checkpoint_path = "./checkpoint/bayesian_start.pth"
 best_path = "./checkpoint/best.pth"
@@ -70,14 +74,31 @@ def get_module(parameterization):
     return net
 
 
-def train_evaluate(parameterization):
-    print(f'Optimizing - Params {parameterization}')
+def evaluate_hyper_params(parameterization):
+    global opt
+    global loader
+    global val_loader
+    start_time = time.monotonic()
+    print(f'Optimizing HyperParam - {parameterization}')
 
     net = get_module(parameterization)
-    parameters = {
-        'lr': parameterization.get('lr', 0.1)
-    }
-    val_result = train_pending(net, parameters, opt_epochs_per_trial)
+    opt.batch_size = parameterization['batch_size']
+    loader, val_loader = datasets.get_dataloaders(opt)
+    val_result = train_pending(net, { 'lr': parameterization['lr'] }, opt_hyper_epochs_per_trial)
+
+    seconds = time.monotonic() - start_time
+    print(f'Optimizing - Alignment: {val_result}, Seconds: {seconds}', end='')
+    val_result -= seconds * 1e-4
+    print(f', Metric: {val_result}')
+
+    return val_result
+
+
+def evaluate_channels(parameterization):
+    print(f'Optimizing Channels - {parameterization}')
+
+    net = get_module(parameterization)
+    val_result = train_pending(net, parameters, opt_channels_epochs_per_trial)
 
     resource_constraint = 0
     for i in range(6):
@@ -88,7 +109,7 @@ def train_evaluate(parameterization):
         else:
             kernel_size = 49
         resource_constraint += (parameterization['out' + str(i + 1)] * kernel_size)
-    resource_constraint *= 3e-6
+    resource_constraint *= 1e-6
 
     print(f'Optimizing - Alignment: {val_result}, ResConst: {resource_constraint}', end='')
     val_result -= resource_constraint
@@ -130,7 +151,6 @@ def main():
     utils.set_logger(opt=opt, filename='train.log', filemode='w')
     if opt.seed:
         utils.make_deterministic(opt.seed)
-    loader, val_loader = datasets.get_dataloaders(opt)
     best_val_accuracy = 0
     model = Morph().to(device)
 
@@ -141,10 +161,25 @@ def main():
         # Save current model for resetting on bayesian trials and after
         torch.save(model, checkpoint_path)
 
-        # Search for parameters
-        best_parameters, _, _, _ = optimize(
+        # Search for best hyper parameters
+        best_hyper_params, _, _, _ = optimize(
             parameters=[
-                {"name": "lr", "type": "range", "bounds": [0.001, 0.3], "log_scale": True},
+                {"name": "lr", "type": "range", "bounds": [0.0001, 0.01], "log_scale": True},
+                {"name": "batch_size", "type": "choice", "values": [16, 32, 64, 128, 256, 512, 1024]},
+            ],
+            total_trials=opt_hyper_trials,
+            evaluation_function=evaluate_hyper_params,
+            objective_name=opt.hidden_objective,
+        )
+        print("BEST HYPER_PARAMS: ", end='')
+        print(best_hyper_params)
+        parameters = { 'lr': best_hyper_params['lr'] }
+        opt.batch_size = best_hyper_params['batch_size']
+        loader, val_loader = datasets.get_dataloaders(opt)
+
+        # Search for best channels
+        best_channels, _, _, _ = optimize(
+            parameters=[
                 {"name": "out1", "type": "choice", "values": [4, 8, 16, 32, 64, 128]},
                 {"name": "out2", "type": "choice", "values": [4, 8, 16, 32, 64, 128]},
                 {"name": "out3", "type": "choice", "values": [4, 8, 16, 32, 64, 128]},
@@ -152,17 +187,12 @@ def main():
                 {"name": "out5", "type": "choice", "values": [4, 8, 16, 32, 64, 128]},
                 {"name": "out6", "type": "choice", "values": [4, 8, 16, 32, 64, 128]},
             ],
-            total_trials=opt_trials,
-            evaluation_function=train_evaluate,
+            total_trials=opt_channels_trials,
+            evaluation_function=evaluate_channels,
             objective_name=opt.hidden_objective,
         )
-
-        # Print and set the best parameters
-        print("BEST PARAMETERS: ", end='')
-        print(best_parameters)
-        parameters = {
-            'lr': best_parameters["lr"]
-        }
+        print("BEST CHANNELS: ", end='')
+        print(best_channels)
 
         # Reset model
         model = torch.load(checkpoint_path)
@@ -172,12 +202,12 @@ def main():
             model.add_pending(torch.nn.Conv2d(data_channels, in_channels, kernel_size=3, stride=1, padding=1, bias=False).to(device))
             model.add_pending(torch.nn.BatchNorm2d(in_channels).to(device))
         cell = Cell(in_channels=in_channels, use_residual=True, blocks=[
-            Block(in_channels, best_parameters['out1'], 3),
-            Block(best_parameters['out1'], best_parameters['out2'], 3),
-            Block(in_channels, best_parameters['out3'], 5),
-            Block(best_parameters['out3'], best_parameters['out4'], 5),
-            Block(in_channels, best_parameters['out5'], 7),
-            Block(best_parameters['out5'], best_parameters['out6'], 7),
+            Block(in_channels, best_channels['out1'], 3),
+            Block(best_channels['out1'], best_channels['out2'], 3),
+            Block(in_channels, best_channels['out3'], 5),
+            Block(best_channels['out3'], best_channels['out4'], 5),
+            Block(in_channels, best_channels['out5'], 7),
+            Block(best_channels['out5'], best_channels['out6'], 7),
         ]).to(device)
         model.add_pending(cell)
 
@@ -200,7 +230,7 @@ def main():
     print(f"TOTAL PARAMS FOR HIDDEN LAYERS: {model.n_params()}")
 
     # Train output layer
-    model.add_pending(OutputCell(in_channels, opt.n_classes))
+    model.add_pending(OutputCell(in_channels, opt.n_classes).to(device))
     optimizer = torch.optim.Adam(model.get_trainable_params(), lr=parameters['lr'])
     trainer = Trainer(
         opt=opt,
