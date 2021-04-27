@@ -112,7 +112,7 @@ def evaluate_channels(parameterization):
     resource_constraint *= 1e-6
 
     print(f'Optimizing - Alignment: {val_result}, ResConst: {resource_constraint}', end='')
-    # val_result -= resource_constraint
+    val_result -= resource_constraint
     print(f', Metric: {val_result}')
 
     return val_result
