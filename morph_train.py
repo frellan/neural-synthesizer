@@ -14,7 +14,7 @@ from network.trainers import train_hidden, train_output, Trainer
 data_channels = 3
 in_channels = 16
 epochs = 200
-output_epochs = 100
+output_epochs = 200
 opt_hyper_trials = 10
 opt_hyper_epochs_per_trial = 5
 opt_channels_trials = 20
@@ -119,7 +119,8 @@ def evaluate_channels(parameterization):
 
 
 def train_pending(net, parameters, epochs, save_model=False):
-    optimizer = torch.optim.Adam(net.get_trainable_params(), lr=parameters['lr'])
+    params = net.get_trainable_params() if net.is_frozen else net.get_all_trainable_params()
+    optimizer = torch.optim.Adam(params, lr=parameters['lr'])
     trainer = Trainer(
         opt=opt,
         model=net,
@@ -212,7 +213,9 @@ def main():
         model.add_pending(cell)
 
         # Train for given epochs and then freeze
+        # model.toggle_frozen(False)
         new_accuracy = train_pending(model, parameters, epochs, True)
+        # model.toggle_frozen(True)
 
         print(f'new_acc: {new_accuracy} best_acc: {best_val_accuracy}')
         if new_accuracy > 1.01 * best_val_accuracy: # Be better with at least 1%
@@ -230,8 +233,10 @@ def main():
     print(f"TOTAL PARAMS FOR HIDDEN LAYERS: {model.n_params()}")
 
     # Train output layer
+    # model.toggle_frozen(False)
     model.add_pending(OutputCell(in_channels, opt.n_classes).to(device))
-    optimizer = torch.optim.Adam(model.get_trainable_params(), lr=parameters['lr'])
+    params = model.get_trainable_params() if model.is_frozen else model.get_all_trainable_params()
+    optimizer = torch.optim.Adam(params, lr=parameters['lr'])
     trainer = Trainer(
         opt=opt,
         model=model,

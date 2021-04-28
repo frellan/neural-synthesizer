@@ -30,8 +30,7 @@ class Block(nn.Module):
         self.relu = nn.ReLU()
 
     def forward(self, x):
-        stack = torch.cat([conv(x) for conv in self.convs], dim=1)
-        return self.relu(self.bn(stack))
+        return self.relu(self.bn(self.conv(x)))
 
 
 class Cell(nn.Module):
@@ -82,6 +81,7 @@ class Morph(nn.Module):
         super(Morph, self).__init__(*args, **kwargs)
 
         self.n_modules = 0
+        self.is_frozen = True
         self.frozen = []
         self.pending = []
 
@@ -115,10 +115,11 @@ class Morph(nn.Module):
 
         self.n_modules += 1
 
-    def unfreeze_network(self):
+    def toggle_frozen(self, frozen):
+        self.is_frozen = frozen
         frozen_module = nn.Sequential(*self.frozen)
         for p in frozen_module.parameters():
-            p.requires_grad_(True)
+            p.requires_grad_(not frozen)
 
     def get_all_trainable_params(self):
         return nn.Sequential(*self.frozen, *self.pending).parameters()
@@ -133,17 +134,6 @@ class Morph(nn.Module):
 
     def n_trainable_params(self):
         model = nn.Sequential(*self.frozen, *self.pending)
-        model_parameters = filter(lambda p: p.requires_grad, model.parameters())
-        params = sum([np.prod(p.size()) for p in model_parameters])
-        return params
-
-    def n_params(self):
-        model = nn.Sequential(*self.frozen, *self.pending).to(self.device)
-        params = sum([np.prod(p.size()) for p in model.parameters()])
-        return params
-
-    def n_trainable_params(self):
-        model = nn.Sequential(*self.frozen, *self.pending).to(self.device)
         model_parameters = filter(lambda p: p.requires_grad, model.parameters())
         params = sum([np.prod(p.size()) for p in model_parameters])
         return params
