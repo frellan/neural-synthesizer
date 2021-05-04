@@ -19,5 +19,4 @@ python morph_train.py \
     --augment_data True \
     --batch_size 512 \
     --n_val 10000 \
-    --max_trainset_size 50000 \
-    --seed 42
+    --max_trainset_size 50000

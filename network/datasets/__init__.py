@@ -127,17 +127,30 @@ def get_dataloaders(opt):
         def _init_fn(worker_id):
             import numpy as np
             np.random.seed(int(opt.seed))
-        train_loader = torch.utils.data.DataLoader(
-            trainset, batch_size=opt.batch_size,
-            shuffle=opt.shuffle, num_workers=opt.n_workers,
-            pin_memory=True, worker_init_fn=_init_fn)
-        if opt.n_val > 0:
-            val_loader = torch.utils.data.DataLoader(
-                valset, batch_size=opt.batch_size,
+        if opt.seed != None:
+            train_loader = torch.utils.data.DataLoader(
+                trainset, batch_size=opt.batch_size,
                 shuffle=opt.shuffle, num_workers=opt.n_workers,
                 pin_memory=True, worker_init_fn=_init_fn)
+            if opt.n_val > 0:
+                val_loader = torch.utils.data.DataLoader(
+                    valset, batch_size=opt.batch_size,
+                    shuffle=opt.shuffle, num_workers=opt.n_workers,
+                    pin_memory=True, worker_init_fn=_init_fn)
+            else:
+                val_loader = None
         else:
-            val_loader = None
+            train_loader = torch.utils.data.DataLoader(
+                trainset, batch_size=opt.batch_size,
+                shuffle=opt.shuffle, num_workers=opt.n_workers,
+                pin_memory=True)
+            if opt.n_val > 0:
+                val_loader = torch.utils.data.DataLoader(
+                    valset, batch_size=opt.batch_size,
+                    shuffle=opt.shuffle, num_workers=opt.n_workers,
+                    pin_memory=True)
+            else:
+                val_loader = None
 
         return train_loader, val_loader
     else:

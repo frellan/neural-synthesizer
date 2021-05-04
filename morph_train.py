@@ -158,6 +158,9 @@ def main():
     hidden_criterion = get_hidden_criterion(opt)
     output_criterion = torch.nn.CrossEntropyLoss() if opt.loss == 'xe' else torch.nn.MultiMarginLoss()
 
+    print("Mode:", "e2e")
+    print("Channels:", in_channels)
+
     for i in range(max_layers):
         # Save current model for resetting on bayesian trials and after
         torch.save(model, checkpoint_path)
@@ -213,12 +216,12 @@ def main():
         model.add_pending(cell)
 
         # Train for given epochs and then freeze
-        # model.toggle_frozen(False)
+        model.toggle_frozen(False)
         new_accuracy = train_pending(model, parameters, epochs, True)
-        # model.toggle_frozen(True)
+        model.toggle_frozen(True)
 
         print(f'new_acc: {new_accuracy} best_acc: {best_val_accuracy}')
-        if new_accuracy > 1.01 * best_val_accuracy: # Be better with at least 1%
+        if new_accuracy > 1.005 * best_val_accuracy: # Be better with at least 0.5%
             print(f'Better acc from new layer:')
             print(f'{new_accuracy} > {best_val_accuracy}')
             best_val_accuracy = new_accuracy
@@ -233,7 +236,7 @@ def main():
     print(f"TOTAL PARAMS FOR HIDDEN LAYERS: {model.n_params()}")
 
     # Train output layer
-    # model.toggle_frozen(False)
+    model.toggle_frozen(False)
     model.add_pending(OutputCell(in_channels, opt.n_classes).to(device))
     params = model.get_trainable_params() if model.is_frozen else model.get_all_trainable_params()
     optimizer = torch.optim.Adam(params, lr=parameters['lr'])
