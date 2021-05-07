@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --gpus-per-node=A100:1
+#SBATCH --gpus-per-node=V100:1
 #SBATCH -t 0-10:00:00
 
 module load GCC/10.2.0
