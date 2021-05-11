@@ -98,59 +98,99 @@ def get_dataloaders(opt):
         logger.debug("transformations:\n" + str(train_transform))
 
         # sample a subset from the original training set
-        trainset = _get_subset(trainset, opt.max_ori_trainset_size, opt.ori_balanced,
-                               opt.ori_train_subset_indices, 'ori_train_subset_indices', opt)
+        # trainset = _get_subset(trainset, opt.max_ori_trainset_size, opt.ori_balanced,
+        #                        opt.ori_train_subset_indices, 'ori_train_subset_indices', opt)
 
-        if opt.n_val > 0:
-            # for regular datasets, the validation set is simply the last opt.n_val elements in a randomly
-            # permuted training set. Random permutation is needed to break the original order of the
-            # dataset. This is critical for datasets that are ordered by, e.g., class labels
-            if opt.n_val > len(trainset):
-                raise ValueError(
-                    'Validation set size cannot exceed that of training set.')
-            if opt.dataset_rand_idx is not None:
-                rand_idx = pickle.load(open(opt.dataset_rand_idx, 'rb'))
-            else:
-                rand_idx = torch.randperm(len(trainset)).tolist()
-            # save rand_idx for reproducibility
-            # file_name = os.path.join(opt.save_dir, 'dataset_rand_idx')
-            # with open(file_name + '.txt', 'wt') as f:
-            #     f.write(str(rand_idx))
-            # with open(file_name + '.pkl', 'wb') as f:
-            #     pickle.dump(rand_idx, f)
-            trainset, valset = Subset(
-                trainset, rand_idx[:-opt.n_val]), Subset(trainset, rand_idx[-opt.n_val:])
+        # if opt.n_val > 0:
+        #     # for regular datasets, the validation set is simply the last opt.n_val elements in a randomly
+        #     # permuted training set. Random permutation is needed to break the original order of the
+        #     # dataset. This is critical for datasets that are ordered by, e.g., class labels
+        #     if opt.n_val > len(trainset):
+        #         raise ValueError(
+        #             'Validation set size cannot exceed that of training set.')
+        #     if opt.dataset_rand_idx is not None:
+        #         rand_idx = pickle.load(open(opt.dataset_rand_idx, 'rb'))
+        #     else:
+        #         rand_idx = torch.randperm(len(trainset)).tolist()
+        #     # save rand_idx for reproducibility
+        #     # file_name = os.path.join(opt.save_dir, 'dataset_rand_idx')
+        #     # with open(file_name + '.txt', 'wt') as f:
+        #     #     f.write(str(rand_idx))
+        #     # with open(file_name + '.pkl', 'wb') as f:
+        #     #     pickle.dump(rand_idx, f)
+        #     trainset, valset = Subset(
+        #         trainset, rand_idx[:-opt.n_val]), Subset(trainset, rand_idx[-opt.n_val:])
 
-        trainset = _get_subset(trainset, opt.max_trainset_size, opt.balanced,
-                               opt.train_subset_indices, 'train_subset_indices', opt)
+        # trainset = _get_subset(trainset, opt.max_trainset_size, opt.balanced,
+        #                        opt.train_subset_indices, 'train_subset_indices', opt)
         
-        def _init_fn(worker_id):
-            import numpy as np
-            np.random.seed(int(opt.seed))
-        if opt.seed != None:
-            train_loader = torch.utils.data.DataLoader(
-                trainset, batch_size=opt.batch_size,
-                shuffle=opt.shuffle, num_workers=opt.n_workers,
-                pin_memory=True, worker_init_fn=_init_fn)
-            if opt.n_val > 0:
-                val_loader = torch.utils.data.DataLoader(
-                    valset, batch_size=opt.batch_size,
-                    shuffle=opt.shuffle, num_workers=opt.n_workers,
-                    pin_memory=True, worker_init_fn=_init_fn)
-            else:
-                val_loader = None
+        # def _init_fn(worker_id):
+        #     import numpy as np
+        #     np.random.seed(int(opt.seed))
+        # if opt.seed != None:
+        #     train_loader = torch.utils.data.DataLoader(
+        #         trainset, batch_size=opt.batch_size,
+        #         shuffle=opt.shuffle, num_workers=opt.n_workers,
+        #         pin_memory=True, worker_init_fn=_init_fn)
+        #     if opt.n_val > 0:
+        #         val_loader = torch.utils.data.DataLoader(
+        #             valset, batch_size=opt.batch_size,
+        #             shuffle=opt.shuffle, num_workers=opt.n_workers,
+        #             pin_memory=True, worker_init_fn=_init_fn)
+        #     else:
+        #         val_loader = None
+        # else:
+        #     train_loader = torch.utils.data.DataLoader(
+        #         trainset, batch_size=opt.batch_size,
+        #         shuffle=opt.shuffle, num_workers=opt.n_workers,
+        #         pin_memory=True)
+        #     if opt.n_val > 0:
+        #         val_loader = torch.utils.data.DataLoader(
+        #             valset, batch_size=opt.batch_size,
+        #             shuffle=opt.shuffle, num_workers=opt.n_workers,
+        #             pin_memory=True)
+        #     else:
+        #         val_loader = None
+
+        test_transform = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize(opt.normalize_mean, opt.normalize_std)
+        ])
+        if opt.dataset == 'cifar100':
+            testset = torchvision.datasets.CIFAR100(
+                root='./data', train=False,
+                download=True, transform=test_transform)
+        elif opt.dataset.startswith('cifar10'):
+            testset = torchvision.datasets.CIFAR10(
+                root='./data', train=False,
+                download=True, transform=test_transform)
+            if opt.dataset in CIFAR10_2:
+                testset = utils.get_cifar10_subset(
+                    testset, CIFAR10_2[opt.dataset])
+        elif opt.dataset == 'mnist':
+            testset = torchvision.datasets.MNIST(
+                root='./data', train=False,
+                download=True, transform=test_transform)
+        elif opt.dataset == 'fashionmnist':
+            testset = torchvision.datasets.FashionMNIST(
+                root='./data', train=False,
+                download=True, transform=test_transform)
+        elif opt.dataset == 'svhn':
+            testset = torchvision.datasets.SVHN(
+                root='./data', split='test',
+                download=True, transform=test_transform)
         else:
-            train_loader = torch.utils.data.DataLoader(
-                trainset, batch_size=opt.batch_size,
-                shuffle=opt.shuffle, num_workers=opt.n_workers,
-                pin_memory=True)
-            if opt.n_val > 0:
-                val_loader = torch.utils.data.DataLoader(
-                    valset, batch_size=opt.batch_size,
-                    shuffle=opt.shuffle, num_workers=opt.n_workers,
-                    pin_memory=True)
-            else:
-                val_loader = None
+            raise NotImplementedError()
+
+        train_loader = torch.utils.data.DataLoader(
+            trainset, batch_size=opt.batch_size,
+            shuffle=opt.shuffle, num_workers=opt.n_workers,
+            pin_memory=True)
+
+        val_loader = torch.utils.data.DataLoader(
+            testset, batch_size=opt.batch_size,
+            shuffle=opt.shuffle, num_workers=opt.n_workers,
+            pin_memory=True)
 
         return train_loader, val_loader
     else:
