@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --gpus-per-node=V100:1
+#SBATCH --gpus-per-node=A100:1
 #SBATCH -t 0-10:00:00
 
 module load GCC/10.2.0
@@ -9,7 +9,7 @@ module load torchvision/0.8.2-PyTorch-1.7.1
 pip install ax-platform
 
 python morph_train.py \
-    --dataset cifar10 \
+    --dataset svhn \
     --loss xe \
     --activation relu \
     --hidden_objective srs_upper_tri_alignment \

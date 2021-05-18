@@ -12,7 +12,7 @@ from network.trainers import train_hidden, train_output, Trainer
 
 
 data_channels = 3
-in_channels = 32
+in_channels = 16
 epochs = 200
 output_epochs = 200
 opt_hyper_trials = 10
