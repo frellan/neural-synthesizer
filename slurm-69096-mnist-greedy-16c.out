@@ -1,0 +1,2318 @@
+This job can be monitored from: https://scruffy.c3se.chalmers.se/d/alvis-job/alvis-job?var-jobid=69096&from=1620587504000
+Defaulting to user installation because normal site-packages is not writeable
+Requirement already satisfied: ax-platform in /cephyr/users/frekin/Alvis/.local/lib/python3.8/site-packages (0.1.20)
+Requirement already satisfied: typeguard in /cephyr/users/frekin/Alvis/.local/lib/python3.8/site-packages (from ax-platform) (2.12.0)
+Requirement already satisfied: scipy in /apps/Alvis/software/MPI/GCC-CUDA/10.2.0-11.1.1/OpenMPI/4.0.5/SciPy-bundle/2020.11/lib/python3.8/site-packages (from ax-platform) (1.5.4)
+Requirement already satisfied: pandas in /apps/Alvis/software/MPI/GCC-CUDA/10.2.0-11.1.1/OpenMPI/4.0.5/SciPy-bundle/2020.11/lib/python3.8/site-packages (from ax-platform) (1.1.4)
+Requirement already satisfied: scikit-learn in /cephyr/users/frekin/Alvis/.local/lib/python3.8/site-packages (from ax-platform) (0.24.1)
+Requirement already satisfied: jinja2 in /apps/Alvis/software/Compiler/GCCcore/10.2.0/Python/3.8.6/lib/python3.8/site-packages (from ax-platform) (2.11.2)
+Requirement already satisfied: plotly in /cephyr/users/frekin/Alvis/.local/lib/python3.8/site-packages (from ax-platform) (4.14.3)
+Requirement already satisfied: botorch==0.4.0 in /cephyr/users/frekin/Alvis/.local/lib/python3.8/site-packages (from ax-platform) (0.4.0)
+Requirement already satisfied: numpy>=1.14.5 in /apps/Alvis/software/MPI/GCC-CUDA/10.2.0-11.1.1/OpenMPI/4.0.5/SciPy-bundle/2020.11/lib/python3.8/site-packages (from scipy->ax-platform) (1.19.4)
+Requirement already satisfied: python-dateutil>=2.7.3 in /apps/Alvis/software/Compiler/GCCcore/10.2.0/Python/3.8.6/lib/python3.8/site-packages (from pandas->ax-platform) (2.8.1)
+Requirement already satisfied: pytz>=2017.2 in /apps/Alvis/software/Compiler/GCCcore/10.2.0/Python/3.8.6/lib/python3.8/site-packages (from pandas->ax-platform) (2020.1)
+Requirement already satisfied: threadpoolctl>=2.0.0 in /apps/Alvis/software/Compiler/GCCcore/10.2.0/Python/3.8.6/lib/python3.8/site-packages (from scikit-learn->ax-platform) (2.1.0)
+Requirement already satisfied: joblib>=0.11 in /apps/Alvis/software/Compiler/GCCcore/10.2.0/Python/3.8.6/lib/python3.8/site-packages (from scikit-learn->ax-platform) (0.17.0)
+Requirement already satisfied: MarkupSafe>=0.23 in /apps/Alvis/software/Compiler/GCCcore/10.2.0/Python/3.8.6/lib/python3.8/site-packages (from jinja2->ax-platform) (1.1.1)
+Requirement already satisfied: six in /apps/Alvis/software/Compiler/GCCcore/10.2.0/Python/3.8.6/lib/python3.8/site-packages (from plotly->ax-platform) (1.15.0)
+Requirement already satisfied: retrying>=1.3.3 in /cephyr/users/frekin/Alvis/.local/lib/python3.8/site-packages (from plotly->ax-platform) (1.3.3)
+Requirement already satisfied: gpytorch>=1.4 in /cephyr/users/frekin/Alvis/.local/lib/python3.8/site-packages (from botorch==0.4.0->ax-platform) (1.4.1)
+Requirement already satisfied: torch>=1.7.1 in /apps/Alvis/software/MPI/GCC-CUDA/10.2.0-11.1.1/OpenMPI/4.0.5/PyTorch/1.7.1/lib/python3.8/site-packages (from botorch==0.4.0->ax-platform) (1.7.1)
+Requirement already satisfied: typing_extensions in /apps/Alvis/software/Compiler/GCCcore/10.2.0/typing-extensions/3.7.4.3/lib/python3.8/site-packages (from torch>=1.7.1->botorch==0.4.0->ax-platform) (3.7.4.3)
+[INFO 05-09 21:12:04] ax.service.utils.instantiation: Inferred value type of ParameterType.FLOAT for parameter lr. If that is not the expected value type, you can explicity specify 'value_type' ('int', 'float', 'bool' or 'str') in parameter dict.
+[INFO 05-09 21:12:04] ax.service.utils.instantiation: Inferred value type of ParameterType.INT for parameter batch_size. If that is not the expected value type, you can explicity specify 'value_type' ('int', 'float', 'bool' or 'str') in parameter dict.
+[INFO 05-09 21:12:04] ax.modelbridge.dispatch_utils: Using Sobol generation strategy.
+[INFO 05-09 21:12:04] ax.service.managed_loop: Started full optimization with 10 steps.
+[INFO 05-09 21:12:04] ax.service.managed_loop: Running optimization trial 1...
+05/09/2021 09:12:06 PM INFO: dataset [train: MNIST] was created
+05/09/2021 09:12:06 PM INFO: Starting training layer 1...
+USING DEVICE cuda
+----------------- Options ---------------
+----------------- Options ---------------
+               activation: relu                          	[default: tanh]
+             augment_data: True                          	[default: False]
+                 balanced: False                         
+               batch_size: 512                           	[default: 128]
+               data_shape: (1, 28, 28)                   
+                  dataset: mnist                         
+         dataset_rand_idx: None                          
+         hidden_objective: srs_upper_tri_alignment       	[default: srs_alignment]
+              in_channels: 1                             	[default: 3]
+                 is_train: True                          	[default: None]
+                 loglevel: INFO                          
+                     loss: xe                            
+       lr_schedule_factor: 0.1                           
+     lr_schedule_patience: 10                            
+    max_ori_trainset_size: 1000000000000                 
+         max_testset_size: 1000000000000                 
+        max_trainset_size: 50000                         	[default: 1000000000000]
+                multi_gpu: False                         
+                n_classes: 10                            
+                  n_parts: 2                             
+                    n_val: 10000                         	[default: 100]
+                n_workers: 2                             
+           normalize_mean: 0.1307                        
+            normalize_std: 0.3081                        
+                optimizer: adam                          
+             ori_balanced: False                         
+ ori_train_subset_indices: None                          
+               print_freq: 100                           
+              schedule_lr: True                          	[default: False]
+                     seed: None                          
+                  shuffle: True                          
+                   tf_log: True                          
+     train_subset_indices: None                          
+                 val_freq: 1                             
+----------------- End -------------------
+Mode: greedy
+Channels: 16
+Optimizing HyperParam - {'lr': 0.00020667747285202538, 'batch_size': 16}
+Trying a model with 43664 params, of which 43664 are trainable
+05/09/2021 09:12:42 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.632
+05/09/2021 09:13:16 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.699
+05/09/2021 09:13:48 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.731
+05/09/2021 09:14:23 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.751
+05/09/2021 09:14:55 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.746
+05/09/2021 09:14:55 PM INFO: Layer 1 training finished!
+05/09/2021 09:14:55 PM INFO: Note: NumExpr detected 32 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+05/09/2021 09:14:55 PM INFO: NumExpr defaulting to 8 threads.
+[INFO 05-09 21:14:56] ax.service.managed_loop: Running optimization trial 2...
+05/09/2021 09:14:56 PM INFO: dataset [train: MNIST] was created
+05/09/2021 09:14:56 PM INFO: Starting training layer 1...
+No improvement for 1 epochs
+Optimizing - Alignment: 0.7514109017372131, Seconds: 171.2305358289741, Metric: 0.7342878481543157
+Optimizing HyperParam - {'lr': 0.0007236205116039415, 'batch_size': 256}
+Trying a model with 43664 params, of which 43664 are trainable
+05/09/2021 09:15:03 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.579
+05/09/2021 09:15:10 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.703
+05/09/2021 09:15:17 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.747
+05/09/2021 09:15:24 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.770
+05/09/2021 09:15:31 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.805
+05/09/2021 09:15:31 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:15:32] ax.service.managed_loop: Running optimization trial 3...
+05/09/2021 09:15:32 PM INFO: dataset [train: MNIST] was created
+05/09/2021 09:15:32 PM INFO: Starting training layer 1...
+Optimizing - Alignment: 0.805079098045826, Seconds: 35.971590660046786, Metric: 0.8014819389798213
+Optimizing HyperParam - {'lr': 0.001293903458563297, 'batch_size': 128}
+Trying a model with 43664 params, of which 43664 are trainable
+05/09/2021 09:15:39 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.746
+05/09/2021 09:15:46 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.809
+05/09/2021 09:15:54 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.822
+05/09/2021 09:16:01 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.824
+05/09/2021 09:16:09 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.837
+05/09/2021 09:16:09 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:16:09] ax.service.managed_loop: Running optimization trial 4...
+05/09/2021 09:16:09 PM INFO: dataset [train: MNIST] was created
+05/09/2021 09:16:09 PM INFO: Starting training layer 1...
+Optimizing - Alignment: 0.8373508317561089, Seconds: 37.04920081188902, Metric: 0.83364591167492
+Optimizing HyperParam - {'lr': 0.001638299424074234, 'batch_size': 128}
+Trying a model with 43664 params, of which 43664 are trainable
+05/09/2021 09:16:16 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.735
+05/09/2021 09:16:23 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.798
+05/09/2021 09:16:31 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.798
+No improvement for 1 epochs
+05/09/2021 09:16:38 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.834
+05/09/2021 09:16:46 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.834
+05/09/2021 09:16:46 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:16:46] ax.service.managed_loop: Running optimization trial 5...
+05/09/2021 09:16:46 PM INFO: dataset [train: MNIST] was created
+05/09/2021 09:16:46 PM INFO: Starting training layer 1...
+Optimizing - Alignment: 0.8342366965511178, Seconds: 37.02498324401677, Metric: 0.830534198226716
+Optimizing HyperParam - {'lr': 0.005148736571595036, 'batch_size': 128}
+Trying a model with 43664 params, of which 43664 are trainable
+05/09/2021 09:16:53 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.774
+05/09/2021 09:17:00 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.808
+05/09/2021 09:17:08 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.808
+05/09/2021 09:17:15 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.826
+05/09/2021 09:17:23 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.819
+05/09/2021 09:17:23 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:17:23] ax.service.managed_loop: Running optimization trial 6...
+05/09/2021 09:17:23 PM INFO: dataset [train: MNIST] was created
+05/09/2021 09:17:23 PM INFO: Starting training layer 1...
+No improvement for 1 epochs
+Optimizing - Alignment: 0.8259751193131073, Seconds: 36.87240502005443, Metric: 0.8222878788111019
+Optimizing HyperParam - {'lr': 0.00017985243013669502, 'batch_size': 64}
+Trying a model with 43664 params, of which 43664 are trainable
+05/09/2021 09:17:32 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.587
+05/09/2021 09:17:41 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.653
+05/09/2021 09:17:50 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.698
+05/09/2021 09:17:59 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.716
+05/09/2021 09:18:08 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.756
+05/09/2021 09:18:08 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:18:08] ax.service.managed_loop: Running optimization trial 7...
+05/09/2021 09:18:09 PM INFO: dataset [train: MNIST] was created
+05/09/2021 09:18:09 PM INFO: Starting training layer 1...
+Optimizing - Alignment: 0.7555939866479036, Seconds: 45.848162316018716, Metric: 0.7510091704163017
+Optimizing HyperParam - {'lr': 0.00027103498484164164, 'batch_size': 32}
+Trying a model with 43664 params, of which 43664 are trainable
+05/09/2021 09:18:26 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.676
+05/09/2021 09:18:45 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.743
+05/09/2021 09:19:03 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.760
+05/09/2021 09:19:22 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.783
+05/09/2021 09:19:40 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.787
+05/09/2021 09:19:40 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:19:41] ax.service.managed_loop: Running optimization trial 8...
+05/09/2021 09:19:41 PM INFO: dataset [train: MNIST] was created
+05/09/2021 09:19:41 PM INFO: Starting training layer 1...
+Optimizing - Alignment: 0.7867963072210075, Seconds: 92.02273875311948, Metric: 0.7775940333456955
+Optimizing HyperParam - {'lr': 0.0006606013046722534, 'batch_size': 64}
+Trying a model with 43664 params, of which 43664 are trainable
+05/09/2021 09:19:50 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.702
+05/09/2021 09:19:59 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.771
+05/09/2021 09:20:08 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.797
+05/09/2021 09:20:17 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.797
+05/09/2021 09:20:27 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.820
+05/09/2021 09:20:27 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:20:27] ax.service.managed_loop: Running optimization trial 9...
+05/09/2021 09:20:27 PM INFO: dataset [train: MNIST] was created
+05/09/2021 09:20:27 PM INFO: Starting training layer 1...
+Optimizing - Alignment: 0.8196154760706956, Seconds: 46.04949166299775, Metric: 0.8150105269043959
+Optimizing HyperParam - {'lr': 0.000319993629768806, 'batch_size': 32}
+Trying a model with 43664 params, of which 43664 are trainable
+05/09/2021 09:20:45 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.661
+05/09/2021 09:21:04 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.727
+05/09/2021 09:21:22 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.761
+05/09/2021 09:21:41 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.768
+05/09/2021 09:21:59 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.778
+05/09/2021 09:21:59 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:21:59] ax.service.managed_loop: Running optimization trial 10...
+05/09/2021 09:21:59 PM INFO: dataset [train: MNIST] was created
+05/09/2021 09:21:59 PM INFO: Starting training layer 1...
+Optimizing - Alignment: 0.7782558031356372, Seconds: 92.23301433515735, Metric: 0.7690325017021216
+Optimizing HyperParam - {'lr': 0.005487998736943558, 'batch_size': 128}
+Trying a model with 43664 params, of which 43664 are trainable
+05/09/2021 09:22:06 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.772
+05/09/2021 09:22:14 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.811
+05/09/2021 09:22:21 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.832
+05/09/2021 09:22:29 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.844
+05/09/2021 09:22:36 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.859
+05/09/2021 09:22:36 PM INFO: Layer 1 training finished!
+05/09/2021 09:22:36 PM INFO: dataset [train: MNIST] was created
+[INFO 05-09 21:22:36] ax.service.utils.instantiation: Inferred value type of ParameterType.INT for parameter out1. If that is not the expected value type, you can explicity specify 'value_type' ('int', 'float', 'bool' or 'str') in parameter dict.
+[INFO 05-09 21:22:36] ax.service.utils.instantiation: Inferred value type of ParameterType.INT for parameter out2. If that is not the expected value type, you can explicity specify 'value_type' ('int', 'float', 'bool' or 'str') in parameter dict.
+[INFO 05-09 21:22:36] ax.service.utils.instantiation: Inferred value type of ParameterType.INT for parameter out3. If that is not the expected value type, you can explicity specify 'value_type' ('int', 'float', 'bool' or 'str') in parameter dict.
+[INFO 05-09 21:22:36] ax.service.utils.instantiation: Inferred value type of ParameterType.INT for parameter out4. If that is not the expected value type, you can explicity specify 'value_type' ('int', 'float', 'bool' or 'str') in parameter dict.
+[INFO 05-09 21:22:36] ax.service.utils.instantiation: Inferred value type of ParameterType.INT for parameter out5. If that is not the expected value type, you can explicity specify 'value_type' ('int', 'float', 'bool' or 'str') in parameter dict.
+[INFO 05-09 21:22:36] ax.service.utils.instantiation: Inferred value type of ParameterType.INT for parameter out6. If that is not the expected value type, you can explicity specify 'value_type' ('int', 'float', 'bool' or 'str') in parameter dict.
+[INFO 05-09 21:22:36] ax.modelbridge.dispatch_utils: Using Sobol generation strategy.
+[INFO 05-09 21:22:36] ax.service.managed_loop: Started full optimization with 20 steps.
+[INFO 05-09 21:22:36] ax.service.managed_loop: Running optimization trial 1...
+05/09/2021 09:22:36 PM INFO: Starting training layer 1...
+Optimizing - Alignment: 0.8587172174755531, Seconds: 36.991621067980304, Metric: 0.8550180553687551
+BEST HYPER_PARAMS: {'lr': 0.005487998736943558, 'batch_size': 128}
+Optimizing Channels - {'out1': 8, 'out2': 32, 'out3': 64, 'out4': 16, 'out5': 8, 'out6': 32}
+Trying a model with 75280 params, of which 75280 are trainable
+05/09/2021 09:22:44 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.786
+05/09/2021 09:22:51 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.816
+05/09/2021 09:22:58 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.835
+05/09/2021 09:23:06 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.843
+05/09/2021 09:23:13 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.842
+No improvement for 1 epochs
+05/09/2021 09:23:21 PM INFO: [layer 1, epoch: 6] val srs_upper_tri_alignment: 0.865
+05/09/2021 09:23:28 PM INFO: [layer 1, epoch: 7] val srs_upper_tri_alignment: 0.863
+No improvement for 1 epochs
+05/09/2021 09:23:35 PM INFO: [layer 1, epoch: 8] val srs_upper_tri_alignment: 0.860
+                   2 epochs
+05/09/2021 09:23:43 PM INFO: [layer 1, epoch: 9] val srs_upper_tri_alignment: 0.872
+05/09/2021 09:23:50 PM INFO: [layer 1, epoch: 10] val srs_upper_tri_alignment: 0.877
+05/09/2021 09:23:50 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:23:50] ax.service.managed_loop: Running optimization trial 2...
+05/09/2021 09:23:50 PM INFO: Starting training layer 1...
+Optimizing - Alignment: 0.8774570271938662, ResConst: 0.00432, Metric: 0.8731370271938662
+Optimizing Channels - {'out1': 16, 'out2': 64, 'out3': 16, 'out4': 16, 'out5': 64, 'out6': 128}
+Trying a model with 480048 params, of which 480048 are trainable
+05/09/2021 09:23:58 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.825
+05/09/2021 09:24:06 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.857
+05/09/2021 09:24:13 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.888
+05/09/2021 09:24:21 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.907
+05/09/2021 09:24:28 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.911
+05/09/2021 09:24:35 PM INFO: [layer 1, epoch: 6] val srs_upper_tri_alignment: 0.919
+05/09/2021 09:24:43 PM INFO: [layer 1, epoch: 7] val srs_upper_tri_alignment: 0.913
+No improvement for 1 epochs
+05/09/2021 09:24:50 PM INFO: [layer 1, epoch: 8] val srs_upper_tri_alignment: 0.933
+05/09/2021 09:24:58 PM INFO: [layer 1, epoch: 9] val srs_upper_tri_alignment: 0.928
+No improvement for 1 epochs
+05/09/2021 09:25:05 PM INFO: [layer 1, epoch: 10] val srs_upper_tri_alignment: 0.930
+05/09/2021 09:25:05 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:25:05] ax.service.managed_loop: Running optimization trial 3...
+05/09/2021 09:25:05 PM INFO: Starting training layer 1...
+                   2 epochs
+Optimizing - Alignment: 0.9329650862307488, ResConst: 0.010928, Metric: 0.9220370862307488
+Optimizing Channels - {'out1': 64, 'out2': 4, 'out3': 8, 'out4': 128, 'out5': 64, 'out6': 4}
+Trying a model with 105968 params, of which 105968 are trainable
+05/09/2021 09:25:13 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.743
+05/09/2021 09:25:20 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.811
+05/09/2021 09:25:28 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.839
+05/09/2021 09:25:35 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.849
+05/09/2021 09:25:43 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.855
+05/09/2021 09:25:50 PM INFO: [layer 1, epoch: 6] val srs_upper_tri_alignment: 0.867
+05/09/2021 09:25:58 PM INFO: [layer 1, epoch: 7] val srs_upper_tri_alignment: 0.864
+No improvement for 1 epochs
+05/09/2021 09:26:05 PM INFO: [layer 1, epoch: 8] val srs_upper_tri_alignment: 0.882
+05/09/2021 09:26:12 PM INFO: [layer 1, epoch: 9] val srs_upper_tri_alignment: 0.877
+No improvement for 1 epochs
+05/09/2021 09:26:20 PM INFO: [layer 1, epoch: 10] val srs_upper_tri_alignment: 0.882
+05/09/2021 09:26:20 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:26:20] ax.service.managed_loop: Running optimization trial 4...
+05/09/2021 09:26:20 PM INFO: Starting training layer 1...
+                   2 epochs
+Optimizing - Alignment: 0.8819753942610342, ResConst: 0.007344, Metric: 0.8746313942610342
+Optimizing Channels - {'out1': 32, 'out2': 16, 'out3': 8, 'out4': 16, 'out5': 16, 'out6': 8}
+Trying a model with 35472 params, of which 35472 are trainable
+05/09/2021 09:26:27 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.746
+05/09/2021 09:26:35 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.793
+05/09/2021 09:26:42 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.796
+05/09/2021 09:26:50 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.814
+05/09/2021 09:26:57 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.818
+05/09/2021 09:27:04 PM INFO: [layer 1, epoch: 6] val srs_upper_tri_alignment: 0.825
+05/09/2021 09:27:12 PM INFO: [layer 1, epoch: 7] val srs_upper_tri_alignment: 0.810
+No improvement for 1 epochs
+05/09/2021 09:27:19 PM INFO: [layer 1, epoch: 8] val srs_upper_tri_alignment: 0.824
+                   2 epochs
+05/09/2021 09:27:27 PM INFO: [layer 1, epoch: 9] val srs_upper_tri_alignment: 0.820
+                   3 epochs
+05/09/2021 09:27:34 PM INFO: [layer 1, epoch: 10] val srs_upper_tri_alignment: 0.832
+05/09/2021 09:27:34 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:27:34] ax.service.managed_loop: Running optimization trial 5...
+05/09/2021 09:27:34 PM INFO: Starting training layer 1...
+Optimizing - Alignment: 0.8324062741255458, ResConst: 0.002208, Metric: 0.8301982741255458
+Optimizing Channels - {'out1': 64, 'out2': 64, 'out3': 128, 'out4': 16, 'out5': 128, 'out6': 128}
+Trying a model with 1056240 params, of which 1056240 are trainable
+05/09/2021 09:27:44 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.788
+05/09/2021 09:27:54 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.879
+05/09/2021 09:28:03 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.893
+05/09/2021 09:28:13 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.901
+05/09/2021 09:28:23 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.916
+05/09/2021 09:28:33 PM INFO: [layer 1, epoch: 6] val srs_upper_tri_alignment: 0.918
+05/09/2021 09:28:42 PM INFO: [layer 1, epoch: 7] val srs_upper_tri_alignment: 0.927
+05/09/2021 09:28:52 PM INFO: [layer 1, epoch: 8] val srs_upper_tri_alignment: 0.918
+No improvement for 1 epochs
+05/09/2021 09:29:02 PM INFO: [layer 1, epoch: 9] val srs_upper_tri_alignment: 0.925
+                   2 epochs
+05/09/2021 09:29:11 PM INFO: [layer 1, epoch: 10] val srs_upper_tri_alignment: 0.925
+05/09/2021 09:29:11 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:29:11] ax.service.managed_loop: Running optimization trial 6...
+05/09/2021 09:29:12 PM INFO: Starting training layer 1...
+                   3 epochs
+Optimizing - Alignment: 0.9265014378330375, ResConst: 0.017296, Metric: 0.9092054378330375
+Optimizing Channels - {'out1': 16, 'out2': 16, 'out3': 32, 'out4': 64, 'out5': 8, 'out6': 32}
+Trying a model with 89760 params, of which 89760 are trainable
+05/09/2021 09:29:19 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.808
+05/09/2021 09:29:26 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.839
+05/09/2021 09:29:34 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.856
+05/09/2021 09:29:41 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.864
+05/09/2021 09:29:49 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.865
+05/09/2021 09:29:56 PM INFO: [layer 1, epoch: 6] val srs_upper_tri_alignment: 0.877
+05/09/2021 09:30:03 PM INFO: [layer 1, epoch: 7] val srs_upper_tri_alignment: 0.888
+05/09/2021 09:30:11 PM INFO: [layer 1, epoch: 8] val srs_upper_tri_alignment: 0.890
+05/09/2021 09:30:18 PM INFO: [layer 1, epoch: 9] val srs_upper_tri_alignment: 0.890
+No improvement for 1 epochs
+05/09/2021 09:30:25 PM INFO: [layer 1, epoch: 10] val srs_upper_tri_alignment: 0.900
+05/09/2021 09:30:25 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:30:25] ax.service.managed_loop: Running optimization trial 7...
+05/09/2021 09:30:25 PM INFO: Starting training layer 1...
+Optimizing - Alignment: 0.8999590760544885, ResConst: 0.004648, Metric: 0.8953110760544886
+Optimizing Channels - {'out1': 8, 'out2': 64, 'out3': 32, 'out4': 128, 'out5': 8, 'out6': 8}
+Trying a model with 134272 params, of which 134272 are trainable
+05/09/2021 09:30:33 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.767
+05/09/2021 09:30:40 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.813
+05/09/2021 09:30:48 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.820
+05/09/2021 09:30:55 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.835
+05/09/2021 09:31:03 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.860
+05/09/2021 09:31:10 PM INFO: [layer 1, epoch: 6] val srs_upper_tri_alignment: 0.845
+No improvement for 1 epochs
+05/09/2021 09:31:17 PM INFO: [layer 1, epoch: 7] val srs_upper_tri_alignment: 0.853
+                   2 epochs
+05/09/2021 09:31:25 PM INFO: [layer 1, epoch: 8] val srs_upper_tri_alignment: 0.862
+05/09/2021 09:31:32 PM INFO: [layer 1, epoch: 9] val srs_upper_tri_alignment: 0.863
+05/09/2021 09:31:40 PM INFO: [layer 1, epoch: 10] val srs_upper_tri_alignment: 0.863
+05/09/2021 09:31:40 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:31:40] ax.service.managed_loop: Running optimization trial 8...
+05/09/2021 09:31:40 PM INFO: Starting training layer 1...
+Optimizing - Alignment: 0.8633021908470347, ResConst: 0.005431999999999999, Metric: 0.8578701908470348
+Optimizing Channels - {'out1': 64, 'out2': 8, 'out3': 64, 'out4': 16, 'out5': 128, 'out6': 4}
+Trying a model with 191688 params, of which 191688 are trainable
+05/09/2021 09:31:47 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.780
+05/09/2021 09:31:55 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.810
+05/09/2021 09:32:02 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.826
+05/09/2021 09:32:10 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.829
+05/09/2021 09:32:17 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.844
+05/09/2021 09:32:25 PM INFO: [layer 1, epoch: 6] val srs_upper_tri_alignment: 0.849
+05/09/2021 09:32:32 PM INFO: [layer 1, epoch: 7] val srs_upper_tri_alignment: 0.856
+05/09/2021 09:32:40 PM INFO: [layer 1, epoch: 8] val srs_upper_tri_alignment: 0.853
+No improvement for 1 epochs
+05/09/2021 09:32:47 PM INFO: [layer 1, epoch: 9] val srs_upper_tri_alignment: 0.861
+05/09/2021 09:32:55 PM INFO: [layer 1, epoch: 10] val srs_upper_tri_alignment: 0.863
+05/09/2021 09:32:55 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:32:55] ax.service.managed_loop: Running optimization trial 9...
+05/09/2021 09:32:55 PM INFO: Starting training layer 1...
+Optimizing - Alignment: 0.8632549379445329, ResConst: 0.009115999999999999, Metric: 0.8541389379445329
+Optimizing Channels - {'out1': 128, 'out2': 8, 'out3': 32, 'out4': 8, 'out5': 16, 'out6': 64}
+Trying a model with 111568 params, of which 111568 are trainable
+05/09/2021 09:33:02 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.782
+05/09/2021 09:33:10 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.837
+05/09/2021 09:33:17 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.855
+05/09/2021 09:33:24 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.863
+05/09/2021 09:33:32 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.878
+05/09/2021 09:33:39 PM INFO: [layer 1, epoch: 6] val srs_upper_tri_alignment: 0.882
+05/09/2021 09:33:47 PM INFO: [layer 1, epoch: 7] val srs_upper_tri_alignment: 0.889
+05/09/2021 09:33:54 PM INFO: [layer 1, epoch: 8] val srs_upper_tri_alignment: 0.886
+No improvement for 1 epochs
+05/09/2021 09:34:01 PM INFO: [layer 1, epoch: 9] val srs_upper_tri_alignment: 0.896
+05/09/2021 09:34:09 PM INFO: [layer 1, epoch: 10] val srs_upper_tri_alignment: 0.906
+05/09/2021 09:34:09 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:34:09] ax.service.managed_loop: Running optimization trial 10...
+05/09/2021 09:34:09 PM INFO: Starting training layer 1...
+Optimizing - Alignment: 0.9056642960898483, ResConst: 0.006144, Metric: 0.8995202960898483
+Optimizing Channels - {'out1': 64, 'out2': 128, 'out3': 16, 'out4': 128, 'out5': 64, 'out6': 128}
+Trying a model with 599536 params, of which 599536 are trainable
+05/09/2021 09:34:18 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.819
+05/09/2021 09:34:26 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.866
+05/09/2021 09:34:35 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.882
+05/09/2021 09:34:43 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.911
+05/09/2021 09:34:52 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.916
+05/09/2021 09:35:01 PM INFO: [layer 1, epoch: 6] val srs_upper_tri_alignment: 0.916
+05/09/2021 09:35:09 PM INFO: [layer 1, epoch: 7] val srs_upper_tri_alignment: 0.928
+05/09/2021 09:35:18 PM INFO: [layer 1, epoch: 8] val srs_upper_tri_alignment: 0.932
+05/09/2021 09:35:26 PM INFO: [layer 1, epoch: 9] val srs_upper_tri_alignment: 0.936
+05/09/2021 09:35:35 PM INFO: [layer 1, epoch: 10] val srs_upper_tri_alignment: 0.933
+05/09/2021 09:35:35 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:35:35] ax.service.managed_loop: Running optimization trial 11...
+05/09/2021 09:35:35 PM INFO: Starting training layer 1...
+No improvement for 1 epochs
+Optimizing - Alignment: 0.9357731659201127, ResConst: 0.014735999999999999, Metric: 0.9210371659201128
+Optimizing Channels - {'out1': 32, 'out2': 4, 'out3': 16, 'out4': 4, 'out5': 128, 'out6': 16}
+Trying a model with 215456 params, of which 215456 are trainable
+05/09/2021 09:35:43 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.786
+05/09/2021 09:35:50 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.830
+05/09/2021 09:35:58 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.851
+05/09/2021 09:36:05 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.869
+05/09/2021 09:36:13 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.872
+05/09/2021 09:36:20 PM INFO: [layer 1, epoch: 6] val srs_upper_tri_alignment: 0.880
+05/09/2021 09:36:27 PM INFO: [layer 1, epoch: 7] val srs_upper_tri_alignment: 0.888
+05/09/2021 09:36:35 PM INFO: [layer 1, epoch: 8] val srs_upper_tri_alignment: 0.876
+No improvement for 1 epochs
+05/09/2021 09:36:42 PM INFO: [layer 1, epoch: 9] val srs_upper_tri_alignment: 0.887
+                   2 epochs
+05/09/2021 09:36:50 PM INFO: [layer 1, epoch: 10] val srs_upper_tri_alignment: 0.893
+05/09/2021 09:36:50 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:36:50] ax.service.managed_loop: Running optimization trial 12...
+05/09/2021 09:36:50 PM INFO: Starting training layer 1...
+Optimizing - Alignment: 0.8932834773124019, ResConst: 0.00788, Metric: 0.8854034773124019
+Optimizing Channels - {'out1': 128, 'out2': 4, 'out3': 64, 'out4': 128, 'out5': 128, 'out6': 4}
+Trying a model with 382176 params, of which 382176 are trainable
+05/09/2021 09:36:59 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.801
+05/09/2021 09:37:08 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.838
+05/09/2021 09:37:17 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.836
+No improvement for 1 epochs
+05/09/2021 09:37:25 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.855
+05/09/2021 09:37:34 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.863
+05/09/2021 09:37:43 PM INFO: [layer 1, epoch: 6] val srs_upper_tri_alignment: 0.875
+05/09/2021 09:37:52 PM INFO: [layer 1, epoch: 7] val srs_upper_tri_alignment: 0.873
+No improvement for 1 epochs
+05/09/2021 09:38:01 PM INFO: [layer 1, epoch: 8] val srs_upper_tri_alignment: 0.881
+05/09/2021 09:38:10 PM INFO: [layer 1, epoch: 9] val srs_upper_tri_alignment: 0.887
+05/09/2021 09:38:19 PM INFO: [layer 1, epoch: 10] val srs_upper_tri_alignment: 0.893
+05/09/2021 09:38:19 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:38:19] ax.service.managed_loop: Running optimization trial 13...
+05/09/2021 09:38:19 PM INFO: Starting training layer 1...
+Optimizing - Alignment: 0.8933573146409626, ResConst: 0.012456, Metric: 0.8809013146409626
+Optimizing Channels - {'out1': 128, 'out2': 8, 'out3': 128, 'out4': 8, 'out5': 8, 'out6': 4}
+Trying a model with 113384 params, of which 113384 are trainable
+05/09/2021 09:38:26 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.730
+05/09/2021 09:38:34 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.764
+05/09/2021 09:38:41 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.775
+05/09/2021 09:38:49 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.785
+05/09/2021 09:38:56 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.776
+No improvement for 1 epochs
+05/09/2021 09:39:04 PM INFO: [layer 1, epoch: 6] val srs_upper_tri_alignment: 0.808
+05/09/2021 09:39:11 PM INFO: [layer 1, epoch: 7] val srs_upper_tri_alignment: 0.801
+No improvement for 1 epochs
+05/09/2021 09:39:18 PM INFO: [layer 1, epoch: 8] val srs_upper_tri_alignment: 0.808
+05/09/2021 09:39:26 PM INFO: [layer 1, epoch: 9] val srs_upper_tri_alignment: 0.812
+05/09/2021 09:39:33 PM INFO: [layer 1, epoch: 10] val srs_upper_tri_alignment: 0.808
+05/09/2021 09:39:33 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:39:33] ax.service.managed_loop: Running optimization trial 14...
+05/09/2021 09:39:33 PM INFO: Starting training layer 1...
+No improvement for 1 epochs
+Optimizing - Alignment: 0.8120823977868769, ResConst: 0.005212, Metric: 0.8068703977868769
+Optimizing Channels - {'out1': 8, 'out2': 128, 'out3': 16, 'out4': 128, 'out5': 16, 'out6': 32}
+Trying a model with 111072 params, of which 111072 are trainable
+05/09/2021 09:39:41 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.784
+05/09/2021 09:39:48 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.809
+05/09/2021 09:39:55 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.839
+05/09/2021 09:40:03 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.861
+05/09/2021 09:40:10 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.868
+05/09/2021 09:40:18 PM INFO: [layer 1, epoch: 6] val srs_upper_tri_alignment: 0.869
+05/09/2021 09:40:25 PM INFO: [layer 1, epoch: 7] val srs_upper_tri_alignment: 0.878
+05/09/2021 09:40:33 PM INFO: [layer 1, epoch: 8] val srs_upper_tri_alignment: 0.873
+No improvement for 1 epochs
+05/09/2021 09:40:40 PM INFO: [layer 1, epoch: 9] val srs_upper_tri_alignment: 0.883
+05/09/2021 09:40:47 PM INFO: [layer 1, epoch: 10] val srs_upper_tri_alignment: 0.876
+05/09/2021 09:40:47 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:40:47] ax.service.managed_loop: Running optimization trial 15...
+05/09/2021 09:40:47 PM INFO: Starting training layer 1...
+No improvement for 1 epochs
+Optimizing - Alignment: 0.8832988799372806, ResConst: 0.007176, Metric: 0.8761228799372807
+Optimizing Channels - {'out1': 16, 'out2': 8, 'out3': 64, 'out4': 8, 'out5': 64, 'out6': 4}
+Trying a model with 105432 params, of which 105432 are trainable
+05/09/2021 09:40:55 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.727
+05/09/2021 09:41:02 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.787
+05/09/2021 09:41:10 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.803
+05/09/2021 09:41:17 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.805
+05/09/2021 09:41:24 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.815
+05/09/2021 09:41:32 PM INFO: [layer 1, epoch: 6] val srs_upper_tri_alignment: 0.837
+05/09/2021 09:41:39 PM INFO: [layer 1, epoch: 7] val srs_upper_tri_alignment: 0.839
+05/09/2021 09:41:47 PM INFO: [layer 1, epoch: 8] val srs_upper_tri_alignment: 0.834
+No improvement for 1 epochs
+05/09/2021 09:41:54 PM INFO: [layer 1, epoch: 9] val srs_upper_tri_alignment: 0.841
+05/09/2021 09:42:01 PM INFO: [layer 1, epoch: 10] val srs_upper_tri_alignment: 0.849
+05/09/2021 09:42:01 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:42:01] ax.service.managed_loop: Running optimization trial 16...
+05/09/2021 09:42:02 PM INFO: Starting training layer 1...
+Optimizing - Alignment: 0.8492231338838988, ResConst: 0.0053479999999999995, Metric: 0.8438751338838988
+Optimizing Channels - {'out1': 4, 'out2': 8, 'out3': 32, 'out4': 32, 'out5': 32, 'out6': 8}
+Trying a model with 78104 params, of which 78104 are trainable
+05/09/2021 09:42:09 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.778
+05/09/2021 09:42:17 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.785
+05/09/2021 09:42:24 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.819
+05/09/2021 09:42:31 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.839
+05/09/2021 09:42:39 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.846
+05/09/2021 09:42:46 PM INFO: [layer 1, epoch: 6] val srs_upper_tri_alignment: 0.843
+No improvement for 1 epochs
+05/09/2021 09:42:54 PM INFO: [layer 1, epoch: 7] val srs_upper_tri_alignment: 0.863
+05/09/2021 09:43:01 PM INFO: [layer 1, epoch: 8] val srs_upper_tri_alignment: 0.863
+No improvement for 1 epochs
+05/09/2021 09:43:08 PM INFO: [layer 1, epoch: 9] val srs_upper_tri_alignment: 0.878
+05/09/2021 09:43:16 PM INFO: [layer 1, epoch: 10] val srs_upper_tri_alignment: 0.869
+05/09/2021 09:43:16 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:43:16] ax.service.managed_loop: Running optimization trial 17...
+05/09/2021 09:43:16 PM INFO: Starting training layer 1...
+No improvement for 1 epochs
+Optimizing - Alignment: 0.8781107384947282, ResConst: 0.003668, Metric: 0.8744427384947282
+Optimizing Channels - {'out1': 4, 'out2': 64, 'out3': 16, 'out4': 8, 'out5': 8, 'out6': 8}
+Trying a model with 23592 params, of which 23592 are trainable
+05/09/2021 09:43:23 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.730
+05/09/2021 09:43:31 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.767
+05/09/2021 09:43:38 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.766
+No improvement for 1 epochs
+05/09/2021 09:43:46 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.780
+05/09/2021 09:43:53 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.776
+No improvement for 1 epochs
+05/09/2021 09:44:00 PM INFO: [layer 1, epoch: 6] val srs_upper_tri_alignment: 0.796
+05/09/2021 09:44:08 PM INFO: [layer 1, epoch: 7] val srs_upper_tri_alignment: 0.803
+05/09/2021 09:44:15 PM INFO: [layer 1, epoch: 8] val srs_upper_tri_alignment: 0.806
+05/09/2021 09:44:23 PM INFO: [layer 1, epoch: 9] val srs_upper_tri_alignment: 0.801
+No improvement for 1 epochs
+05/09/2021 09:44:30 PM INFO: [layer 1, epoch: 10] val srs_upper_tri_alignment: 0.802
+05/09/2021 09:44:30 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:44:30] ax.service.managed_loop: Running optimization trial 18...
+05/09/2021 09:44:30 PM INFO: Starting training layer 1...
+                   2 epochs
+Optimizing - Alignment: 0.8061541688593128, ResConst: 0.001996, Metric: 0.8041581688593128
+Optimizing Channels - {'out1': 4, 'out2': 128, 'out3': 128, 'out4': 8, 'out5': 16, 'out6': 32}
+Trying a model with 123144 params, of which 123144 are trainable
+05/09/2021 09:44:38 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.767
+05/09/2021 09:44:45 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.807
+05/09/2021 09:44:53 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.833
+05/09/2021 09:45:00 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.854
+05/09/2021 09:45:07 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.854
+No improvement for 1 epochs
+05/09/2021 09:45:15 PM INFO: [layer 1, epoch: 6] val srs_upper_tri_alignment: 0.858
+05/09/2021 09:45:22 PM INFO: [layer 1, epoch: 7] val srs_upper_tri_alignment: 0.869
+05/09/2021 09:45:30 PM INFO: [layer 1, epoch: 8] val srs_upper_tri_alignment: 0.877
+05/09/2021 09:45:37 PM INFO: [layer 1, epoch: 9] val srs_upper_tri_alignment: 0.871
+No improvement for 1 epochs
+05/09/2021 09:45:44 PM INFO: [layer 1, epoch: 10] val srs_upper_tri_alignment: 0.883
+05/09/2021 09:45:44 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:45:44] ax.service.managed_loop: Running optimization trial 19...
+05/09/2021 09:45:44 PM INFO: Starting training layer 1...
+Optimizing - Alignment: 0.8827542285375958, ResConst: 0.00694, Metric: 0.8758142285375958
+Optimizing Channels - {'out1': 128, 'out2': 128, 'out3': 16, 'out4': 4, 'out5': 128, 'out6': 4}
+Trying a model with 302528 params, of which 302528 are trainable
+05/09/2021 09:45:53 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.708
+05/09/2021 09:46:01 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.765
+05/09/2021 09:46:10 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.779
+05/09/2021 09:46:18 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.786
+05/09/2021 09:46:27 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.779
+No improvement for 1 epochs
+05/09/2021 09:46:35 PM INFO: [layer 1, epoch: 6] val srs_upper_tri_alignment: 0.825
+05/09/2021 09:46:44 PM INFO: [layer 1, epoch: 7] val srs_upper_tri_alignment: 0.814
+No improvement for 1 epochs
+05/09/2021 09:46:52 PM INFO: [layer 1, epoch: 8] val srs_upper_tri_alignment: 0.814
+                   2 epochs
+05/09/2021 09:47:01 PM INFO: [layer 1, epoch: 9] val srs_upper_tri_alignment: 0.830
+05/09/2021 09:47:09 PM INFO: [layer 1, epoch: 10] val srs_upper_tri_alignment: 0.831
+05/09/2021 09:47:09 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:47:09] ax.service.managed_loop: Running optimization trial 20...
+05/09/2021 09:47:09 PM INFO: Starting training layer 1...
+Optimizing - Alignment: 0.8310884259924104, ResConst: 0.009271999999999999, Metric: 0.8218164259924104
+Optimizing Channels - {'out1': 16, 'out2': 16, 'out3': 64, 'out4': 128, 'out5': 8, 'out6': 128}
+Trying a model with 296736 params, of which 296736 are trainable
+05/09/2021 09:47:17 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.791
+05/09/2021 09:47:24 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.820
+05/09/2021 09:47:32 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.854
+05/09/2021 09:47:39 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.875
+05/09/2021 09:47:46 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.875
+No improvement for 1 epochs
+05/09/2021 09:47:54 PM INFO: [layer 1, epoch: 6] val srs_upper_tri_alignment: 0.901
+05/09/2021 09:48:01 PM INFO: [layer 1, epoch: 7] val srs_upper_tri_alignment: 0.896
+No improvement for 1 epochs
+05/09/2021 09:48:09 PM INFO: [layer 1, epoch: 8] val srs_upper_tri_alignment: 0.911
+05/09/2021 09:48:16 PM INFO: [layer 1, epoch: 9] val srs_upper_tri_alignment: 0.913
+05/09/2021 09:48:23 PM INFO: [layer 1, epoch: 10] val srs_upper_tri_alignment: 0.909
+05/09/2021 09:48:23 PM INFO: Layer 1 training finished!
+05/09/2021 09:48:24 PM INFO: Starting training layer 1...
+No improvement for 1 epochs
+Optimizing - Alignment: 0.9127049325387689, ResConst: 0.011752, Metric: 0.900952932538769
+BEST CHANNELS: {'out1': 16, 'out2': 64, 'out3': 16, 'out4': 16, 'out5': 64, 'out6': 128}
+05/09/2021 09:48:31 PM INFO: [layer 1, epoch: 1] val srs_upper_tri_alignment: 0.844
+New best val acc 0.8442396174503278, saving model
+05/09/2021 09:48:38 PM INFO: [layer 1, epoch: 2] val srs_upper_tri_alignment: 0.882
+New best val acc 0.8815893334678456, saving model
+05/09/2021 09:48:46 PM INFO: [layer 1, epoch: 3] val srs_upper_tri_alignment: 0.907
+New best val acc 0.9072082065328767, saving model
+05/09/2021 09:48:54 PM INFO: [layer 1, epoch: 4] val srs_upper_tri_alignment: 0.927
+New best val acc 0.9266938816142988, saving model
+05/09/2021 09:49:01 PM INFO: [layer 1, epoch: 5] val srs_upper_tri_alignment: 0.931
+New best val acc 0.9307064632826214, saving model
+05/09/2021 09:49:09 PM INFO: [layer 1, epoch: 6] val srs_upper_tri_alignment: 0.932
+New best val acc 0.932423160800451, saving model
+05/09/2021 09:49:16 PM INFO: [layer 1, epoch: 7] val srs_upper_tri_alignment: 0.931
+No improvement for 1 epochs
+05/09/2021 09:49:23 PM INFO: [layer 1, epoch: 8] val srs_upper_tri_alignment: 0.934
+New best val acc 0.9339101857776884, saving model
+05/09/2021 09:49:31 PM INFO: [layer 1, epoch: 9] val srs_upper_tri_alignment: 0.943
+New best val acc 0.9433532477934149, saving model
+05/09/2021 09:49:38 PM INFO: [layer 1, epoch: 10] val srs_upper_tri_alignment: 0.938
+No improvement for 1 epochs
+05/09/2021 09:49:46 PM INFO: [layer 1, epoch: 11] val srs_upper_tri_alignment: 0.935
+                   2 epochs
+05/09/2021 09:49:53 PM INFO: [layer 1, epoch: 12] val srs_upper_tri_alignment: 0.939
+                   3 epochs
+05/09/2021 09:50:01 PM INFO: [layer 1, epoch: 13] val srs_upper_tri_alignment: 0.946
+New best val acc 0.9461879420884048, saving model
+05/09/2021 09:50:08 PM INFO: [layer 1, epoch: 14] val srs_upper_tri_alignment: 0.945
+No improvement for 1 epochs
+05/09/2021 09:50:16 PM INFO: [layer 1, epoch: 15] val srs_upper_tri_alignment: 0.942
+                   2 epochs
+05/09/2021 09:50:23 PM INFO: [layer 1, epoch: 16] val srs_upper_tri_alignment: 0.947
+New best val acc 0.9473028929927682, saving model
+05/09/2021 09:50:31 PM INFO: [layer 1, epoch: 17] val srs_upper_tri_alignment: 0.951
+New best val acc 0.9505022869834417, saving model
+05/09/2021 09:50:38 PM INFO: [layer 1, epoch: 18] val srs_upper_tri_alignment: 0.956
+New best val acc 0.9555575108226342, saving model
+05/09/2021 09:50:46 PM INFO: [layer 1, epoch: 19] val srs_upper_tri_alignment: 0.951
+No improvement for 1 epochs
+05/09/2021 09:50:53 PM INFO: [layer 1, epoch: 20] val srs_upper_tri_alignment: 0.943
+                   2 epochs
+05/09/2021 09:51:00 PM INFO: [layer 1, epoch: 21] val srs_upper_tri_alignment: 0.951
+                   3 epochs
+05/09/2021 09:51:08 PM INFO: [layer 1, epoch: 22] val srs_upper_tri_alignment: 0.951
+                   4 epochs
+05/09/2021 09:51:16 PM INFO: [layer 1, epoch: 23] val srs_upper_tri_alignment: 0.945
+                   5 epochs
+05/09/2021 09:51:23 PM INFO: [layer 1, epoch: 24] val srs_upper_tri_alignment: 0.953
+                   6 epochs
+05/09/2021 09:51:31 PM INFO: [layer 1, epoch: 25] val srs_upper_tri_alignment: 0.951
+                   7 epochs
+05/09/2021 09:51:38 PM INFO: [layer 1, epoch: 26] val srs_upper_tri_alignment: 0.954
+                   8 epochs
+05/09/2021 09:51:46 PM INFO: [layer 1, epoch: 27] val srs_upper_tri_alignment: 0.956
+New best val acc 0.9564516551886932, saving model
+05/09/2021 09:51:53 PM INFO: [layer 1, epoch: 28] val srs_upper_tri_alignment: 0.952
+No improvement for 1 epochs
+05/09/2021 09:52:01 PM INFO: [layer 1, epoch: 29] val srs_upper_tri_alignment: 0.952
+                   2 epochs
+05/09/2021 09:52:08 PM INFO: [layer 1, epoch: 30] val srs_upper_tri_alignment: 0.954
+                   3 epochs
+05/09/2021 09:52:16 PM INFO: [layer 1, epoch: 31] val srs_upper_tri_alignment: 0.950
+                   4 epochs
+05/09/2021 09:52:23 PM INFO: [layer 1, epoch: 32] val srs_upper_tri_alignment: 0.953
+                   5 epochs
+05/09/2021 09:52:31 PM INFO: [layer 1, epoch: 33] val srs_upper_tri_alignment: 0.954
+                   6 epochs
+05/09/2021 09:52:38 PM INFO: [layer 1, epoch: 34] val srs_upper_tri_alignment: 0.955
+                   7 epochs
+05/09/2021 09:52:45 PM INFO: [layer 1, epoch: 35] val srs_upper_tri_alignment: 0.957
+New best val acc 0.9570259202884722, saving model
+05/09/2021 09:52:53 PM INFO: [layer 1, epoch: 36] val srs_upper_tri_alignment: 0.959
+New best val acc 0.9587800563136234, saving model
+05/09/2021 09:53:00 PM INFO: [layer 1, epoch: 37] val srs_upper_tri_alignment: 0.956
+No improvement for 1 epochs
+05/09/2021 09:53:08 PM INFO: [layer 1, epoch: 38] val srs_upper_tri_alignment: 0.954
+                   2 epochs
+05/09/2021 09:53:15 PM INFO: [layer 1, epoch: 39] val srs_upper_tri_alignment: 0.951
+                   3 epochs
+05/09/2021 09:53:23 PM INFO: [layer 1, epoch: 40] val srs_upper_tri_alignment: 0.953
+                   4 epochs
+05/09/2021 09:53:30 PM INFO: [layer 1, epoch: 41] val srs_upper_tri_alignment: 0.958
+                   5 epochs
+05/09/2021 09:53:38 PM INFO: [layer 1, epoch: 42] val srs_upper_tri_alignment: 0.956
+                   6 epochs
+05/09/2021 09:53:45 PM INFO: [layer 1, epoch: 43] val srs_upper_tri_alignment: 0.959
+                   7 epochs
+05/09/2021 09:53:53 PM INFO: [layer 1, epoch: 44] val srs_upper_tri_alignment: 0.958
+                   8 epochs
+05/09/2021 09:54:01 PM INFO: [layer 1, epoch: 45] val srs_upper_tri_alignment: 0.956
+                   9 epochs
+05/09/2021 09:54:08 PM INFO: [layer 1, epoch: 46] val srs_upper_tri_alignment: 0.953
+                   10 epochs
+05/09/2021 09:54:16 PM INFO: [layer 1, epoch: 47] val srs_upper_tri_alignment: 0.955
+Epoch    47: reducing learning rate of group 0 to 5.4880e-04.
+                   11 epochs
+05/09/2021 09:54:23 PM INFO: [layer 1, epoch: 48] val srs_upper_tri_alignment: 0.961
+New best val acc 0.9612045899222169, saving model
+05/09/2021 09:54:31 PM INFO: [layer 1, epoch: 49] val srs_upper_tri_alignment: 0.960
+No improvement for 1 epochs
+05/09/2021 09:54:38 PM INFO: [layer 1, epoch: 50] val srs_upper_tri_alignment: 0.962
+New best val acc 0.9620840775815747, saving model
+05/09/2021 09:54:46 PM INFO: [layer 1, epoch: 51] val srs_upper_tri_alignment: 0.961
+No improvement for 1 epochs
+05/09/2021 09:54:53 PM INFO: [layer 1, epoch: 52] val srs_upper_tri_alignment: 0.961
+                   2 epochs
+05/09/2021 09:55:01 PM INFO: [layer 1, epoch: 53] val srs_upper_tri_alignment: 0.962
+New best val acc 0.9623301051839998, saving model
+05/09/2021 09:55:08 PM INFO: [layer 1, epoch: 54] val srs_upper_tri_alignment: 0.962
+No improvement for 1 epochs
+05/09/2021 09:55:16 PM INFO: [layer 1, epoch: 55] val srs_upper_tri_alignment: 0.960
+                   2 epochs
+05/09/2021 09:55:23 PM INFO: [layer 1, epoch: 56] val srs_upper_tri_alignment: 0.961
+                   3 epochs
+05/09/2021 09:55:31 PM INFO: [layer 1, epoch: 57] val srs_upper_tri_alignment: 0.963
+New best val acc 0.962949825238578, saving model
+05/09/2021 09:55:38 PM INFO: [layer 1, epoch: 58] val srs_upper_tri_alignment: 0.961
+No improvement for 1 epochs
+05/09/2021 09:55:46 PM INFO: [layer 1, epoch: 59] val srs_upper_tri_alignment: 0.961
+                   2 epochs
+05/09/2021 09:55:53 PM INFO: [layer 1, epoch: 60] val srs_upper_tri_alignment: 0.961
+                   3 epochs
+05/09/2021 09:56:01 PM INFO: [layer 1, epoch: 61] val srs_upper_tri_alignment: 0.962
+                   4 epochs
+05/09/2021 09:56:08 PM INFO: [layer 1, epoch: 62] val srs_upper_tri_alignment: 0.961
+                   5 epochs
+05/09/2021 09:56:16 PM INFO: [layer 1, epoch: 63] val srs_upper_tri_alignment: 0.962
+                   6 epochs
+05/09/2021 09:56:23 PM INFO: [layer 1, epoch: 64] val srs_upper_tri_alignment: 0.963
+New best val acc 0.962955459009243, saving model
+05/09/2021 09:56:31 PM INFO: [layer 1, epoch: 65] val srs_upper_tri_alignment: 0.961
+No improvement for 1 epochs
+05/09/2021 09:56:38 PM INFO: [layer 1, epoch: 66] val srs_upper_tri_alignment: 0.962
+                   2 epochs
+05/09/2021 09:56:46 PM INFO: [layer 1, epoch: 67] val srs_upper_tri_alignment: 0.962
+                   3 epochs
+05/09/2021 09:56:53 PM INFO: [layer 1, epoch: 68] val srs_upper_tri_alignment: 0.961
+Epoch    68: reducing learning rate of group 0 to 5.4880e-05.
+                   4 epochs
+05/09/2021 09:57:00 PM INFO: [layer 1, epoch: 69] val srs_upper_tri_alignment: 0.962
+                   5 epochs
+05/09/2021 09:57:08 PM INFO: [layer 1, epoch: 70] val srs_upper_tri_alignment: 0.963
+                   6 epochs
+05/09/2021 09:57:15 PM INFO: [layer 1, epoch: 71] val srs_upper_tri_alignment: 0.962
+                   7 epochs
+05/09/2021 09:57:23 PM INFO: [layer 1, epoch: 72] val srs_upper_tri_alignment: 0.962
+                   8 epochs
+05/09/2021 09:57:30 PM INFO: [layer 1, epoch: 73] val srs_upper_tri_alignment: 0.962
+                   9 epochs
+05/09/2021 09:57:38 PM INFO: [layer 1, epoch: 74] val srs_upper_tri_alignment: 0.961
+                   10 epochs
+05/09/2021 09:57:45 PM INFO: [layer 1, epoch: 75] val srs_upper_tri_alignment: 0.962
+                   11 epochs
+05/09/2021 09:57:53 PM INFO: [layer 1, epoch: 76] val srs_upper_tri_alignment: 0.959
+                   12 epochs
+05/09/2021 09:58:00 PM INFO: [layer 1, epoch: 77] val srs_upper_tri_alignment: 0.962
+                   13 epochs
+05/09/2021 09:58:08 PM INFO: [layer 1, epoch: 78] val srs_upper_tri_alignment: 0.962
+                   14 epochs
+05/09/2021 09:58:15 PM INFO: [layer 1, epoch: 79] val srs_upper_tri_alignment: 0.962
+Epoch    79: reducing learning rate of group 0 to 5.4880e-06.
+                   15 epochs
+05/09/2021 09:58:23 PM INFO: [layer 1, epoch: 80] val srs_upper_tri_alignment: 0.963
+                   16 epochs
+05/09/2021 09:58:30 PM INFO: [layer 1, epoch: 81] val srs_upper_tri_alignment: 0.962
+                   17 epochs
+05/09/2021 09:58:37 PM INFO: [layer 1, epoch: 82] val srs_upper_tri_alignment: 0.962
+                   18 epochs
+05/09/2021 09:58:45 PM INFO: [layer 1, epoch: 83] val srs_upper_tri_alignment: 0.963
+                   19 epochs
+05/09/2021 09:58:53 PM INFO: [layer 1, epoch: 84] val srs_upper_tri_alignment: 0.962
+05/09/2021 09:58:53 PM INFO: Layer 1 training finished!
+[INFO 05-09 21:58:53] ax.service.utils.instantiation: Inferred value type of ParameterType.FLOAT for parameter lr. If that is not the expected value type, you can explicity specify 'value_type' ('int', 'float', 'bool' or 'str') in parameter dict.
+[INFO 05-09 21:58:53] ax.service.utils.instantiation: Inferred value type of ParameterType.INT for parameter batch_size. If that is not the expected value type, you can explicity specify 'value_type' ('int', 'float', 'bool' or 'str') in parameter dict.
+[INFO 05-09 21:58:53] ax.modelbridge.dispatch_utils: Using Sobol generation strategy.
+[INFO 05-09 21:58:53] ax.service.managed_loop: Started full optimization with 10 steps.
+[INFO 05-09 21:58:53] ax.service.managed_loop: Running optimization trial 1...
+05/09/2021 09:58:53 PM INFO: dataset [train: MNIST] was created
+05/09/2021 09:58:54 PM INFO: Starting training layer 2...
+                   20 epochs
+No improvement for 20 epochs, STOPPING EARLY
+new_acc: 0.962955459009243 best_acc: 0
+Better acc from new layer:
+0.962955459009243 > 0
+Optimizing HyperParam - {'lr': 0.0007839632582209778, 'batch_size': 32}
+Trying a model with 523536 params, of which 43488 are trainable
+05/09/2021 09:59:15 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.970
+05/09/2021 09:59:36 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.972
+05/09/2021 09:59:57 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.971
+No improvement for 1 epochs
+05/09/2021 10:00:19 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.974
+05/09/2021 10:00:40 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.974
+05/09/2021 10:00:40 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:00:40] ax.service.managed_loop: Running optimization trial 2...
+05/09/2021 10:00:40 PM INFO: dataset [train: MNIST] was created
+05/09/2021 10:00:40 PM INFO: Starting training layer 2...
+No improvement for 1 epochs
+Optimizing - Alignment: 0.9744911009130387, Seconds: 106.31330392602831, Metric: 0.9638597705204359
+Optimizing HyperParam - {'lr': 0.0018537649160888909, 'batch_size': 512}
+Trying a model with 523536 params, of which 43488 are trainable
+05/09/2021 10:00:47 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.970
+05/09/2021 10:00:54 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.974
+05/09/2021 10:01:01 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.973
+No improvement for 1 epochs
+05/09/2021 10:01:09 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:01:16 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:01:16 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:01:16] ax.service.managed_loop: Running optimization trial 3...
+05/09/2021 10:01:16 PM INFO: dataset [train: MNIST] was created
+05/09/2021 10:01:16 PM INFO: Starting training layer 2...
+No improvement for 1 epochs
+Optimizing - Alignment: 0.9754085689783096, Seconds: 35.8656930711586, Metric: 0.9718219996711938
+Optimizing HyperParam - {'lr': 0.003920175965454184, 'batch_size': 32}
+Trying a model with 523536 params, of which 43488 are trainable
+05/09/2021 10:01:37 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.971
+05/09/2021 10:01:58 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.970
+No improvement for 1 epochs
+05/09/2021 10:02:19 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.971
+05/09/2021 10:02:41 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.972
+05/09/2021 10:03:02 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.973
+05/09/2021 10:03:02 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:03:02] ax.service.managed_loop: Running optimization trial 4...
+05/09/2021 10:03:02 PM INFO: dataset [train: MNIST] was created
+05/09/2021 10:03:02 PM INFO: Starting training layer 2...
+Optimizing - Alignment: 0.9728610936445169, Seconds: 106.10815678490326, Metric: 0.9622502779660266
+Optimizing HyperParam - {'lr': 0.00012177611888285462, 'batch_size': 16}
+Trying a model with 523536 params, of which 43488 are trainable
+05/09/2021 10:03:43 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.965
+05/09/2021 10:04:21 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.969
+05/09/2021 10:05:00 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.968
+No improvement for 1 epochs
+05/09/2021 10:05:40 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.968
+                   2 epochs
+05/09/2021 10:06:21 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.973
+05/09/2021 10:06:21 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:06:21] ax.service.managed_loop: Running optimization trial 5...
+05/09/2021 10:06:21 PM INFO: dataset [train: MNIST] was created
+05/09/2021 10:06:21 PM INFO: Starting training layer 2...
+Optimizing - Alignment: 0.9726453462600708, Seconds: 198.81107391999103, Metric: 0.9527642388680717
+Optimizing HyperParam - {'lr': 0.0001113098643558926, 'batch_size': 128}
+Trying a model with 523536 params, of which 43488 are trainable
+05/09/2021 10:06:28 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.961
+05/09/2021 10:06:35 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.968
+05/09/2021 10:06:43 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.970
+05/09/2021 10:06:50 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.971
+05/09/2021 10:06:58 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.972
+05/09/2021 10:06:58 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:06:58] ax.service.managed_loop: Running optimization trial 6...
+05/09/2021 10:06:58 PM INFO: dataset [train: MNIST] was created
+05/09/2021 10:06:58 PM INFO: Starting training layer 2...
+Optimizing - Alignment: 0.972336765331558, Seconds: 37.02203842694871, Metric: 0.9686345614888632
+Optimizing HyperParam - {'lr': 0.004233701247898237, 'batch_size': 1024}
+Trying a model with 523536 params, of which 43488 are trainable
+05/09/2021 10:07:06 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.971
+05/09/2021 10:07:13 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.973
+05/09/2021 10:07:20 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.974
+05/09/2021 10:07:27 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:07:34 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.973
+05/09/2021 10:07:34 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:07:34] ax.service.managed_loop: Running optimization trial 7...
+05/09/2021 10:07:34 PM INFO: dataset [train: MNIST] was created
+05/09/2021 10:07:34 PM INFO: Starting training layer 2...
+No improvement for 1 epochs
+Optimizing - Alignment: 0.9749508619308471, Seconds: 36.495880401926115, Metric: 0.9713012738906545
+Optimizing HyperParam - {'lr': 0.006828426692889034, 'batch_size': 16}
+Trying a model with 523536 params, of which 43488 are trainable
+05/09/2021 10:08:14 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.959
+05/09/2021 10:08:53 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.961
+05/09/2021 10:09:33 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.962
+05/09/2021 10:10:12 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.966
+05/09/2021 10:10:52 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.966
+05/09/2021 10:10:52 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:10:52] ax.service.managed_loop: Running optimization trial 8...
+05/09/2021 10:10:52 PM INFO: dataset [train: MNIST] was created
+05/09/2021 10:10:52 PM INFO: Starting training layer 2...
+No improvement for 1 epochs
+Optimizing - Alignment: 0.9660356492042541, Seconds: 197.94243494491093, Metric: 0.946241405709763
+Optimizing HyperParam - {'lr': 0.0029934933633131654, 'batch_size': 512}
+Trying a model with 523536 params, of which 43488 are trainable
+05/09/2021 10:10:59 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.972
+05/09/2021 10:11:07 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:11:14 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.974
+No improvement for 1 epochs
+05/09/2021 10:11:21 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:11:28 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:11:28 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:11:28] ax.service.managed_loop: Running optimization trial 9...
+05/09/2021 10:11:28 PM INFO: dataset [train: MNIST] was created
+05/09/2021 10:11:28 PM INFO: Starting training layer 2...
+No improvement for 1 epochs
+Optimizing - Alignment: 0.9764562487602234, Seconds: 35.5624006150756, Metric: 0.9729000086987158
+Optimizing HyperParam - {'lr': 0.0004247742738351718, 'batch_size': 64}
+Trying a model with 523536 params, of which 43488 are trainable
+05/09/2021 10:11:39 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.970
+05/09/2021 10:11:50 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.973
+05/09/2021 10:12:00 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:12:11 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.973
+No improvement for 1 epochs
+05/09/2021 10:12:22 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:12:22 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:12:22] ax.service.managed_loop: Running optimization trial 10...
+05/09/2021 10:12:22 PM INFO: dataset [train: MNIST] was created
+05/09/2021 10:12:22 PM INFO: Starting training layer 2...
+                   2 epochs
+Optimizing - Alignment: 0.9752984050732509, Seconds: 54.388095752103254, Metric: 0.9698595954980406
+Optimizing HyperParam - {'lr': 0.0005359617010572842, 'batch_size': 256}
+Trying a model with 523536 params, of which 43488 are trainable
+05/09/2021 10:12:30 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.970
+05/09/2021 10:12:37 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.972
+05/09/2021 10:12:44 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:12:51 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.974
+No improvement for 1 epochs
+05/09/2021 10:12:58 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:12:58 PM INFO: Layer 2 training finished!
+05/09/2021 10:12:58 PM INFO: dataset [train: MNIST] was created
+[INFO 05-09 22:12:58] ax.service.utils.instantiation: Inferred value type of ParameterType.INT for parameter out1. If that is not the expected value type, you can explicity specify 'value_type' ('int', 'float', 'bool' or 'str') in parameter dict.
+[INFO 05-09 22:12:58] ax.service.utils.instantiation: Inferred value type of ParameterType.INT for parameter out2. If that is not the expected value type, you can explicity specify 'value_type' ('int', 'float', 'bool' or 'str') in parameter dict.
+[INFO 05-09 22:12:58] ax.service.utils.instantiation: Inferred value type of ParameterType.INT for parameter out3. If that is not the expected value type, you can explicity specify 'value_type' ('int', 'float', 'bool' or 'str') in parameter dict.
+[INFO 05-09 22:12:58] ax.service.utils.instantiation: Inferred value type of ParameterType.INT for parameter out4. If that is not the expected value type, you can explicity specify 'value_type' ('int', 'float', 'bool' or 'str') in parameter dict.
+[INFO 05-09 22:12:58] ax.service.utils.instantiation: Inferred value type of ParameterType.INT for parameter out5. If that is not the expected value type, you can explicity specify 'value_type' ('int', 'float', 'bool' or 'str') in parameter dict.
+[INFO 05-09 22:12:58] ax.service.utils.instantiation: Inferred value type of ParameterType.INT for parameter out6. If that is not the expected value type, you can explicity specify 'value_type' ('int', 'float', 'bool' or 'str') in parameter dict.
+[INFO 05-09 22:12:58] ax.modelbridge.dispatch_utils: Using Sobol generation strategy.
+[INFO 05-09 22:12:58] ax.service.managed_loop: Started full optimization with 20 steps.
+[INFO 05-09 22:12:58] ax.service.managed_loop: Running optimization trial 1...
+05/09/2021 10:12:58 PM INFO: Starting training layer 2...
+Optimizing - Alignment: 0.9760790303349495, Seconds: 35.74954142002389, Metric: 0.9725040761929471
+BEST HYPER_PARAMS: {'lr': 0.0029934933633131654, 'batch_size': 512}
+Optimizing Channels - {'out1': 8, 'out2': 32, 'out3': 16, 'out4': 32, 'out5': 4, 'out6': 128}
+Trying a model with 534472 params, of which 54424 are trainable
+05/09/2021 10:13:05 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.970
+05/09/2021 10:13:13 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.973
+05/09/2021 10:13:20 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.974
+05/09/2021 10:13:27 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:13:34 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:13:41 PM INFO: [layer 2, epoch: 6] val srs_upper_tri_alignment: 0.974
+No improvement for 1 epochs
+05/09/2021 10:13:48 PM INFO: [layer 2, epoch: 7] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:13:56 PM INFO: [layer 2, epoch: 8] val srs_upper_tri_alignment: 0.972
+No improvement for 1 epochs
+05/09/2021 10:14:03 PM INFO: [layer 2, epoch: 9] val srs_upper_tri_alignment: 0.975
+                   2 epochs
+05/09/2021 10:14:10 PM INFO: [layer 2, epoch: 10] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:14:10 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:14:10] ax.service.managed_loop: Running optimization trial 2...
+05/09/2021 10:14:10 PM INFO: Starting training layer 2...
+Optimizing - Alignment: 0.9759965807199478, ResConst: 0.008028, Metric: 0.9679685807199477
+Optimizing Channels - {'out1': 4, 'out2': 128, 'out3': 32, 'out4': 128, 'out5': 16, 'out6': 128}
+Trying a model with 720376 params, of which 240328 are trainable
+05/09/2021 10:14:17 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.970
+05/09/2021 10:14:25 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.973
+05/09/2021 10:14:32 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:14:39 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.974
+No improvement for 1 epochs
+05/09/2021 10:14:46 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.975
+                   2 epochs
+05/09/2021 10:14:53 PM INFO: [layer 2, epoch: 6] val srs_upper_tri_alignment: 0.975
+                   3 epochs
+05/09/2021 10:15:00 PM INFO: [layer 2, epoch: 7] val srs_upper_tri_alignment: 0.976
+                   4 epochs
+05/09/2021 10:15:07 PM INFO: [layer 2, epoch: 8] val srs_upper_tri_alignment: 0.976
+                   5 epochs
+05/09/2021 10:15:15 PM INFO: [layer 2, epoch: 9] val srs_upper_tri_alignment: 0.975
+                   6 epochs
+05/09/2021 10:15:22 PM INFO: [layer 2, epoch: 10] val srs_upper_tri_alignment: 0.977
+05/09/2021 10:15:22 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:15:22] ax.service.managed_loop: Running optimization trial 3...
+05/09/2021 10:15:22 PM INFO: Starting training layer 2...
+Optimizing - Alignment: 0.9768405288457871, ResConst: 0.012244, Metric: 0.9645965288457871
+Optimizing Channels - {'out1': 64, 'out2': 64, 'out3': 128, 'out4': 8, 'out5': 8, 'out6': 16}
+Trying a model with 617488 params, of which 137440 are trainable
+05/09/2021 10:15:29 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.972
+05/09/2021 10:15:36 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.974
+05/09/2021 10:15:44 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:15:51 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.974
+No improvement for 1 epochs
+05/09/2021 10:15:58 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:16:05 PM INFO: [layer 2, epoch: 6] val srs_upper_tri_alignment: 0.974
+No improvement for 1 epochs
+05/09/2021 10:16:12 PM INFO: [layer 2, epoch: 7] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:16:19 PM INFO: [layer 2, epoch: 8] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 10:16:26 PM INFO: [layer 2, epoch: 9] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:16:33 PM INFO: [layer 2, epoch: 10] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:16:33 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:16:33] ax.service.managed_loop: Running optimization trial 4...
+05/09/2021 10:16:34 PM INFO: Starting training layer 2...
+No improvement for 1 epochs
+Optimizing - Alignment: 0.9764290273189544, ResConst: 0.005728, Metric: 0.9707010273189545
+Optimizing Channels - {'out1': 128, 'out2': 4, 'out3': 16, 'out4': 16, 'out5': 16, 'out6': 4}
+Trying a model with 532352 params, of which 52304 are trainable
+05/09/2021 10:16:41 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.971
+05/09/2021 10:16:48 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.973
+05/09/2021 10:16:55 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.974
+05/09/2021 10:17:02 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:17:09 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:17:16 PM INFO: [layer 2, epoch: 6] val srs_upper_tri_alignment: 0.975
+No improvement for 1 epochs
+05/09/2021 10:17:23 PM INFO: [layer 2, epoch: 7] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:17:31 PM INFO: [layer 2, epoch: 8] val srs_upper_tri_alignment: 0.977
+05/09/2021 10:17:38 PM INFO: [layer 2, epoch: 9] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 10:17:45 PM INFO: [layer 2, epoch: 10] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:17:45 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:17:45] ax.service.managed_loop: Running optimization trial 5...
+05/09/2021 10:17:45 PM INFO: Starting training layer 2...
+                   2 epochs
+Optimizing - Alignment: 0.97694311439991, ResConst: 0.0029679999999999997, Metric: 0.97397511439991
+Optimizing Channels - {'out1': 8, 'out2': 64, 'out3': 64, 'out4': 32, 'out5': 8, 'out6': 32}
+Trying a model with 583920 params, of which 103872 are trainable
+05/09/2021 10:17:52 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.973
+05/09/2021 10:17:59 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:18:06 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.973
+No improvement for 1 epochs
+05/09/2021 10:18:13 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:18:20 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.977
+05/09/2021 10:18:28 PM INFO: [layer 2, epoch: 6] val srs_upper_tri_alignment: 0.973
+No improvement for 1 epochs
+05/09/2021 10:18:35 PM INFO: [layer 2, epoch: 7] val srs_upper_tri_alignment: 0.976
+                   2 epochs
+05/09/2021 10:18:42 PM INFO: [layer 2, epoch: 8] val srs_upper_tri_alignment: 0.976
+                   3 epochs
+05/09/2021 10:18:49 PM INFO: [layer 2, epoch: 9] val srs_upper_tri_alignment: 0.978
+05/09/2021 10:18:56 PM INFO: [layer 2, epoch: 10] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:18:56 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:18:56] ax.service.managed_loop: Running optimization trial 6...
+05/09/2021 10:18:56 PM INFO: Starting training layer 2...
+No improvement for 1 epochs
+Optimizing - Alignment: 0.9778482437133789, ResConst: 0.005007999999999999, Metric: 0.9728402437133788
+Optimizing Channels - {'out1': 64, 'out2': 8, 'out3': 128, 'out4': 16, 'out5': 4, 'out6': 128}
+Trying a model with 627656 params, of which 147608 are trainable
+05/09/2021 10:19:03 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.972
+05/09/2021 10:19:11 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.974
+05/09/2021 10:19:18 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:19:25 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.974
+No improvement for 1 epochs
+05/09/2021 10:19:32 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:19:39 PM INFO: [layer 2, epoch: 6] val srs_upper_tri_alignment: 0.975
+No improvement for 1 epochs
+05/09/2021 10:19:46 PM INFO: [layer 2, epoch: 7] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:19:54 PM INFO: [layer 2, epoch: 8] val srs_upper_tri_alignment: 0.975
+No improvement for 1 epochs
+05/09/2021 10:20:01 PM INFO: [layer 2, epoch: 9] val srs_upper_tri_alignment: 0.975
+                   2 epochs
+05/09/2021 10:20:08 PM INFO: [layer 2, epoch: 10] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:20:08 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:20:08] ax.service.managed_loop: Running optimization trial 7...
+05/09/2021 10:20:08 PM INFO: Starting training layer 2...
+                   3 epochs
+Optimizing - Alignment: 0.9763817429542542, ResConst: 0.010716, Metric: 0.9656657429542542
+Optimizing Channels - {'out1': 16, 'out2': 128, 'out3': 128, 'out4': 128, 'out5': 8, 'out6': 16}
+Trying a model with 979360 params, of which 499312 are trainable
+05/09/2021 10:20:16 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.971
+05/09/2021 10:20:23 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.972
+05/09/2021 10:20:30 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:20:37 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.975
+No improvement for 1 epochs
+05/09/2021 10:20:44 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:20:52 PM INFO: [layer 2, epoch: 6] val srs_upper_tri_alignment: 0.973
+No improvement for 1 epochs
+05/09/2021 10:20:59 PM INFO: [layer 2, epoch: 7] val srs_upper_tri_alignment: 0.977
+05/09/2021 10:21:06 PM INFO: [layer 2, epoch: 8] val srs_upper_tri_alignment: 0.975
+No improvement for 1 epochs
+05/09/2021 10:21:13 PM INFO: [layer 2, epoch: 9] val srs_upper_tri_alignment: 0.976
+                   2 epochs
+05/09/2021 10:21:20 PM INFO: [layer 2, epoch: 10] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:21:20 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:21:20] ax.service.managed_loop: Running optimization trial 8...
+05/09/2021 10:21:20 PM INFO: Starting training layer 2...
+                   3 epochs
+Optimizing - Alignment: 0.976644292473793, ResConst: 0.008872, Metric: 0.967772292473793
+Optimizing Channels - {'out1': 128, 'out2': 8, 'out3': 64, 'out4': 128, 'out5': 128, 'out6': 128}
+Trying a model with 1646688 params, of which 1166640 are trainable
+05/09/2021 10:21:30 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.973
+05/09/2021 10:21:39 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.973
+No improvement for 1 epochs
+05/09/2021 10:21:48 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:21:57 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.977
+05/09/2021 10:22:06 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 10:22:15 PM INFO: [layer 2, epoch: 6] val srs_upper_tri_alignment: 0.976
+                   2 epochs
+05/09/2021 10:22:24 PM INFO: [layer 2, epoch: 7] val srs_upper_tri_alignment: 0.976
+                   3 epochs
+05/09/2021 10:22:33 PM INFO: [layer 2, epoch: 8] val srs_upper_tri_alignment: 0.972
+                   4 epochs
+05/09/2021 10:22:42 PM INFO: [layer 2, epoch: 9] val srs_upper_tri_alignment: 0.974
+                   5 epochs
+05/09/2021 10:22:51 PM INFO: [layer 2, epoch: 10] val srs_upper_tri_alignment: 0.977
+05/09/2021 10:22:51 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:22:51] ax.service.managed_loop: Running optimization trial 9...
+05/09/2021 10:22:51 PM INFO: Starting training layer 2...
+                   6 epochs
+Optimizing - Alignment: 0.976755079627037, ResConst: 0.018567999999999998, Metric: 0.958187079627037
+Optimizing Channels - {'out1': 128, 'out2': 8, 'out3': 128, 'out4': 128, 'out5': 32, 'out6': 128}
+Trying a model with 1199648 params, of which 719600 are trainable
+05/09/2021 10:23:00 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.972
+05/09/2021 10:23:07 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.974
+05/09/2021 10:23:15 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:23:23 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.974
+No improvement for 1 epochs
+05/09/2021 10:23:31 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.975
+                   2 epochs
+05/09/2021 10:23:39 PM INFO: [layer 2, epoch: 6] val srs_upper_tri_alignment: 0.976
+                   3 epochs
+05/09/2021 10:23:47 PM INFO: [layer 2, epoch: 7] val srs_upper_tri_alignment: 0.975
+                   4 epochs
+05/09/2021 10:23:55 PM INFO: [layer 2, epoch: 8] val srs_upper_tri_alignment: 0.977
+05/09/2021 10:24:03 PM INFO: [layer 2, epoch: 9] val srs_upper_tri_alignment: 0.978
+05/09/2021 10:24:11 PM INFO: [layer 2, epoch: 10] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:24:11 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:24:11] ax.service.managed_loop: Running optimization trial 10...
+05/09/2021 10:24:11 PM INFO: Starting training layer 2...
+No improvement for 1 epochs
+Optimizing - Alignment: 0.97806676030159, ResConst: 0.015463999999999999, Metric: 0.96260276030159
+Optimizing Channels - {'out1': 128, 'out2': 8, 'out3': 8, 'out4': 8, 'out5': 64, 'out6': 16}
+Trying a model with 613856 params, of which 133808 are trainable
+05/09/2021 10:24:18 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.973
+05/09/2021 10:24:25 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.974
+05/09/2021 10:24:33 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:24:40 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:24:47 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.975
+No improvement for 1 epochs
+05/09/2021 10:24:54 PM INFO: [layer 2, epoch: 6] val srs_upper_tri_alignment: 0.976
+                   2 epochs
+05/09/2021 10:25:01 PM INFO: [layer 2, epoch: 7] val srs_upper_tri_alignment: 0.977
+05/09/2021 10:25:08 PM INFO: [layer 2, epoch: 8] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 10:25:16 PM INFO: [layer 2, epoch: 9] val srs_upper_tri_alignment: 0.976
+                   2 epochs
+05/09/2021 10:25:23 PM INFO: [layer 2, epoch: 10] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:25:23 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:25:23] ax.service.managed_loop: Running optimization trial 11...
+05/09/2021 10:25:23 PM INFO: Starting training layer 2...
+                   3 epochs
+Optimizing - Alignment: 0.9766940772533417, ResConst: 0.0055439999999999994, Metric: 0.9711500772533417
+Optimizing Channels - {'out1': 4, 'out2': 8, 'out3': 128, 'out4': 4, 'out5': 16, 'out6': 64}
+Trying a model with 609328 params, of which 129280 are trainable
+05/09/2021 10:25:30 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.973
+05/09/2021 10:25:37 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:25:44 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.974
+No improvement for 1 epochs
+05/09/2021 10:25:52 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.975
+                   2 epochs
+05/09/2021 10:25:59 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.975
+                   3 epochs
+05/09/2021 10:26:06 PM INFO: [layer 2, epoch: 6] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:26:13 PM INFO: [layer 2, epoch: 7] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:26:20 PM INFO: [layer 2, epoch: 8] val srs_upper_tri_alignment: 0.977
+05/09/2021 10:26:27 PM INFO: [layer 2, epoch: 9] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 10:26:35 PM INFO: [layer 2, epoch: 10] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:26:35 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:26:35] ax.service.managed_loop: Running optimization trial 12...
+05/09/2021 10:26:35 PM INFO: Starting training layer 2...
+                   2 epochs
+Optimizing - Alignment: 0.977243059873581, ResConst: 0.0073279999999999994, Metric: 0.969915059873581
+Optimizing Channels - {'out1': 128, 'out2': 64, 'out3': 128, 'out4': 16, 'out5': 128, 'out6': 8}
+Trying a model with 827520 params, of which 347472 are trainable
+05/09/2021 10:26:42 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.971
+05/09/2021 10:26:50 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.973
+05/09/2021 10:26:57 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.971
+No improvement for 1 epochs
+05/09/2021 10:27:04 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:27:11 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.977
+05/09/2021 10:27:19 PM INFO: [layer 2, epoch: 6] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 10:27:26 PM INFO: [layer 2, epoch: 7] val srs_upper_tri_alignment: 0.975
+                   2 epochs
+05/09/2021 10:27:33 PM INFO: [layer 2, epoch: 8] val srs_upper_tri_alignment: 0.974
+                   3 epochs
+05/09/2021 10:27:40 PM INFO: [layer 2, epoch: 9] val srs_upper_tri_alignment: 0.975
+                   4 epochs
+05/09/2021 10:27:48 PM INFO: [layer 2, epoch: 10] val srs_upper_tri_alignment: 0.977
+05/09/2021 10:27:48 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:27:48] ax.service.managed_loop: Running optimization trial 13...
+05/09/2021 10:27:48 PM INFO: Starting training layer 2...
+                   5 epochs
+Optimizing - Alignment: 0.9769467562437057, ResConst: 0.011992, Metric: 0.9649547562437057
+Optimizing Channels - {'out1': 64, 'out2': 16, 'out3': 16, 'out4': 32, 'out5': 4, 'out6': 32}
+Trying a model with 528728 params, of which 48680 are trainable
+05/09/2021 10:27:55 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.972
+05/09/2021 10:28:02 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.974
+05/09/2021 10:28:09 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:28:16 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.974
+No improvement for 1 epochs
+05/09/2021 10:28:23 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.974
+                   2 epochs
+05/09/2021 10:28:31 PM INFO: [layer 2, epoch: 6] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:28:38 PM INFO: [layer 2, epoch: 7] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:28:45 PM INFO: [layer 2, epoch: 8] val srs_upper_tri_alignment: 0.977
+05/09/2021 10:28:52 PM INFO: [layer 2, epoch: 9] val srs_upper_tri_alignment: 0.974
+No improvement for 1 epochs
+05/09/2021 10:28:59 PM INFO: [layer 2, epoch: 10] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:28:59 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:28:59] ax.service.managed_loop: Running optimization trial 14...
+05/09/2021 10:28:59 PM INFO: Starting training layer 2...
+                   2 epochs
+Optimizing - Alignment: 0.9767769426107407, ResConst: 0.0036839999999999998, Metric: 0.9730929426107406
+Optimizing Channels - {'out1': 16, 'out2': 16, 'out3': 4, 'out4': 128, 'out5': 16, 'out6': 16}
+Trying a model with 527128 params, of which 47080 are trainable
+05/09/2021 10:29:06 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.973
+05/09/2021 10:29:14 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:29:21 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.973
+No improvement for 1 epochs
+05/09/2021 10:29:28 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.975
+                   2 epochs
+05/09/2021 10:29:35 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:29:43 PM INFO: [layer 2, epoch: 6] val srs_upper_tri_alignment: 0.974
+No improvement for 1 epochs
+05/09/2021 10:29:50 PM INFO: [layer 2, epoch: 7] val srs_upper_tri_alignment: 0.975
+                   2 epochs
+05/09/2021 10:29:57 PM INFO: [layer 2, epoch: 8] val srs_upper_tri_alignment: 0.975
+                   3 epochs
+05/09/2021 10:30:04 PM INFO: [layer 2, epoch: 9] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:30:12 PM INFO: [layer 2, epoch: 10] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:30:12 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:30:12] ax.service.managed_loop: Running optimization trial 15...
+05/09/2021 10:30:12 PM INFO: Starting training layer 2...
+No improvement for 1 epochs
+Optimizing - Alignment: 0.9763833969831467, ResConst: 0.005156, Metric: 0.9712273969831466
+Optimizing Channels - {'out1': 32, 'out2': 8, 'out3': 8, 'out4': 16, 'out5': 4, 'out6': 32}
+Trying a model with 503896 params, of which 23848 are trainable
+05/09/2021 10:30:19 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.970
+05/09/2021 10:30:26 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.973
+05/09/2021 10:30:33 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.973
+05/09/2021 10:30:40 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.974
+05/09/2021 10:30:47 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.973
+No improvement for 1 epochs
+05/09/2021 10:30:55 PM INFO: [layer 2, epoch: 6] val srs_upper_tri_alignment: 0.973
+                   2 epochs
+05/09/2021 10:31:02 PM INFO: [layer 2, epoch: 7] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:31:09 PM INFO: [layer 2, epoch: 8] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:31:16 PM INFO: [layer 2, epoch: 9] val srs_upper_tri_alignment: 0.975
+No improvement for 1 epochs
+05/09/2021 10:31:23 PM INFO: [layer 2, epoch: 10] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:31:23 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:31:23] ax.service.managed_loop: Running optimization trial 16...
+05/09/2021 10:31:23 PM INFO: Starting training layer 2...
+Optimizing - Alignment: 0.9762193948030472, ResConst: 0.002724, Metric: 0.9734953948030473
+Optimizing Channels - {'out1': 128, 'out2': 128, 'out3': 64, 'out4': 8, 'out5': 32, 'out6': 128}
+Trying a model with 915360 params, of which 435312 are trainable
+05/09/2021 10:31:31 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.974
+05/09/2021 10:31:38 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:31:45 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.973
+No improvement for 1 epochs
+05/09/2021 10:31:52 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.975
+                   2 epochs
+05/09/2021 10:31:59 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:32:07 PM INFO: [layer 2, epoch: 6] val srs_upper_tri_alignment: 0.977
+05/09/2021 10:32:14 PM INFO: [layer 2, epoch: 7] val srs_upper_tri_alignment: 0.975
+No improvement for 1 epochs
+05/09/2021 10:32:21 PM INFO: [layer 2, epoch: 8] val srs_upper_tri_alignment: 0.976
+                   2 epochs
+05/09/2021 10:32:28 PM INFO: [layer 2, epoch: 9] val srs_upper_tri_alignment: 0.975
+                   3 epochs
+05/09/2021 10:32:36 PM INFO: [layer 2, epoch: 10] val srs_upper_tri_alignment: 0.974
+05/09/2021 10:32:36 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:32:36] ax.service.managed_loop: Running optimization trial 17...
+05/09/2021 10:32:36 PM INFO: Starting training layer 2...
+                   4 epochs
+Optimizing - Alignment: 0.9767920315265656, ResConst: 0.011944, Metric: 0.9648480315265656
+Optimizing Channels - {'out1': 32, 'out2': 128, 'out3': 32, 'out4': 8, 'out5': 8, 'out6': 16}
+Trying a model with 556176 params, of which 76128 are trainable
+05/09/2021 10:32:43 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.970
+05/09/2021 10:32:50 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.972
+05/09/2021 10:32:57 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.974
+05/09/2021 10:33:04 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:33:11 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.973
+No improvement for 1 epochs
+05/09/2021 10:33:19 PM INFO: [layer 2, epoch: 6] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:33:26 PM INFO: [layer 2, epoch: 7] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 10:33:33 PM INFO: [layer 2, epoch: 8] val srs_upper_tri_alignment: 0.974
+                   2 epochs
+05/09/2021 10:33:40 PM INFO: [layer 2, epoch: 9] val srs_upper_tri_alignment: 0.976
+                   3 epochs
+05/09/2021 10:33:47 PM INFO: [layer 2, epoch: 10] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:33:47 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:33:47] ax.service.managed_loop: Running optimization trial 18...
+05/09/2021 10:33:47 PM INFO: Starting training layer 2...
+                   4 epochs
+Optimizing - Alignment: 0.9764881998300552, ResConst: 0.003616, Metric: 0.9728721998300552
+Optimizing Channels - {'out1': 8, 'out2': 8, 'out3': 8, 'out4': 16, 'out5': 4, 'out6': 4}
+Trying a model with 492672 params, of which 12624 are trainable
+05/09/2021 10:33:54 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.969
+05/09/2021 10:34:02 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.971
+05/09/2021 10:34:09 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.971
+No improvement for 1 epochs
+05/09/2021 10:34:16 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.974
+05/09/2021 10:34:23 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:34:30 PM INFO: [layer 2, epoch: 6] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:34:37 PM INFO: [layer 2, epoch: 7] val srs_upper_tri_alignment: 0.975
+No improvement for 1 epochs
+05/09/2021 10:34:44 PM INFO: [layer 2, epoch: 8] val srs_upper_tri_alignment: 0.974
+                   2 epochs
+05/09/2021 10:34:51 PM INFO: [layer 2, epoch: 9] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:34:58 PM INFO: [layer 2, epoch: 10] val srs_upper_tri_alignment: 0.974
+05/09/2021 10:34:58 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:34:58] ax.service.managed_loop: Running optimization trial 19...
+05/09/2021 10:34:59 PM INFO: Starting training layer 2...
+No improvement for 1 epochs
+Optimizing - Alignment: 0.9756091177463532, ResConst: 0.0011359999999999999, Metric: 0.9744731177463531
+Optimizing Channels - {'out1': 128, 'out2': 16, 'out3': 16, 'out4': 128, 'out5': 16, 'out6': 64}
+Trying a model with 641328 params, of which 161280 are trainable
+05/09/2021 10:35:06 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.973
+05/09/2021 10:35:13 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:35:20 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:35:27 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:35:35 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 10:35:42 PM INFO: [layer 2, epoch: 6] val srs_upper_tri_alignment: 0.976
+                   2 epochs
+05/09/2021 10:35:49 PM INFO: [layer 2, epoch: 7] val srs_upper_tri_alignment: 0.975
+                   3 epochs
+05/09/2021 10:35:56 PM INFO: [layer 2, epoch: 8] val srs_upper_tri_alignment: 0.977
+05/09/2021 10:36:03 PM INFO: [layer 2, epoch: 9] val srs_upper_tri_alignment: 0.978
+05/09/2021 10:36:10 PM INFO: [layer 2, epoch: 10] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:36:10 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:36:10] ax.service.managed_loop: Running optimization trial 20...
+05/09/2021 10:36:10 PM INFO: Starting training layer 2...
+No improvement for 1 epochs
+Optimizing - Alignment: 0.9776852309703827, ResConst: 0.008816, Metric: 0.9688692309703827
+Optimizing Channels - {'out1': 32, 'out2': 8, 'out3': 4, 'out4': 64, 'out5': 16, 'out6': 128}
+Trying a model with 611592 params, of which 131544 are trainable
+05/09/2021 10:36:18 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.973
+05/09/2021 10:36:25 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:36:32 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 10:36:39 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:36:46 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 10:36:54 PM INFO: [layer 2, epoch: 6] val srs_upper_tri_alignment: 0.975
+                   2 epochs
+05/09/2021 10:37:01 PM INFO: [layer 2, epoch: 7] val srs_upper_tri_alignment: 0.975
+                   3 epochs
+05/09/2021 10:37:08 PM INFO: [layer 2, epoch: 8] val srs_upper_tri_alignment: 0.977
+05/09/2021 10:37:15 PM INFO: [layer 2, epoch: 9] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 10:37:22 PM INFO: [layer 2, epoch: 10] val srs_upper_tri_alignment: 0.974
+05/09/2021 10:37:22 PM INFO: Layer 2 training finished!
+05/09/2021 10:37:22 PM INFO: Starting training layer 2...
+                   2 epochs
+Optimizing - Alignment: 0.9769789814949036, ResConst: 0.009115999999999999, Metric: 0.9678629814949036
+BEST CHANNELS: {'out1': 8, 'out2': 8, 'out3': 8, 'out4': 16, 'out5': 4, 'out6': 4}
+05/09/2021 10:37:29 PM INFO: [layer 2, epoch: 1] val srs_upper_tri_alignment: 0.969
+New best val acc 0.9693691939115524, saving model
+05/09/2021 10:37:37 PM INFO: [layer 2, epoch: 2] val srs_upper_tri_alignment: 0.972
+New best val acc 0.972155311703682, saving model
+05/09/2021 10:37:44 PM INFO: [layer 2, epoch: 3] val srs_upper_tri_alignment: 0.974
+New best val acc 0.9742150008678436, saving model
+05/09/2021 10:37:51 PM INFO: [layer 2, epoch: 4] val srs_upper_tri_alignment: 0.974
+No improvement for 1 epochs
+05/09/2021 10:37:58 PM INFO: [layer 2, epoch: 5] val srs_upper_tri_alignment: 0.975
+New best val acc 0.9746658831834794, saving model
+05/09/2021 10:38:05 PM INFO: [layer 2, epoch: 6] val srs_upper_tri_alignment: 0.974
+No improvement for 1 epochs
+05/09/2021 10:38:12 PM INFO: [layer 2, epoch: 7] val srs_upper_tri_alignment: 0.975
+New best val acc 0.9753237456083298, saving model
+05/09/2021 10:38:20 PM INFO: [layer 2, epoch: 8] val srs_upper_tri_alignment: 0.976
+New best val acc 0.9759547144174576, saving model
+05/09/2021 10:38:27 PM INFO: [layer 2, epoch: 9] val srs_upper_tri_alignment: 0.975
+No improvement for 1 epochs
+05/09/2021 10:38:34 PM INFO: [layer 2, epoch: 10] val srs_upper_tri_alignment: 0.976
+New best val acc 0.9761989444494248, saving model
+05/09/2021 10:38:41 PM INFO: [layer 2, epoch: 11] val srs_upper_tri_alignment: 0.977
+New best val acc 0.9769176274538041, saving model
+05/09/2021 10:38:48 PM INFO: [layer 2, epoch: 12] val srs_upper_tri_alignment: 0.977
+New best val acc 0.977043268084526, saving model
+05/09/2021 10:38:55 PM INFO: [layer 2, epoch: 13] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 10:39:02 PM INFO: [layer 2, epoch: 14] val srs_upper_tri_alignment: 0.977
+                   2 epochs
+05/09/2021 10:39:09 PM INFO: [layer 2, epoch: 15] val srs_upper_tri_alignment: 0.975
+                   3 epochs
+05/09/2021 10:39:17 PM INFO: [layer 2, epoch: 16] val srs_upper_tri_alignment: 0.977
+New best val acc 0.9771286070346832, saving model
+05/09/2021 10:39:24 PM INFO: [layer 2, epoch: 17] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 10:39:31 PM INFO: [layer 2, epoch: 18] val srs_upper_tri_alignment: 0.977
+                   2 epochs
+05/09/2021 10:39:38 PM INFO: [layer 2, epoch: 19] val srs_upper_tri_alignment: 0.977
+                   3 epochs
+05/09/2021 10:39:46 PM INFO: [layer 2, epoch: 20] val srs_upper_tri_alignment: 0.977
+                   4 epochs
+05/09/2021 10:39:53 PM INFO: [layer 2, epoch: 21] val srs_upper_tri_alignment: 0.976
+                   5 epochs
+05/09/2021 10:40:00 PM INFO: [layer 2, epoch: 22] val srs_upper_tri_alignment: 0.977
+                   6 epochs
+05/09/2021 10:40:07 PM INFO: [layer 2, epoch: 23] val srs_upper_tri_alignment: 0.976
+Epoch    23: reducing learning rate of group 0 to 2.9935e-04.
+                   7 epochs
+05/09/2021 10:40:14 PM INFO: [layer 2, epoch: 24] val srs_upper_tri_alignment: 0.977
+                   8 epochs
+05/09/2021 10:40:22 PM INFO: [layer 2, epoch: 25] val srs_upper_tri_alignment: 0.976
+                   9 epochs
+05/09/2021 10:40:29 PM INFO: [layer 2, epoch: 26] val srs_upper_tri_alignment: 0.976
+                   10 epochs
+05/09/2021 10:40:36 PM INFO: [layer 2, epoch: 27] val srs_upper_tri_alignment: 0.977
+                   11 epochs
+05/09/2021 10:40:43 PM INFO: [layer 2, epoch: 28] val srs_upper_tri_alignment: 0.976
+                   12 epochs
+05/09/2021 10:40:50 PM INFO: [layer 2, epoch: 29] val srs_upper_tri_alignment: 0.977
+New best val acc 0.9774572283029557, saving model
+05/09/2021 10:40:57 PM INFO: [layer 2, epoch: 30] val srs_upper_tri_alignment: 0.977
+No improvement for 1 epochs
+05/09/2021 10:41:05 PM INFO: [layer 2, epoch: 31] val srs_upper_tri_alignment: 0.978
+New best val acc 0.9775324612855911, saving model
+05/09/2021 10:41:12 PM INFO: [layer 2, epoch: 32] val srs_upper_tri_alignment: 0.977
+No improvement for 1 epochs
+05/09/2021 10:41:19 PM INFO: [layer 2, epoch: 33] val srs_upper_tri_alignment: 0.977
+                   2 epochs
+05/09/2021 10:41:26 PM INFO: [layer 2, epoch: 34] val srs_upper_tri_alignment: 0.977
+                   3 epochs
+05/09/2021 10:41:33 PM INFO: [layer 2, epoch: 35] val srs_upper_tri_alignment: 0.977
+                   4 epochs
+05/09/2021 10:41:41 PM INFO: [layer 2, epoch: 36] val srs_upper_tri_alignment: 0.977
+                   5 epochs
+05/09/2021 10:41:48 PM INFO: [layer 2, epoch: 37] val srs_upper_tri_alignment: 0.977
+                   6 epochs
+05/09/2021 10:41:55 PM INFO: [layer 2, epoch: 38] val srs_upper_tri_alignment: 0.977
+                   7 epochs
+05/09/2021 10:42:02 PM INFO: [layer 2, epoch: 39] val srs_upper_tri_alignment: 0.978
+New best val acc 0.9776187509298324, saving model
+05/09/2021 10:42:10 PM INFO: [layer 2, epoch: 40] val srs_upper_tri_alignment: 0.977
+No improvement for 1 epochs
+05/09/2021 10:42:17 PM INFO: [layer 2, epoch: 41] val srs_upper_tri_alignment: 0.978
+New best val acc 0.9777171909809113, saving model
+05/09/2021 10:42:24 PM INFO: [layer 2, epoch: 42] val srs_upper_tri_alignment: 0.978
+No improvement for 1 epochs
+05/09/2021 10:42:31 PM INFO: [layer 2, epoch: 43] val srs_upper_tri_alignment: 0.977
+                   2 epochs
+05/09/2021 10:42:39 PM INFO: [layer 2, epoch: 44] val srs_upper_tri_alignment: 0.977
+                   3 epochs
+05/09/2021 10:42:46 PM INFO: [layer 2, epoch: 45] val srs_upper_tri_alignment: 0.977
+                   4 epochs
+05/09/2021 10:42:53 PM INFO: [layer 2, epoch: 46] val srs_upper_tri_alignment: 0.977
+                   5 epochs
+05/09/2021 10:43:01 PM INFO: [layer 2, epoch: 47] val srs_upper_tri_alignment: 0.976
+                   6 epochs
+05/09/2021 10:43:08 PM INFO: [layer 2, epoch: 48] val srs_upper_tri_alignment: 0.976
+                   7 epochs
+05/09/2021 10:43:15 PM INFO: [layer 2, epoch: 49] val srs_upper_tri_alignment: 0.977
+                   8 epochs
+05/09/2021 10:43:22 PM INFO: [layer 2, epoch: 50] val srs_upper_tri_alignment: 0.977
+                   9 epochs
+05/09/2021 10:43:29 PM INFO: [layer 2, epoch: 51] val srs_upper_tri_alignment: 0.977
+                   10 epochs
+05/09/2021 10:43:37 PM INFO: [layer 2, epoch: 52] val srs_upper_tri_alignment: 0.977
+Epoch    52: reducing learning rate of group 0 to 2.9935e-05.
+                   11 epochs
+05/09/2021 10:43:44 PM INFO: [layer 2, epoch: 53] val srs_upper_tri_alignment: 0.977
+                   12 epochs
+05/09/2021 10:43:51 PM INFO: [layer 2, epoch: 54] val srs_upper_tri_alignment: 0.977
+                   13 epochs
+05/09/2021 10:43:58 PM INFO: [layer 2, epoch: 55] val srs_upper_tri_alignment: 0.977
+                   14 epochs
+05/09/2021 10:44:05 PM INFO: [layer 2, epoch: 56] val srs_upper_tri_alignment: 0.976
+                   15 epochs
+05/09/2021 10:44:12 PM INFO: [layer 2, epoch: 57] val srs_upper_tri_alignment: 0.977
+                   16 epochs
+05/09/2021 10:44:19 PM INFO: [layer 2, epoch: 58] val srs_upper_tri_alignment: 0.977
+                   17 epochs
+05/09/2021 10:44:27 PM INFO: [layer 2, epoch: 59] val srs_upper_tri_alignment: 0.977
+                   18 epochs
+05/09/2021 10:44:34 PM INFO: [layer 2, epoch: 60] val srs_upper_tri_alignment: 0.977
+                   19 epochs
+05/09/2021 10:44:41 PM INFO: [layer 2, epoch: 61] val srs_upper_tri_alignment: 0.977
+05/09/2021 10:44:41 PM INFO: Layer 2 training finished!
+[INFO 05-09 22:44:41] ax.service.utils.instantiation: Inferred value type of ParameterType.FLOAT for parameter lr. If that is not the expected value type, you can explicity specify 'value_type' ('int', 'float', 'bool' or 'str') in parameter dict.
+[INFO 05-09 22:44:41] ax.service.utils.instantiation: Inferred value type of ParameterType.INT for parameter batch_size. If that is not the expected value type, you can explicity specify 'value_type' ('int', 'float', 'bool' or 'str') in parameter dict.
+[INFO 05-09 22:44:41] ax.modelbridge.dispatch_utils: Using Sobol generation strategy.
+[INFO 05-09 22:44:41] ax.service.managed_loop: Started full optimization with 10 steps.
+[INFO 05-09 22:44:41] ax.service.managed_loop: Running optimization trial 1...
+05/09/2021 10:44:41 PM INFO: dataset [train: MNIST] was created
+05/09/2021 10:44:41 PM INFO: Starting training layer 3...
+                   20 epochs
+No improvement for 20 epochs, STOPPING EARLY
+new_acc: 0.9777171909809113 best_acc: 0.962955459009243
+Better acc from new layer:
+0.9777171909809113 > 0.962955459009243
+Optimizing HyperParam - {'lr': 0.007753524594811609, 'batch_size': 1024}
+Trying a model with 536160 params, of which 43488 are trainable
+05/09/2021 10:44:48 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.978
+05/09/2021 10:44:55 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.977
+No improvement for 1 epochs
+05/09/2021 10:45:03 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.977
+                   2 epochs
+05/09/2021 10:45:10 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.977
+                   3 epochs
+05/09/2021 10:45:17 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.978
+05/09/2021 10:45:17 PM INFO: Layer 3 training finished!
+[INFO 05-09 22:45:17] ax.service.managed_loop: Running optimization trial 2...
+05/09/2021 10:45:17 PM INFO: dataset [train: MNIST] was created
+05/09/2021 10:45:17 PM INFO: Starting training layer 3...
+                   4 epochs
+Optimizing - Alignment: 0.9778140842914581, Seconds: 36.083080479176715, Metric: 0.9742057762435404
+Optimizing HyperParam - {'lr': 0.00014457903247170397, 'batch_size': 512}
+Trying a model with 536160 params, of which 43488 are trainable
+05/09/2021 10:45:24 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.972
+05/09/2021 10:45:31 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:45:38 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:45:45 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.977
+05/09/2021 10:45:53 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:45:53 PM INFO: Layer 3 training finished!
+[INFO 05-09 22:45:53] ax.service.managed_loop: Running optimization trial 3...
+05/09/2021 10:45:53 PM INFO: dataset [train: MNIST] was created
+05/09/2021 10:45:53 PM INFO: Starting training layer 3...
+No improvement for 1 epochs
+Optimizing - Alignment: 0.9771025806665421, Seconds: 35.614182190038264, Metric: 0.9735411624475383
+Optimizing HyperParam - {'lr': 0.001494978036977019, 'batch_size': 64}
+Trying a model with 536160 params, of which 43488 are trainable
+05/09/2021 10:46:05 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.974
+05/09/2021 10:46:18 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:46:30 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:46:43 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:46:56 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:46:56 PM INFO: Layer 3 training finished!
+[INFO 05-09 22:46:56] ax.service.managed_loop: Running optimization trial 4...
+05/09/2021 10:46:56 PM INFO: dataset [train: MNIST] was created
+05/09/2021 10:46:56 PM INFO: Starting training layer 3...
+No improvement for 1 epochs
+Optimizing - Alignment: 0.9759763243851388, Seconds: 63.16774317319505, Metric: 0.9696595500678193
+Optimizing HyperParam - {'lr': 0.0013329750555960676, 'batch_size': 256}
+Trying a model with 536160 params, of which 43488 are trainable
+05/09/2021 10:47:03 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.977
+05/09/2021 10:47:10 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 10:47:17 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.978
+05/09/2021 10:47:24 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.977
+No improvement for 1 epochs
+05/09/2021 10:47:32 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:47:32 PM INFO: Layer 3 training finished!
+[INFO 05-09 22:47:32] ax.service.managed_loop: Running optimization trial 5...
+05/09/2021 10:47:32 PM INFO: dataset [train: MNIST] was created
+05/09/2021 10:47:32 PM INFO: Starting training layer 3...
+                   2 epochs
+Optimizing - Alignment: 0.9775966688990593, Seconds: 35.8991476688534, Metric: 0.974006754132174
+Optimizing HyperParam - {'lr': 0.002356054835717731, 'batch_size': 64}
+Trying a model with 536160 params, of which 43488 are trainable
+05/09/2021 10:47:44 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:47:57 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:48:09 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 10:48:22 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:48:35 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:48:35 PM INFO: Layer 3 training finished!
+[INFO 05-09 22:48:35] ax.service.managed_loop: Running optimization trial 6...
+05/09/2021 10:48:35 PM INFO: dataset [train: MNIST] was created
+05/09/2021 10:48:35 PM INFO: Starting training layer 3...
+No improvement for 1 epochs
+Optimizing - Alignment: 0.9761116371792593, Seconds: 62.96787737309933, Metric: 0.9698148494419494
+Optimizing HyperParam - {'lr': 0.005319941724441506, 'batch_size': 32}
+Trying a model with 536160 params, of which 43488 are trainable
+05/09/2021 10:48:58 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.974
+05/09/2021 10:49:22 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.973
+No improvement for 1 epochs
+05/09/2021 10:49:46 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.974
+                   2 epochs
+05/09/2021 10:50:09 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:50:32 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.973
+05/09/2021 10:50:32 PM INFO: Layer 3 training finished!
+[INFO 05-09 22:50:32] ax.service.managed_loop: Running optimization trial 7...
+05/09/2021 10:50:32 PM INFO: dataset [train: MNIST] was created
+05/09/2021 10:50:32 PM INFO: Starting training layer 3...
+No improvement for 1 epochs
+Optimizing - Alignment: 0.974523161927732, Seconds: 117.5279241790995, Metric: 0.9627703695098221
+Optimizing HyperParam - {'lr': 0.00011897418218686531, 'batch_size': 64}
+Trying a model with 536160 params, of which 43488 are trainable
+05/09/2021 10:50:45 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:50:58 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:51:10 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:51:23 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 10:51:35 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:51:35 PM INFO: Layer 3 training finished!
+[INFO 05-09 22:51:35] ax.service.managed_loop: Running optimization trial 8...
+05/09/2021 10:51:35 PM INFO: dataset [train: MNIST] was created
+05/09/2021 10:51:35 PM INFO: Starting training layer 3...
+                   2 epochs
+Optimizing - Alignment: 0.9758972104187984, Seconds: 63.137021538103, Metric: 0.9695835082649881
+Optimizing HyperParam - {'lr': 0.0024241587568319444, 'batch_size': 32}
+Trying a model with 536160 params, of which 43488 are trainable
+05/09/2021 10:51:58 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.974
+05/09/2021 10:52:22 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.975
+05/09/2021 10:52:46 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.974
+No improvement for 1 epochs
+05/09/2021 10:53:09 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.974
+                   2 epochs
+05/09/2021 10:53:32 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.974
+05/09/2021 10:53:32 PM INFO: Layer 3 training finished!
+[INFO 05-09 22:53:32] ax.service.managed_loop: Running optimization trial 9...
+05/09/2021 10:53:32 PM INFO: dataset [train: MNIST] was created
+05/09/2021 10:53:32 PM INFO: Starting training layer 3...
+                   3 epochs
+Optimizing - Alignment: 0.9749085347111613, Seconds: 116.4548458000645, Metric: 0.9632630501311549
+Optimizing HyperParam - {'lr': 0.0002997103585363291, 'batch_size': 256}
+Trying a model with 536160 params, of which 43488 are trainable
+05/09/2021 10:53:39 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.977
+05/09/2021 10:53:46 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 10:53:54 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.977
+05/09/2021 10:54:01 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.977
+No improvement for 1 epochs
+05/09/2021 10:54:08 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.978
+05/09/2021 10:54:08 PM INFO: Layer 3 training finished!
+[INFO 05-09 22:54:08] ax.service.managed_loop: Running optimization trial 10...
+05/09/2021 10:54:08 PM INFO: dataset [train: MNIST] was created
+05/09/2021 10:54:08 PM INFO: Starting training layer 3...
+Optimizing - Alignment: 0.978181754052639, Seconds: 36.148627950111404, Metric: 0.9745668912576279
+Optimizing HyperParam - {'lr': 0.008999963974149802, 'batch_size': 128}
+Trying a model with 536160 params, of which 43488 are trainable
+05/09/2021 10:54:16 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.977
+05/09/2021 10:54:23 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 10:54:30 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.976
+                   2 epochs
+05/09/2021 10:54:38 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.977
+                   3 epochs
+05/09/2021 10:54:45 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.977
+05/09/2021 10:54:45 PM INFO: Layer 3 training finished!
+05/09/2021 10:54:45 PM INFO: dataset [train: MNIST] was created
+[INFO 05-09 22:54:45] ax.service.utils.instantiation: Inferred value type of ParameterType.INT for parameter out1. If that is not the expected value type, you can explicity specify 'value_type' ('int', 'float', 'bool' or 'str') in parameter dict.
+[INFO 05-09 22:54:45] ax.service.utils.instantiation: Inferred value type of ParameterType.INT for parameter out2. If that is not the expected value type, you can explicity specify 'value_type' ('int', 'float', 'bool' or 'str') in parameter dict.
+[INFO 05-09 22:54:45] ax.service.utils.instantiation: Inferred value type of ParameterType.INT for parameter out3. If that is not the expected value type, you can explicity specify 'value_type' ('int', 'float', 'bool' or 'str') in parameter dict.
+[INFO 05-09 22:54:45] ax.service.utils.instantiation: Inferred value type of ParameterType.INT for parameter out4. If that is not the expected value type, you can explicity specify 'value_type' ('int', 'float', 'bool' or 'str') in parameter dict.
+[INFO 05-09 22:54:45] ax.service.utils.instantiation: Inferred value type of ParameterType.INT for parameter out5. If that is not the expected value type, you can explicity specify 'value_type' ('int', 'float', 'bool' or 'str') in parameter dict.
+[INFO 05-09 22:54:45] ax.service.utils.instantiation: Inferred value type of ParameterType.INT for parameter out6. If that is not the expected value type, you can explicity specify 'value_type' ('int', 'float', 'bool' or 'str') in parameter dict.
+[INFO 05-09 22:54:45] ax.modelbridge.dispatch_utils: Using Sobol generation strategy.
+[INFO 05-09 22:54:45] ax.service.managed_loop: Started full optimization with 20 steps.
+[INFO 05-09 22:54:45] ax.service.managed_loop: Running optimization trial 1...
+05/09/2021 10:54:45 PM INFO: Starting training layer 3...
+                   4 epochs
+Optimizing - Alignment: 0.9769391877741753, Seconds: 37.191693883156404, Metric: 0.9732200183858597
+BEST HYPER_PARAMS: {'lr': 0.0002997103585363291, 'batch_size': 256}
+Optimizing Channels - {'out1': 8, 'out2': 128, 'out3': 32, 'out4': 64, 'out5': 16, 'out6': 128}
+Trying a model with 685840 params, of which 193168 are trainable
+05/09/2021 10:54:53 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.973
+05/09/2021 10:55:00 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.978
+05/09/2021 10:55:07 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.977
+No improvement for 1 epochs
+05/09/2021 10:55:15 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.975
+                   2 epochs
+05/09/2021 10:55:22 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.977
+                   3 epochs
+05/09/2021 10:55:29 PM INFO: [layer 3, epoch: 6] val srs_upper_tri_alignment: 0.975
+                   4 epochs
+05/09/2021 10:55:36 PM INFO: [layer 3, epoch: 7] val srs_upper_tri_alignment: 0.976
+                   5 epochs
+05/09/2021 10:55:44 PM INFO: [layer 3, epoch: 8] val srs_upper_tri_alignment: 0.976
+                   6 epochs
+05/09/2021 10:55:51 PM INFO: [layer 3, epoch: 9] val srs_upper_tri_alignment: 0.977
+                   7 epochs
+05/09/2021 10:55:58 PM INFO: [layer 3, epoch: 10] val srs_upper_tri_alignment: 0.978
+05/09/2021 10:55:58 PM INFO: Layer 3 training finished!
+[INFO 05-09 22:55:58] ax.service.managed_loop: Running optimization trial 2...
+05/09/2021 10:55:58 PM INFO: Starting training layer 3...
+Optimizing - Alignment: 0.9784443438053131, ResConst: 0.01068, Metric: 0.9677643438053131
+Optimizing Channels - {'out1': 16, 'out2': 4, 'out3': 16, 'out4': 8, 'out5': 32, 'out6': 64}
+Trying a model with 632120 params, of which 139448 are trainable
+05/09/2021 10:56:06 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:56:13 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.974
+No improvement for 1 epochs
+05/09/2021 10:56:20 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.975
+                   2 epochs
+05/09/2021 10:56:27 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.978
+05/09/2021 10:56:34 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.978
+05/09/2021 10:56:42 PM INFO: [layer 3, epoch: 6] val srs_upper_tri_alignment: 0.977
+No improvement for 1 epochs
+05/09/2021 10:56:49 PM INFO: [layer 3, epoch: 7] val srs_upper_tri_alignment: 0.978
+                   2 epochs
+05/09/2021 10:56:56 PM INFO: [layer 3, epoch: 8] val srs_upper_tri_alignment: 0.978
+                   3 epochs
+05/09/2021 10:57:03 PM INFO: [layer 3, epoch: 9] val srs_upper_tri_alignment: 0.978
+                   4 epochs
+05/09/2021 10:57:10 PM INFO: [layer 3, epoch: 10] val srs_upper_tri_alignment: 0.978
+05/09/2021 10:57:10 PM INFO: Layer 3 training finished!
+[INFO 05-09 22:57:10] ax.service.managed_loop: Running optimization trial 3...
+05/09/2021 10:57:10 PM INFO: Starting training layer 3...
+                   5 epochs
+Optimizing - Alignment: 0.9783605530858039, ResConst: 0.005484, Metric: 0.9728765530858039
+Optimizing Channels - {'out1': 128, 'out2': 16, 'out3': 4, 'out4': 4, 'out5': 128, 'out6': 128}
+Trying a model with 1437920 params, of which 945248 are trainable
+05/09/2021 10:57:19 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.978
+05/09/2021 10:57:28 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.977
+No improvement for 1 epochs
+05/09/2021 10:57:37 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.976
+                   2 epochs
+05/09/2021 10:57:45 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.977
+                   3 epochs
+05/09/2021 10:57:54 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.976
+                   4 epochs
+05/09/2021 10:58:03 PM INFO: [layer 3, epoch: 6] val srs_upper_tri_alignment: 0.977
+                   5 epochs
+05/09/2021 10:58:11 PM INFO: [layer 3, epoch: 7] val srs_upper_tri_alignment: 0.978
+                   6 epochs
+05/09/2021 10:58:20 PM INFO: [layer 3, epoch: 8] val srs_upper_tri_alignment: 0.975
+                   7 epochs
+05/09/2021 10:58:28 PM INFO: [layer 3, epoch: 9] val srs_upper_tri_alignment: 0.979
+05/09/2021 10:58:37 PM INFO: [layer 3, epoch: 10] val srs_upper_tri_alignment: 0.977
+05/09/2021 10:58:37 PM INFO: Layer 3 training finished!
+[INFO 05-09 22:58:37] ax.service.managed_loop: Running optimization trial 4...
+05/09/2021 10:58:37 PM INFO: Starting training layer 3...
+No improvement for 1 epochs
+Optimizing - Alignment: 0.97851203083992, ResConst: 0.014039999999999999, Metric: 0.96447203083992
+Optimizing Channels - {'out1': 64, 'out2': 64, 'out3': 4, 'out4': 4, 'out5': 4, 'out6': 4}
+Trying a model with 546144 params, of which 53472 are trainable
+05/09/2021 10:58:44 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.976
+05/09/2021 10:58:52 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.977
+05/09/2021 10:58:59 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.977
+05/09/2021 10:59:06 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 10:59:13 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.977
+                   2 epochs
+05/09/2021 10:59:20 PM INFO: [layer 3, epoch: 6] val srs_upper_tri_alignment: 0.976
+                   3 epochs
+05/09/2021 10:59:27 PM INFO: [layer 3, epoch: 7] val srs_upper_tri_alignment: 0.971
+                   4 epochs
+05/09/2021 10:59:35 PM INFO: [layer 3, epoch: 8] val srs_upper_tri_alignment: 0.976
+                   5 epochs
+05/09/2021 10:59:42 PM INFO: [layer 3, epoch: 9] val srs_upper_tri_alignment: 0.978
+05/09/2021 10:59:49 PM INFO: [layer 3, epoch: 10] val srs_upper_tri_alignment: 0.978
+05/09/2021 10:59:49 PM INFO: Layer 3 training finished!
+[INFO 05-09 22:59:49] ax.service.managed_loop: Running optimization trial 5...
+05/09/2021 10:59:49 PM INFO: Starting training layer 3...
+No improvement for 1 epochs
+Optimizing - Alignment: 0.9775790929794311, ResConst: 0.0017439999999999999, Metric: 0.9758350929794312
+Optimizing Channels - {'out1': 8, 'out2': 64, 'out3': 8, 'out4': 8, 'out5': 8, 'out6': 4}
+Trying a model with 512520 params, of which 19848 are trainable
+05/09/2021 10:59:57 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.970
+05/09/2021 11:00:04 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.974
+05/09/2021 11:00:11 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.977
+05/09/2021 11:00:18 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.977
+05/09/2021 11:00:25 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.975
+No improvement for 1 epochs
+05/09/2021 11:00:33 PM INFO: [layer 3, epoch: 6] val srs_upper_tri_alignment: 0.976
+                   2 epochs
+05/09/2021 11:00:40 PM INFO: [layer 3, epoch: 7] val srs_upper_tri_alignment: 0.977
+                   3 epochs
+05/09/2021 11:00:47 PM INFO: [layer 3, epoch: 8] val srs_upper_tri_alignment: 0.977
+                   4 epochs
+05/09/2021 11:00:54 PM INFO: [layer 3, epoch: 9] val srs_upper_tri_alignment: 0.974
+                   5 epochs
+05/09/2021 11:01:01 PM INFO: [layer 3, epoch: 10] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:01:01 PM INFO: Layer 3 training finished!
+[INFO 05-09 23:01:01] ax.service.managed_loop: Running optimization trial 6...
+05/09/2021 11:01:01 PM INFO: Starting training layer 3...
+Optimizing - Alignment: 0.9779512643814087, ResConst: 0.0016359999999999999, Metric: 0.9763152643814087
+Optimizing Channels - {'out1': 128, 'out2': 32, 'out3': 32, 'out4': 8, 'out5': 64, 'out6': 64}
+Trying a model with 820400 params, of which 327728 are trainable
+05/09/2021 11:01:09 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:01:16 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.977
+No improvement for 1 epochs
+05/09/2021 11:01:23 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:01:31 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.978
+No improvement for 1 epochs
+05/09/2021 11:01:38 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.977
+                   2 epochs
+05/09/2021 11:01:45 PM INFO: [layer 3, epoch: 6] val srs_upper_tri_alignment: 0.979
+05/09/2021 11:01:53 PM INFO: [layer 3, epoch: 7] val srs_upper_tri_alignment: 0.978
+No improvement for 1 epochs
+05/09/2021 11:02:00 PM INFO: [layer 3, epoch: 8] val srs_upper_tri_alignment: 0.978
+                   2 epochs
+05/09/2021 11:02:07 PM INFO: [layer 3, epoch: 9] val srs_upper_tri_alignment: 0.977
+                   3 epochs
+05/09/2021 11:02:14 PM INFO: [layer 3, epoch: 10] val srs_upper_tri_alignment: 0.977
+05/09/2021 11:02:14 PM INFO: Layer 3 training finished!
+[INFO 05-09 23:02:14] ax.service.managed_loop: Running optimization trial 7...
+05/09/2021 11:02:15 PM INFO: Starting training layer 3...
+                   4 epochs
+Optimizing - Alignment: 0.9788785353302956, ResConst: 0.008712, Metric: 0.9701665353302955
+Optimizing Channels - {'out1': 64, 'out2': 16, 'out3': 4, 'out4': 128, 'out5': 4, 'out6': 8}
+Trying a model with 533120 params, of which 40448 are trainable
+05/09/2021 11:02:22 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.977
+05/09/2021 11:02:29 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.977
+05/09/2021 11:02:36 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.972
+No improvement for 1 epochs
+05/09/2021 11:02:43 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.977
+                   2 epochs
+05/09/2021 11:02:51 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.975
+                   3 epochs
+05/09/2021 11:02:58 PM INFO: [layer 3, epoch: 6] val srs_upper_tri_alignment: 0.977
+05/09/2021 11:03:05 PM INFO: [layer 3, epoch: 7] val srs_upper_tri_alignment: 0.974
+No improvement for 1 epochs
+05/09/2021 11:03:12 PM INFO: [layer 3, epoch: 8] val srs_upper_tri_alignment: 0.977
+                   2 epochs
+05/09/2021 11:03:19 PM INFO: [layer 3, epoch: 9] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:03:26 PM INFO: [layer 3, epoch: 10] val srs_upper_tri_alignment: 0.977
+05/09/2021 11:03:26 PM INFO: Layer 3 training finished!
+[INFO 05-09 23:03:26] ax.service.managed_loop: Running optimization trial 8...
+05/09/2021 11:03:26 PM INFO: Starting training layer 3...
+No improvement for 1 epochs
+Optimizing - Alignment: 0.9776877060532569, ResConst: 0.004608, Metric: 0.973079706053257
+Optimizing Channels - {'out1': 32, 'out2': 16, 'out3': 64, 'out4': 16, 'out5': 8, 'out6': 16}
+Trying a model with 566736 params, of which 74064 are trainable
+05/09/2021 11:03:34 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.976
+05/09/2021 11:03:41 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.974
+No improvement for 1 epochs
+05/09/2021 11:03:48 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.974
+                   2 epochs
+05/09/2021 11:03:55 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.977
+05/09/2021 11:04:02 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:04:10 PM INFO: [layer 3, epoch: 6] val srs_upper_tri_alignment: 0.977
+No improvement for 1 epochs
+05/09/2021 11:04:17 PM INFO: [layer 3, epoch: 7] val srs_upper_tri_alignment: 0.977
+                   2 epochs
+05/09/2021 11:04:24 PM INFO: [layer 3, epoch: 8] val srs_upper_tri_alignment: 0.976
+                   3 epochs
+05/09/2021 11:04:31 PM INFO: [layer 3, epoch: 9] val srs_upper_tri_alignment: 0.977
+                   4 epochs
+05/09/2021 11:04:38 PM INFO: [layer 3, epoch: 10] val srs_upper_tri_alignment: 0.977
+05/09/2021 11:04:38 PM INFO: Layer 3 training finished!
+[INFO 05-09 23:04:38] ax.service.managed_loop: Running optimization trial 9...
+05/09/2021 11:04:38 PM INFO: Starting training layer 3...
+                   5 epochs
+Optimizing - Alignment: 0.9779270380735398, ResConst: 0.0036079999999999997, Metric: 0.9743190380735398
+Optimizing Channels - {'out1': 64, 'out2': 8, 'out3': 8, 'out4': 32, 'out5': 16, 'out6': 4}
+Trying a model with 532776 params, of which 40104 are trainable
+05/09/2021 11:04:46 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.977
+05/09/2021 11:04:53 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 11:05:00 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.973
+                   2 epochs
+05/09/2021 11:05:07 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.976
+                   3 epochs
+05/09/2021 11:05:14 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.972
+                   4 epochs
+05/09/2021 11:05:22 PM INFO: [layer 3, epoch: 6] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:05:29 PM INFO: [layer 3, epoch: 7] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:05:36 PM INFO: [layer 3, epoch: 8] val srs_upper_tri_alignment: 0.978
+No improvement for 1 epochs
+05/09/2021 11:05:43 PM INFO: [layer 3, epoch: 9] val srs_upper_tri_alignment: 0.978
+                   2 epochs
+05/09/2021 11:05:50 PM INFO: [layer 3, epoch: 10] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:05:50 PM INFO: Layer 3 training finished!
+[INFO 05-09 23:05:50] ax.service.managed_loop: Running optimization trial 10...
+05/09/2021 11:05:51 PM INFO: Starting training layer 3...
+Optimizing - Alignment: 0.9778004094958306, ResConst: 0.0026279999999999997, Metric: 0.9751724094958306
+Optimizing Channels - {'out1': 32, 'out2': 64, 'out3': 4, 'out4': 64, 'out5': 4, 'out6': 32}
+Trying a model with 536112 params, of which 43440 are trainable
+05/09/2021 11:05:58 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.976
+05/09/2021 11:06:05 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 11:06:12 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.977
+05/09/2021 11:06:19 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.977
+05/09/2021 11:06:27 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 11:06:34 PM INFO: [layer 3, epoch: 6] val srs_upper_tri_alignment: 0.975
+                   2 epochs
+05/09/2021 11:06:41 PM INFO: [layer 3, epoch: 7] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:06:48 PM INFO: [layer 3, epoch: 8] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:06:55 PM INFO: [layer 3, epoch: 9] val srs_upper_tri_alignment: 0.978
+No improvement for 1 epochs
+05/09/2021 11:07:02 PM INFO: [layer 3, epoch: 10] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:07:02 PM INFO: Layer 3 training finished!
+[INFO 05-09 23:07:02] ax.service.managed_loop: Running optimization trial 11...
+05/09/2021 11:07:03 PM INFO: Starting training layer 3...
+                   2 epochs
+Optimizing - Alignment: 0.9782221838831902, ResConst: 0.004327999999999999, Metric: 0.9738941838831902
+Optimizing Channels - {'out1': 4, 'out2': 8, 'out3': 4, 'out4': 8, 'out5': 16, 'out6': 128}
+Trying a model with 611504 params, of which 118832 are trainable
+05/09/2021 11:07:10 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.977
+05/09/2021 11:07:17 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 11:07:24 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:07:31 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 11:07:39 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.977
+                   2 epochs
+05/09/2021 11:07:46 PM INFO: [layer 3, epoch: 6] val srs_upper_tri_alignment: 0.977
+                   3 epochs
+05/09/2021 11:07:53 PM INFO: [layer 3, epoch: 7] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:08:00 PM INFO: [layer 3, epoch: 8] val srs_upper_tri_alignment: 0.975
+No improvement for 1 epochs
+05/09/2021 11:08:07 PM INFO: [layer 3, epoch: 9] val srs_upper_tri_alignment: 0.978
+                   2 epochs
+05/09/2021 11:08:15 PM INFO: [layer 3, epoch: 10] val srs_upper_tri_alignment: 0.975
+05/09/2021 11:08:15 PM INFO: Layer 3 training finished!
+[INFO 05-09 23:08:15] ax.service.managed_loop: Running optimization trial 12...
+05/09/2021 11:08:15 PM INFO: Starting training layer 3...
+                   3 epochs
+Optimizing - Alignment: 0.9784491151571274, ResConst: 0.007463999999999999, Metric: 0.9709851151571274
+Optimizing Channels - {'out1': 4, 'out2': 128, 'out3': 128, 'out4': 64, 'out5': 16, 'out6': 128}
+Trying a model with 872840 params, of which 380168 are trainable
+05/09/2021 11:08:23 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.977
+05/09/2021 11:08:30 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:08:38 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.977
+No improvement for 1 epochs
+05/09/2021 11:08:45 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.974
+                   2 epochs
+05/09/2021 11:08:53 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.974
+                   3 epochs
+05/09/2021 11:09:00 PM INFO: [layer 3, epoch: 6] val srs_upper_tri_alignment: 0.977
+                   4 epochs
+05/09/2021 11:09:08 PM INFO: [layer 3, epoch: 7] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:09:15 PM INFO: [layer 3, epoch: 8] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:09:23 PM INFO: [layer 3, epoch: 9] val srs_upper_tri_alignment: 0.977
+No improvement for 1 epochs
+05/09/2021 11:09:30 PM INFO: [layer 3, epoch: 10] val srs_upper_tri_alignment: 0.977
+05/09/2021 11:09:30 PM INFO: Layer 3 training finished!
+[INFO 05-09 23:09:30] ax.service.managed_loop: Running optimization trial 13...
+05/09/2021 11:09:30 PM INFO: Starting training layer 3...
+                   2 epochs
+Optimizing - Alignment: 0.9781314402818679, ResConst: 0.013044, Metric: 0.9650874402818679
+Optimizing Channels - {'out1': 8, 'out2': 4, 'out3': 32, 'out4': 4, 'out5': 64, 'out6': 8}
+Trying a model with 585904 params, of which 93232 are trainable
+05/09/2021 11:09:38 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.976
+05/09/2021 11:09:45 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 11:09:52 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:09:59 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:10:07 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 11:10:14 PM INFO: [layer 3, epoch: 6] val srs_upper_tri_alignment: 0.976
+                   2 epochs
+05/09/2021 11:10:21 PM INFO: [layer 3, epoch: 7] val srs_upper_tri_alignment: 0.975
+                   3 epochs
+05/09/2021 11:10:28 PM INFO: [layer 3, epoch: 8] val srs_upper_tri_alignment: 0.977
+                   4 epochs
+05/09/2021 11:10:35 PM INFO: [layer 3, epoch: 9] val srs_upper_tri_alignment: 0.977
+                   5 epochs
+05/09/2021 11:10:42 PM INFO: [layer 3, epoch: 10] val srs_upper_tri_alignment: 0.976
+05/09/2021 11:10:42 PM INFO: Layer 3 training finished!
+[INFO 05-09 23:10:42] ax.service.managed_loop: Running optimization trial 14...
+05/09/2021 11:10:43 PM INFO: Starting training layer 3...
+                   6 epochs
+Optimizing - Alignment: 0.9780316680669785, ResConst: 0.004536, Metric: 0.9734956680669785
+Optimizing Channels - {'out1': 64, 'out2': 128, 'out3': 64, 'out4': 64, 'out5': 32, 'out6': 64}
+Trying a model with 834016 params, of which 341344 are trainable
+05/09/2021 11:10:50 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.976
+05/09/2021 11:10:58 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:11:05 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.978
+No improvement for 1 epochs
+05/09/2021 11:11:12 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.978
+                   2 epochs
+05/09/2021 11:11:20 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.974
+                   3 epochs
+05/09/2021 11:11:27 PM INFO: [layer 3, epoch: 6] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:11:35 PM INFO: [layer 3, epoch: 7] val srs_upper_tri_alignment: 0.978
+No improvement for 1 epochs
+05/09/2021 11:11:42 PM INFO: [layer 3, epoch: 8] val srs_upper_tri_alignment: 0.978
+                   2 epochs
+05/09/2021 11:11:49 PM INFO: [layer 3, epoch: 9] val srs_upper_tri_alignment: 0.979
+05/09/2021 11:11:57 PM INFO: [layer 3, epoch: 10] val srs_upper_tri_alignment: 0.977
+05/09/2021 11:11:57 PM INFO: Layer 3 training finished!
+[INFO 05-09 23:11:57] ax.service.managed_loop: Running optimization trial 15...
+05/09/2021 11:11:57 PM INFO: Starting training layer 3...
+No improvement for 1 epochs
+Optimizing - Alignment: 0.9785284772515297, ResConst: 0.009632, Metric: 0.9688964772515297
+Optimizing Channels - {'out1': 32, 'out2': 4, 'out3': 32, 'out4': 8, 'out5': 16, 'out6': 4}
+Trying a model with 533792 params, of which 41120 are trainable
+05/09/2021 11:12:04 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.976
+05/09/2021 11:12:11 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.977
+05/09/2021 11:12:18 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:12:26 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.977
+No improvement for 1 epochs
+05/09/2021 11:12:33 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.974
+                   2 epochs
+05/09/2021 11:12:40 PM INFO: [layer 3, epoch: 6] val srs_upper_tri_alignment: 0.977
+                   3 epochs
+05/09/2021 11:12:47 PM INFO: [layer 3, epoch: 7] val srs_upper_tri_alignment: 0.976
+                   4 epochs
+05/09/2021 11:12:54 PM INFO: [layer 3, epoch: 8] val srs_upper_tri_alignment: 0.975
+                   5 epochs
+05/09/2021 11:13:01 PM INFO: [layer 3, epoch: 9] val srs_upper_tri_alignment: 0.979
+05/09/2021 11:13:09 PM INFO: [layer 3, epoch: 10] val srs_upper_tri_alignment: 0.977
+05/09/2021 11:13:09 PM INFO: Layer 3 training finished!
+[INFO 05-09 23:13:09] ax.service.managed_loop: Running optimization trial 16...
+05/09/2021 11:13:09 PM INFO: Starting training layer 3...
+No improvement for 1 epochs
+Optimizing - Alignment: 0.9785471230745315, ResConst: 0.002304, Metric: 0.9762431230745315
+Optimizing Channels - {'out1': 16, 'out2': 16, 'out3': 4, 'out4': 128, 'out5': 4, 'out6': 16}
+Trying a model with 520912 params, of which 28240 are trainable
+05/09/2021 11:13:16 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.976
+05/09/2021 11:13:23 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.974
+No improvement for 1 epochs
+05/09/2021 11:13:30 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.977
+05/09/2021 11:13:37 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.973
+No improvement for 1 epochs
+05/09/2021 11:13:45 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.977
+                   2 epochs
+05/09/2021 11:13:52 PM INFO: [layer 3, epoch: 6] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:13:59 PM INFO: [layer 3, epoch: 7] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 11:14:06 PM INFO: [layer 3, epoch: 8] val srs_upper_tri_alignment: 0.978
+                   2 epochs
+05/09/2021 11:14:13 PM INFO: [layer 3, epoch: 9] val srs_upper_tri_alignment: 0.977
+                   3 epochs
+05/09/2021 11:14:20 PM INFO: [layer 3, epoch: 10] val srs_upper_tri_alignment: 0.977
+05/09/2021 11:14:20 PM INFO: Layer 3 training finished!
+[INFO 05-09 23:14:20] ax.service.managed_loop: Running optimization trial 17...
+05/09/2021 11:14:21 PM INFO: Starting training layer 3...
+                   4 epochs
+Optimizing - Alignment: 0.9777984187006951, ResConst: 0.004568, Metric: 0.973230418700695
+Optimizing Channels - {'out1': 4, 'out2': 16, 'out3': 32, 'out4': 32, 'out5': 32, 'out6': 64}
+Trying a model with 659848 params, of which 167176 are trainable
+05/09/2021 11:14:28 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.977
+05/09/2021 11:14:35 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.977
+05/09/2021 11:14:42 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:14:49 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.977
+No improvement for 1 epochs
+05/09/2021 11:14:57 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.978
+                   2 epochs
+05/09/2021 11:15:04 PM INFO: [layer 3, epoch: 6] val srs_upper_tri_alignment: 0.976
+                   3 epochs
+05/09/2021 11:15:11 PM INFO: [layer 3, epoch: 7] val srs_upper_tri_alignment: 0.977
+                   4 epochs
+05/09/2021 11:15:18 PM INFO: [layer 3, epoch: 8] val srs_upper_tri_alignment: 0.976
+                   5 epochs
+05/09/2021 11:15:26 PM INFO: [layer 3, epoch: 9] val srs_upper_tri_alignment: 0.978
+                   6 epochs
+05/09/2021 11:15:33 PM INFO: [layer 3, epoch: 10] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:15:33 PM INFO: Layer 3 training finished!
+[INFO 05-09 23:15:33] ax.service.managed_loop: Running optimization trial 18...
+05/09/2021 11:15:33 PM INFO: Starting training layer 3...
+Optimizing - Alignment: 0.9782674014568329, ResConst: 0.006483999999999999, Metric: 0.9717834014568328
+Optimizing Channels - {'out1': 32, 'out2': 4, 'out3': 8, 'out4': 8, 'out5': 64, 'out6': 32}
+Trying a model with 654792 params, of which 162120 are trainable
+05/09/2021 11:15:40 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.976
+05/09/2021 11:15:47 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.977
+05/09/2021 11:15:55 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.975
+No improvement for 1 epochs
+05/09/2021 11:16:02 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.976
+                   2 epochs
+05/09/2021 11:16:09 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:16:16 PM INFO: [layer 3, epoch: 6] val srs_upper_tri_alignment: 0.978
+No improvement for 1 epochs
+05/09/2021 11:16:23 PM INFO: [layer 3, epoch: 7] val srs_upper_tri_alignment: 0.977
+                   2 epochs
+05/09/2021 11:16:31 PM INFO: [layer 3, epoch: 8] val srs_upper_tri_alignment: 0.978
+                   3 epochs
+05/09/2021 11:16:38 PM INFO: [layer 3, epoch: 9] val srs_upper_tri_alignment: 0.978
+                   4 epochs
+05/09/2021 11:16:45 PM INFO: [layer 3, epoch: 10] val srs_upper_tri_alignment: 0.979
+05/09/2021 11:16:45 PM INFO: Layer 3 training finished!
+[INFO 05-09 23:16:45] ax.service.managed_loop: Running optimization trial 19...
+05/09/2021 11:16:45 PM INFO: Starting training layer 3...
+Optimizing - Alignment: 0.9787066161632538, ResConst: 0.005428, Metric: 0.9732786161632538
+Optimizing Channels - {'out1': 32, 'out2': 128, 'out3': 64, 'out4': 4, 'out5': 4, 'out6': 8}
+Trying a model with 573600 params, of which 80928 are trainable
+05/09/2021 11:16:52 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.974
+05/09/2021 11:17:00 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.977
+05/09/2021 11:17:07 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 11:17:14 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.977
+                   2 epochs
+05/09/2021 11:17:21 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.977
+05/09/2021 11:17:28 PM INFO: [layer 3, epoch: 6] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:17:36 PM INFO: [layer 3, epoch: 7] val srs_upper_tri_alignment: 0.977
+No improvement for 1 epochs
+05/09/2021 11:17:43 PM INFO: [layer 3, epoch: 8] val srs_upper_tri_alignment: 0.976
+                   2 epochs
+05/09/2021 11:17:50 PM INFO: [layer 3, epoch: 9] val srs_upper_tri_alignment: 0.976
+                   3 epochs
+05/09/2021 11:17:57 PM INFO: [layer 3, epoch: 10] val srs_upper_tri_alignment: 0.975
+05/09/2021 11:17:57 PM INFO: Layer 3 training finished!
+[INFO 05-09 23:17:57] ax.service.managed_loop: Running optimization trial 20...
+05/09/2021 11:17:57 PM INFO: Starting training layer 3...
+                   4 epochs
+Optimizing - Alignment: 0.9776920869946479, ResConst: 0.003728, Metric: 0.973964086994648
+Optimizing Channels - {'out1': 16, 'out2': 4, 'out3': 128, 'out4': 64, 'out5': 8, 'out6': 128}
+Trying a model with 811864 params, of which 319192 are trainable
+05/09/2021 11:18:05 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.977
+05/09/2021 11:18:12 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.975
+No improvement for 1 epochs
+05/09/2021 11:18:19 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.977
+                   2 epochs
+05/09/2021 11:18:26 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.977
+                   3 epochs
+05/09/2021 11:18:34 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.977
+                   4 epochs
+05/09/2021 11:18:41 PM INFO: [layer 3, epoch: 6] val srs_upper_tri_alignment: 0.977
+                   5 epochs
+05/09/2021 11:18:48 PM INFO: [layer 3, epoch: 7] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:18:55 PM INFO: [layer 3, epoch: 8] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:19:03 PM INFO: [layer 3, epoch: 9] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 11:19:10 PM INFO: [layer 3, epoch: 10] val srs_upper_tri_alignment: 0.978
+05/09/2021 11:19:10 PM INFO: Layer 3 training finished!
+05/09/2021 11:19:10 PM INFO: Starting training layer 3...
+                   2 epochs
+Optimizing - Alignment: 0.97824317663908, ResConst: 0.011644, Metric: 0.96659917663908
+BEST CHANNELS: {'out1': 8, 'out2': 64, 'out3': 8, 'out4': 8, 'out5': 8, 'out6': 4}
+05/09/2021 11:19:17 PM INFO: [layer 3, epoch: 1] val srs_upper_tri_alignment: 0.975
+New best val acc 0.9751434668898582, saving model
+05/09/2021 11:19:24 PM INFO: [layer 3, epoch: 2] val srs_upper_tri_alignment: 0.976
+New best val acc 0.9758232846856117, saving model
+05/09/2021 11:19:32 PM INFO: [layer 3, epoch: 3] val srs_upper_tri_alignment: 0.977
+New best val acc 0.9767274469137192, saving model
+05/09/2021 11:19:39 PM INFO: [layer 3, epoch: 4] val srs_upper_tri_alignment: 0.976
+No improvement for 1 epochs
+05/09/2021 11:19:46 PM INFO: [layer 3, epoch: 5] val srs_upper_tri_alignment: 0.978
+New best val acc 0.9775976121425629, saving model
+05/09/2021 11:19:53 PM INFO: [layer 3, epoch: 6] val srs_upper_tri_alignment: 0.977
+No improvement for 1 epochs
+05/09/2021 11:20:00 PM INFO: [layer 3, epoch: 7] val srs_upper_tri_alignment: 0.978
+New best val acc 0.9782084479928017, saving model
+05/09/2021 11:20:08 PM INFO: [layer 3, epoch: 8] val srs_upper_tri_alignment: 0.973
+No improvement for 1 epochs
+05/09/2021 11:20:15 PM INFO: [layer 3, epoch: 9] val srs_upper_tri_alignment: 0.976
+                   2 epochs
+05/09/2021 11:20:22 PM INFO: [layer 3, epoch: 10] val srs_upper_tri_alignment: 0.977
+                   3 epochs
+05/09/2021 11:20:29 PM INFO: [layer 3, epoch: 11] val srs_upper_tri_alignment: 0.976
+                   4 epochs
+05/09/2021 11:20:36 PM INFO: [layer 3, epoch: 12] val srs_upper_tri_alignment: 0.975
+                   5 epochs
+05/09/2021 11:20:44 PM INFO: [layer 3, epoch: 13] val srs_upper_tri_alignment: 0.977
+                   6 epochs
+05/09/2021 11:20:51 PM INFO: [layer 3, epoch: 14] val srs_upper_tri_alignment: 0.978
+                   7 epochs
+05/09/2021 11:20:58 PM INFO: [layer 3, epoch: 15] val srs_upper_tri_alignment: 0.977
+                   8 epochs
+05/09/2021 11:21:05 PM INFO: [layer 3, epoch: 16] val srs_upper_tri_alignment: 0.977
+                   9 epochs
+05/09/2021 11:21:12 PM INFO: [layer 3, epoch: 17] val srs_upper_tri_alignment: 0.975
+                   10 epochs
+05/09/2021 11:21:20 PM INFO: [layer 3, epoch: 18] val srs_upper_tri_alignment: 0.977
+Epoch    18: reducing learning rate of group 0 to 2.9971e-05.
+                   11 epochs
+05/09/2021 11:21:27 PM INFO: [layer 3, epoch: 19] val srs_upper_tri_alignment: 0.975
+                   12 epochs
+05/09/2021 11:21:34 PM INFO: [layer 3, epoch: 20] val srs_upper_tri_alignment: 0.978
+                   13 epochs
+05/09/2021 11:21:41 PM INFO: [layer 3, epoch: 21] val srs_upper_tri_alignment: 0.975
+                   14 epochs
+05/09/2021 11:21:48 PM INFO: [layer 3, epoch: 22] val srs_upper_tri_alignment: 0.975
+                   15 epochs
+05/09/2021 11:21:55 PM INFO: [layer 3, epoch: 23] val srs_upper_tri_alignment: 0.977
+                   16 epochs
+05/09/2021 11:22:03 PM INFO: [layer 3, epoch: 24] val srs_upper_tri_alignment: 0.977
+                   17 epochs
+05/09/2021 11:22:10 PM INFO: [layer 3, epoch: 25] val srs_upper_tri_alignment: 0.972
+                   18 epochs
+05/09/2021 11:22:17 PM INFO: [layer 3, epoch: 26] val srs_upper_tri_alignment: 0.977
+                   19 epochs
+05/09/2021 11:22:24 PM INFO: [layer 3, epoch: 27] val srs_upper_tri_alignment: 0.977
+05/09/2021 11:22:24 PM INFO: Layer 3 training finished!
+05/09/2021 11:22:24 PM INFO: Starting training part 2...
+                   20 epochs
+No improvement for 20 epochs, STOPPING EARLY
+new_acc: 0.9782084479928017 best_acc: 0.9777171909809113
+New layer did not improve upon previous, STOPPING HIDDEN TRAINING
+TOTAL PARAMS FOR HIDDEN LAYERS: 492672
+05/09/2021 11:22:31 PM INFO: [Output layer 2, epoch: 1] val acc (%): 10.370
+05/09/2021 11:22:38 PM INFO: [Output layer 2, epoch: 2] val acc (%): 19.090
+05/09/2021 11:22:46 PM INFO: [Output layer 2, epoch: 3] val acc (%): 53.960
+05/09/2021 11:22:53 PM INFO: [Output layer 2, epoch: 4] val acc (%): 68.940
+05/09/2021 11:23:00 PM INFO: [Output layer 2, epoch: 5] val acc (%): 69.350
+05/09/2021 11:23:07 PM INFO: [Output layer 2, epoch: 6] val acc (%): 69.090
+05/09/2021 11:23:14 PM INFO: [Output layer 2, epoch: 7] val acc (%): 69.040
+05/09/2021 11:23:21 PM INFO: [Output layer 2, epoch: 8] val acc (%): 69.610
+05/09/2021 11:23:29 PM INFO: [Output layer 2, epoch: 9] val acc (%): 71.520
+05/09/2021 11:23:36 PM INFO: [Output layer 2, epoch: 10] val acc (%): 74.020
+05/09/2021 11:23:43 PM INFO: [Output layer 2, epoch: 11] val acc (%): 77.170
+05/09/2021 11:23:50 PM INFO: [Output layer 2, epoch: 12] val acc (%): 80.270
+05/09/2021 11:23:57 PM INFO: [Output layer 2, epoch: 13] val acc (%): 82.770
+05/09/2021 11:24:04 PM INFO: [Output layer 2, epoch: 14] val acc (%): 84.490
+05/09/2021 11:24:11 PM INFO: [Output layer 2, epoch: 15] val acc (%): 86.200
+05/09/2021 11:24:18 PM INFO: [Output layer 2, epoch: 16] val acc (%): 88.030
+05/09/2021 11:24:26 PM INFO: [Output layer 2, epoch: 17] val acc (%): 88.240
+05/09/2021 11:24:33 PM INFO: [Output layer 2, epoch: 18] val acc (%): 89.200
+05/09/2021 11:24:40 PM INFO: [Output layer 2, epoch: 19] val acc (%): 89.950
+05/09/2021 11:24:47 PM INFO: [Output layer 2, epoch: 20] val acc (%): 90.780
+05/09/2021 11:24:54 PM INFO: [Output layer 2, epoch: 21] val acc (%): 91.270
+05/09/2021 11:25:01 PM INFO: [Output layer 2, epoch: 22] val acc (%): 91.700
+05/09/2021 11:25:08 PM INFO: [Output layer 2, epoch: 23] val acc (%): 92.110
+05/09/2021 11:25:16 PM INFO: [Output layer 2, epoch: 24] val acc (%): 92.770
+05/09/2021 11:25:23 PM INFO: [Output layer 2, epoch: 25] val acc (%): 92.860
+05/09/2021 11:25:30 PM INFO: [Output layer 2, epoch: 26] val acc (%): 93.570
+05/09/2021 11:25:37 PM INFO: [Output layer 2, epoch: 27] val acc (%): 93.590
+05/09/2021 11:25:44 PM INFO: [Output layer 2, epoch: 28] val acc (%): 93.920
+05/09/2021 11:25:51 PM INFO: [Output layer 2, epoch: 29] val acc (%): 94.650
+05/09/2021 11:25:59 PM INFO: [Output layer 2, epoch: 30] val acc (%): 94.440
+05/09/2021 11:26:06 PM INFO: [Output layer 2, epoch: 31] val acc (%): 94.700
+05/09/2021 11:26:13 PM INFO: [Output layer 2, epoch: 32] val acc (%): 95.000
+05/09/2021 11:26:20 PM INFO: [Output layer 2, epoch: 33] val acc (%): 95.470
+05/09/2021 11:26:27 PM INFO: [Output layer 2, epoch: 34] val acc (%): 95.580
+05/09/2021 11:26:34 PM INFO: [Output layer 2, epoch: 35] val acc (%): 95.730
+05/09/2021 11:26:41 PM INFO: [Output layer 2, epoch: 36] val acc (%): 95.930
+05/09/2021 11:26:49 PM INFO: [Output layer 2, epoch: 37] val acc (%): 95.710
+05/09/2021 11:26:56 PM INFO: [Output layer 2, epoch: 38] val acc (%): 96.180
+05/09/2021 11:27:03 PM INFO: [Output layer 2, epoch: 39] val acc (%): 96.280
+05/09/2021 11:27:10 PM INFO: [Output layer 2, epoch: 40] val acc (%): 96.190
+05/09/2021 11:27:17 PM INFO: [Output layer 2, epoch: 41] val acc (%): 96.450
+05/09/2021 11:27:24 PM INFO: [Output layer 2, epoch: 42] val acc (%): 96.760
+05/09/2021 11:27:31 PM INFO: [Output layer 2, epoch: 43] val acc (%): 96.720
+05/09/2021 11:27:38 PM INFO: [Output layer 2, epoch: 44] val acc (%): 96.700
+05/09/2021 11:27:46 PM INFO: [Output layer 2, epoch: 45] val acc (%): 96.820
+05/09/2021 11:27:53 PM INFO: [Output layer 2, epoch: 46] val acc (%): 96.840
+05/09/2021 11:28:00 PM INFO: [Output layer 2, epoch: 47] val acc (%): 96.860
+05/09/2021 11:28:07 PM INFO: [Output layer 2, epoch: 48] val acc (%): 96.930
+05/09/2021 11:28:14 PM INFO: [Output layer 2, epoch: 49] val acc (%): 96.880
+05/09/2021 11:28:21 PM INFO: [Output layer 2, epoch: 50] val acc (%): 97.050
+05/09/2021 11:28:28 PM INFO: [Output layer 2, epoch: 51] val acc (%): 97.180
+05/09/2021 11:28:35 PM INFO: [Output layer 2, epoch: 52] val acc (%): 97.130
+05/09/2021 11:28:43 PM INFO: [Output layer 2, epoch: 53] val acc (%): 97.170
+05/09/2021 11:28:50 PM INFO: [Output layer 2, epoch: 54] val acc (%): 97.190
+05/09/2021 11:28:57 PM INFO: [Output layer 2, epoch: 55] val acc (%): 97.210
+05/09/2021 11:29:04 PM INFO: [Output layer 2, epoch: 56] val acc (%): 97.330
+05/09/2021 11:29:11 PM INFO: [Output layer 2, epoch: 57] val acc (%): 97.160
+05/09/2021 11:29:18 PM INFO: [Output layer 2, epoch: 58] val acc (%): 97.170
+05/09/2021 11:29:25 PM INFO: [Output layer 2, epoch: 59] val acc (%): 97.240
+05/09/2021 11:29:32 PM INFO: [Output layer 2, epoch: 60] val acc (%): 97.320
+05/09/2021 11:29:40 PM INFO: [Output layer 2, epoch: 61] val acc (%): 97.250
+05/09/2021 11:29:47 PM INFO: [Output layer 2, epoch: 62] val acc (%): 97.150
+05/09/2021 11:29:54 PM INFO: [Output layer 2, epoch: 63] val acc (%): 97.380
+05/09/2021 11:30:01 PM INFO: [Output layer 2, epoch: 64] val acc (%): 97.280
+05/09/2021 11:30:08 PM INFO: [Output layer 2, epoch: 65] val acc (%): 97.180
+05/09/2021 11:30:15 PM INFO: [Output layer 2, epoch: 66] val acc (%): 97.350
+05/09/2021 11:30:22 PM INFO: [Output layer 2, epoch: 67] val acc (%): 97.220
+05/09/2021 11:30:29 PM INFO: [Output layer 2, epoch: 68] val acc (%): 97.260
+05/09/2021 11:30:37 PM INFO: [Output layer 2, epoch: 69] val acc (%): 97.330
+05/09/2021 11:30:44 PM INFO: [Output layer 2, epoch: 70] val acc (%): 97.370
+05/09/2021 11:30:51 PM INFO: [Output layer 2, epoch: 71] val acc (%): 97.240
+05/09/2021 11:30:58 PM INFO: [Output layer 2, epoch: 72] val acc (%): 97.320
+05/09/2021 11:31:05 PM INFO: [Output layer 2, epoch: 73] val acc (%): 97.390
+05/09/2021 11:31:12 PM INFO: [Output layer 2, epoch: 74] val acc (%): 97.210
+05/09/2021 11:31:19 PM INFO: [Output layer 2, epoch: 75] val acc (%): 97.120
+05/09/2021 11:31:26 PM INFO: [Output layer 2, epoch: 76] val acc (%): 97.330
+05/09/2021 11:31:34 PM INFO: [Output layer 2, epoch: 77] val acc (%): 97.280
+05/09/2021 11:31:41 PM INFO: [Output layer 2, epoch: 78] val acc (%): 97.310
+05/09/2021 11:31:48 PM INFO: [Output layer 2, epoch: 79] val acc (%): 97.390
+05/09/2021 11:31:55 PM INFO: [Output layer 2, epoch: 80] val acc (%): 97.340
+05/09/2021 11:32:02 PM INFO: [Output layer 2, epoch: 81] val acc (%): 97.380
+05/09/2021 11:32:09 PM INFO: [Output layer 2, epoch: 82] val acc (%): 97.200
+05/09/2021 11:32:16 PM INFO: [Output layer 2, epoch: 83] val acc (%): 97.400
+05/09/2021 11:32:23 PM INFO: [Output layer 2, epoch: 84] val acc (%): 97.320
+05/09/2021 11:32:30 PM INFO: [Output layer 2, epoch: 85] val acc (%): 97.230
+05/09/2021 11:32:38 PM INFO: [Output layer 2, epoch: 86] val acc (%): 97.200
+05/09/2021 11:32:45 PM INFO: [Output layer 2, epoch: 87] val acc (%): 97.260
+05/09/2021 11:32:52 PM INFO: [Output layer 2, epoch: 88] val acc (%): 97.250
+05/09/2021 11:32:59 PM INFO: [Output layer 2, epoch: 89] val acc (%): 97.260
+05/09/2021 11:33:06 PM INFO: [Output layer 2, epoch: 90] val acc (%): 97.420
+05/09/2021 11:33:13 PM INFO: [Output layer 2, epoch: 91] val acc (%): 97.320
+05/09/2021 11:33:20 PM INFO: [Output layer 2, epoch: 92] val acc (%): 97.250
+05/09/2021 11:33:28 PM INFO: [Output layer 2, epoch: 93] val acc (%): 97.250
+05/09/2021 11:33:35 PM INFO: [Output layer 2, epoch: 94] val acc (%): 97.370
+05/09/2021 11:33:42 PM INFO: [Output layer 2, epoch: 95] val acc (%): 97.130
+05/09/2021 11:33:49 PM INFO: [Output layer 2, epoch: 96] val acc (%): 97.270
+05/09/2021 11:33:56 PM INFO: [Output layer 2, epoch: 97] val acc (%): 97.360
+05/09/2021 11:34:03 PM INFO: [Output layer 2, epoch: 98] val acc (%): 97.350
+05/09/2021 11:34:10 PM INFO: [Output layer 2, epoch: 99] val acc (%): 97.260
+05/09/2021 11:34:18 PM INFO: [Output layer 2, epoch: 100] val acc (%): 97.220
+05/09/2021 11:34:25 PM INFO: [Output layer 2, epoch: 101] val acc (%): 97.290
+Epoch   101: reducing learning rate of group 0 to 2.9971e-05.
+05/09/2021 11:34:32 PM INFO: [Output layer 2, epoch: 102] val acc (%): 97.200
+05/09/2021 11:34:39 PM INFO: [Output layer 2, epoch: 103] val acc (%): 97.430
+05/09/2021 11:34:46 PM INFO: [Output layer 2, epoch: 104] val acc (%): 97.270
+05/09/2021 11:34:53 PM INFO: [Output layer 2, epoch: 105] val acc (%): 97.270
+05/09/2021 11:35:00 PM INFO: [Output layer 2, epoch: 106] val acc (%): 97.300
+05/09/2021 11:35:07 PM INFO: [Output layer 2, epoch: 107] val acc (%): 97.370
+05/09/2021 11:35:15 PM INFO: [Output layer 2, epoch: 108] val acc (%): 97.340
+05/09/2021 11:35:22 PM INFO: [Output layer 2, epoch: 109] val acc (%): 97.230
+05/09/2021 11:35:29 PM INFO: [Output layer 2, epoch: 110] val acc (%): 97.340
+05/09/2021 11:35:36 PM INFO: [Output layer 2, epoch: 111] val acc (%): 97.340
+05/09/2021 11:35:43 PM INFO: [Output layer 2, epoch: 112] val acc (%): 97.270
+05/09/2021 11:35:50 PM INFO: [Output layer 2, epoch: 113] val acc (%): 97.310
+05/09/2021 11:35:57 PM INFO: [Output layer 2, epoch: 114] val acc (%): 97.380
+Epoch   114: reducing learning rate of group 0 to 2.9971e-06.
+05/09/2021 11:36:05 PM INFO: [Output layer 2, epoch: 115] val acc (%): 97.350
+05/09/2021 11:36:12 PM INFO: [Output layer 2, epoch: 116] val acc (%): 97.220
+05/09/2021 11:36:19 PM INFO: [Output layer 2, epoch: 117] val acc (%): 97.260
+05/09/2021 11:36:26 PM INFO: [Output layer 2, epoch: 118] val acc (%): 97.290
+05/09/2021 11:36:33 PM INFO: [Output layer 2, epoch: 119] val acc (%): 97.160
+05/09/2021 11:36:40 PM INFO: [Output layer 2, epoch: 120] val acc (%): 97.330
+05/09/2021 11:36:48 PM INFO: [Output layer 2, epoch: 121] val acc (%): 97.380
+05/09/2021 11:36:55 PM INFO: [Output layer 2, epoch: 122] val acc (%): 97.230
+05/09/2021 11:37:02 PM INFO: [Output layer 2, epoch: 123] val acc (%): 97.250
+05/09/2021 11:37:09 PM INFO: [Output layer 2, epoch: 124] val acc (%): 97.450
+05/09/2021 11:37:16 PM INFO: [Output layer 2, epoch: 125] val acc (%): 97.270
+05/09/2021 11:37:23 PM INFO: [Output layer 2, epoch: 126] val acc (%): 97.300
+05/09/2021 11:37:30 PM INFO: [Output layer 2, epoch: 127] val acc (%): 97.100
+05/09/2021 11:37:37 PM INFO: [Output layer 2, epoch: 128] val acc (%): 97.110
+05/09/2021 11:37:44 PM INFO: [Output layer 2, epoch: 129] val acc (%): 97.360
+05/09/2021 11:37:52 PM INFO: [Output layer 2, epoch: 130] val acc (%): 97.210
+05/09/2021 11:37:59 PM INFO: [Output layer 2, epoch: 131] val acc (%): 97.160
+05/09/2021 11:38:06 PM INFO: [Output layer 2, epoch: 132] val acc (%): 97.280
+05/09/2021 11:38:13 PM INFO: [Output layer 2, epoch: 133] val acc (%): 97.390
+05/09/2021 11:38:20 PM INFO: [Output layer 2, epoch: 134] val acc (%): 97.240
+05/09/2021 11:38:27 PM INFO: [Output layer 2, epoch: 135] val acc (%): 97.300
+Epoch   135: reducing learning rate of group 0 to 2.9971e-07.
+05/09/2021 11:38:34 PM INFO: [Output layer 2, epoch: 136] val acc (%): 97.170
+05/09/2021 11:38:41 PM INFO: [Output layer 2, epoch: 137] val acc (%): 97.310
+05/09/2021 11:38:49 PM INFO: [Output layer 2, epoch: 138] val acc (%): 97.210
+05/09/2021 11:38:56 PM INFO: [Output layer 2, epoch: 139] val acc (%): 97.250
+05/09/2021 11:39:03 PM INFO: [Output layer 2, epoch: 140] val acc (%): 97.290
+05/09/2021 11:39:10 PM INFO: [Output layer 2, epoch: 141] val acc (%): 97.330
+05/09/2021 11:39:17 PM INFO: [Output layer 2, epoch: 142] val acc (%): 97.290
+05/09/2021 11:39:24 PM INFO: [Output layer 2, epoch: 143] val acc (%): 97.310
+05/09/2021 11:39:31 PM INFO: [Output layer 2, epoch: 144] val acc (%): 97.240
+05/09/2021 11:39:39 PM INFO: [Output layer 2, epoch: 145] val acc (%): 97.260
+05/09/2021 11:39:46 PM INFO: [Output layer 2, epoch: 146] val acc (%): 97.250
+Epoch   146: reducing learning rate of group 0 to 2.9971e-08.
+05/09/2021 11:39:53 PM INFO: [Output layer 2, epoch: 147] val acc (%): 97.380
+05/09/2021 11:40:00 PM INFO: [Output layer 2, epoch: 148] val acc (%): 97.260
+05/09/2021 11:40:07 PM INFO: [Output layer 2, epoch: 149] val acc (%): 97.360
+05/09/2021 11:40:14 PM INFO: [Output layer 2, epoch: 150] val acc (%): 97.380
+05/09/2021 11:40:21 PM INFO: [Output layer 2, epoch: 151] val acc (%): 97.330
+05/09/2021 11:40:28 PM INFO: [Output layer 2, epoch: 152] val acc (%): 97.140
+05/09/2021 11:40:36 PM INFO: [Output layer 2, epoch: 153] val acc (%): 97.350
+05/09/2021 11:40:43 PM INFO: [Output layer 2, epoch: 154] val acc (%): 97.370
+05/09/2021 11:40:50 PM INFO: [Output layer 2, epoch: 155] val acc (%): 97.430
+05/09/2021 11:40:57 PM INFO: [Output layer 2, epoch: 156] val acc (%): 97.270
+05/09/2021 11:41:04 PM INFO: [Output layer 2, epoch: 157] val acc (%): 97.300
+Epoch   157: reducing learning rate of group 0 to 2.9971e-09.
+05/09/2021 11:41:11 PM INFO: [Output layer 2, epoch: 158] val acc (%): 97.390
+05/09/2021 11:41:18 PM INFO: [Output layer 2, epoch: 159] val acc (%): 97.290
+05/09/2021 11:41:26 PM INFO: [Output layer 2, epoch: 160] val acc (%): 97.370
+05/09/2021 11:41:33 PM INFO: [Output layer 2, epoch: 161] val acc (%): 97.360
+05/09/2021 11:41:40 PM INFO: [Output layer 2, epoch: 162] val acc (%): 97.300
+05/09/2021 11:41:47 PM INFO: [Output layer 2, epoch: 163] val acc (%): 97.210
+05/09/2021 11:41:54 PM INFO: [Output layer 2, epoch: 164] val acc (%): 97.240
+05/09/2021 11:42:01 PM INFO: [Output layer 2, epoch: 165] val acc (%): 97.320
+05/09/2021 11:42:08 PM INFO: [Output layer 2, epoch: 166] val acc (%): 97.360
+05/09/2021 11:42:15 PM INFO: [Output layer 2, epoch: 167] val acc (%): 97.160
+05/09/2021 11:42:23 PM INFO: [Output layer 2, epoch: 168] val acc (%): 97.260
+05/09/2021 11:42:30 PM INFO: [Output layer 2, epoch: 169] val acc (%): 97.250
+05/09/2021 11:42:37 PM INFO: [Output layer 2, epoch: 170] val acc (%): 97.200
+05/09/2021 11:42:44 PM INFO: [Output layer 2, epoch: 171] val acc (%): 97.290
+05/09/2021 11:42:51 PM INFO: [Output layer 2, epoch: 172] val acc (%): 97.180
+05/09/2021 11:42:58 PM INFO: [Output layer 2, epoch: 173] val acc (%): 97.240
+05/09/2021 11:43:05 PM INFO: [Output layer 2, epoch: 174] val acc (%): 97.360
+05/09/2021 11:43:12 PM INFO: [Output layer 2, epoch: 175] val acc (%): 97.190
+05/09/2021 11:43:20 PM INFO: [Output layer 2, epoch: 176] val acc (%): 97.240
+05/09/2021 11:43:27 PM INFO: [Output layer 2, epoch: 177] val acc (%): 97.320
+05/09/2021 11:43:34 PM INFO: [Output layer 2, epoch: 178] val acc (%): 97.360
+05/09/2021 11:43:41 PM INFO: [Output layer 2, epoch: 179] val acc (%): 97.280
+05/09/2021 11:43:48 PM INFO: [Output layer 2, epoch: 180] val acc (%): 97.290
+05/09/2021 11:43:55 PM INFO: [Output layer 2, epoch: 181] val acc (%): 97.360
+05/09/2021 11:44:02 PM INFO: [Output layer 2, epoch: 182] val acc (%): 97.300
+05/09/2021 11:44:09 PM INFO: [Output layer 2, epoch: 183] val acc (%): 97.230
+05/09/2021 11:44:17 PM INFO: [Output layer 2, epoch: 184] val acc (%): 97.300
+05/09/2021 11:44:24 PM INFO: [Output layer 2, epoch: 185] val acc (%): 97.270
+05/09/2021 11:44:31 PM INFO: [Output layer 2, epoch: 186] val acc (%): 97.410
+05/09/2021 11:44:38 PM INFO: [Output layer 2, epoch: 187] val acc (%): 97.250
+05/09/2021 11:44:45 PM INFO: [Output layer 2, epoch: 188] val acc (%): 97.270
+05/09/2021 11:44:52 PM INFO: [Output layer 2, epoch: 189] val acc (%): 97.100
+05/09/2021 11:44:59 PM INFO: [Output layer 2, epoch: 190] val acc (%): 97.280
+05/09/2021 11:45:07 PM INFO: [Output layer 2, epoch: 191] val acc (%): 97.200
+05/09/2021 11:45:14 PM INFO: [Output layer 2, epoch: 192] val acc (%): 97.230
+05/09/2021 11:45:21 PM INFO: [Output layer 2, epoch: 193] val acc (%): 97.280
+05/09/2021 11:45:28 PM INFO: [Output layer 2, epoch: 194] val acc (%): 97.410
+05/09/2021 11:45:35 PM INFO: [Output layer 2, epoch: 195] val acc (%): 97.380
+05/09/2021 11:45:42 PM INFO: [Output layer 2, epoch: 196] val acc (%): 97.100
+05/09/2021 11:45:49 PM INFO: [Output layer 2, epoch: 197] val acc (%): 97.370
+05/09/2021 11:45:56 PM INFO: [Output layer 2, epoch: 198] val acc (%): 97.330
+05/09/2021 11:46:04 PM INFO: [Output layer 2, epoch: 199] val acc (%): 97.230
+05/09/2021 11:46:11 PM INFO: [Output layer 2, epoch: 200] val acc (%): 97.320
+05/09/2021 11:46:11 PM INFO: Output layer 2 training finished!
+TOTAL PARAMS FOR ENTIRE NETWORK: 492842
+Morph()
